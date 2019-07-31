@@ -59,6 +59,8 @@ func withDeadline(millis int) (context.Context, context.CancelFunc) {
 }
 
 func CloseConnections() {
+	log.Println("Closing gRPC connections...")
+
 	if apiClient != nil {
 		e := apiClient.Close()
 
@@ -74,4 +76,6 @@ func CloseConnections() {
 			log.Printf("Failed to close searchClient grpc connection\n%v", e)
 		}
 	}
+
+	log.Println("Closing gRPC connections...Done")
 }

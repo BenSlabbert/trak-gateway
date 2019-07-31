@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"os/signal"
 	"trak-gateway/gateway"
 	"trak-gateway/gateway/rest"
 
@@ -12,15 +13,6 @@ import (
 
 func main() {
 	log.Println("Starting gateway")
-
-	latestItems, ok := gateway.GetLatestItems()
-	defer gateway.CloseConnections()
-
-	if !ok {
-		log.Println("Failed to get latest items")
-	}
-
-	log.Printf("Latest: %v", latestItems)
 
 	// set up REST handlers for ReactJS
 	router := mux.NewRouter()
@@ -63,11 +55,23 @@ func main() {
 		Name("DailyDeals")
 
 	http.Handle("/", router)
-	serve := http.ListenAndServe(":"+getGatewayPort(), router)
 
-	if serve != nil {
-		log.Panicf("Failed to serve: %v", serve)
-	}
+	go func() {
+		serve := http.ListenAndServe(":"+getGatewayPort(), router)
+
+		if serve != nil {
+			log.Panicf("Failed to serve: %v", serve)
+		}
+	}()
+
+	defer gateway.CloseConnections()
+
+	// wait for Ctrl + C to exit
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, os.Interrupt)
+
+	// Block until signal is received
+	<-ch
 }
 
 func getGatewayPort() string {
