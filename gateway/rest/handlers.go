@@ -17,6 +17,10 @@ func DailyDeals(w http.ResponseWriter, req *http.Request) {
 		Deal: &pb.PromotionRequest_DailyDeal{
 			DailyDeal: true,
 		},
+		PageRequest: &pb.PageRequestMessage{
+			Page:    0,
+			PageLen: 12,
+		},
 	})
 
 	if !ok {
