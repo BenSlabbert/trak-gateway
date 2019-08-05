@@ -15,6 +15,28 @@ func main() {
 	log.Println("Starting gateway")
 
 	// set up REST handlers for ReactJS
+	router := setUpRoutes()
+	http.Handle("/", router)
+
+	go func() {
+		serve := http.ListenAndServe(":"+getGatewayPort(), router)
+
+		if serve != nil {
+			log.Panicf("Failed to serve: %v", serve)
+		}
+	}()
+
+	defer gateway.CloseConnections()
+
+	// wait for Ctrl + C to exit
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, os.Interrupt)
+
+	// Block until signal is received
+	<-ch
+}
+
+func setUpRoutes() *mux.Router {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", rest.HomeHandler)
@@ -54,24 +76,7 @@ func main() {
 		HandlerFunc(rest.DailyDeals).
 		Name("DailyDeals")
 
-	http.Handle("/", router)
-
-	go func() {
-		serve := http.ListenAndServe(":"+getGatewayPort(), router)
-
-		if serve != nil {
-			log.Panicf("Failed to serve: %v", serve)
-		}
-	}()
-
-	defer gateway.CloseConnections()
-
-	// wait for Ctrl + C to exit
-	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, os.Interrupt)
-
-	// Block until signal is received
-	<-ch
+	return router
 }
 
 func getGatewayPort() string {
