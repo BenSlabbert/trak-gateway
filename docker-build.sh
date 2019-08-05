@@ -12,4 +12,4 @@ echo "#########################"
 
 echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 
-docker push benjaminslabbert/trak_logstash:"${VERSION}"
+docker push benjaminslabbert/trak_gateway:"${VERSION}"
