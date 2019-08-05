@@ -156,14 +156,3 @@ func sendJson(w http.ResponseWriter, message proto.Message) {
 		log.Printf("Wrote: %d bytes to response", i)
 	}
 }
-
-// todo this must serve the reactjs bundle
-func HomeHandler(w http.ResponseWriter, req *http.Request) {
-	i, e := w.Write([]byte("hello world!"))
-
-	if e != nil {
-		log.Printf("Failed to write to client!\n%v", e)
-	} else {
-		log.Printf("Wrote: %d bytes to response", i)
-	}
-}

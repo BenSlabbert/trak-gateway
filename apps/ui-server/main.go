@@ -3,13 +3,59 @@ package main
 import (
 	"os"
 	"os/signal"
+	"path/filepath"
 	"trak-gateway/gateway"
+	"trak-gateway/gateway/profile"
 	"trak-gateway/gateway/rest"
 
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
+
+var StaticFilesDir string
+var Profile string
+var Port string
+
+func init() {
+	StaticFilesDir = getStaticFilesDir()
+	Port = getGatewayPort()
+	Profile = getProfile()
+}
+
+func getStaticFilesDir() string {
+	dir := os.Getenv("STATIC_FILES_DIR")
+
+	if dir == "" {
+		dir = "/static"
+	}
+
+	return dir
+}
+
+func getGatewayPort() string {
+	port := os.Getenv("API_PORT")
+
+	if port == "" {
+		port = "5000"
+	}
+
+	log.Printf("Running gateway on port: %s", port)
+
+	return port
+}
+
+func getProfile() string {
+	p := os.Getenv("PROFILE")
+
+	if p == "" {
+		p = "DEV"
+	}
+
+	log.Printf("Running gateway in profile: %s", p)
+
+	return p
+}
 
 func main() {
 	log.Println("Starting gateway")
@@ -19,7 +65,7 @@ func main() {
 	http.Handle("/", router)
 
 	go func() {
-		serve := http.ListenAndServe(":"+getGatewayPort(), router)
+		serve := http.ListenAndServe(":"+Port, router)
 
 		if serve != nil {
 			log.Panicf("Failed to serve: %v", serve)
@@ -38,8 +84,6 @@ func main() {
 
 func setUpRoutes() *mux.Router {
 	router := mux.NewRouter()
-
-	router.HandleFunc("/", rest.HomeHandler)
 
 	router.Path("/api/latest").
 		HandlerFunc(rest.LatestHandler).
@@ -76,17 +120,11 @@ func setUpRoutes() *mux.Router {
 		HandlerFunc(rest.DailyDeals).
 		Name("DailyDeals")
 
-	return router
-}
-
-func getGatewayPort() string {
-	port := os.Getenv("API_PORT")
-
-	if port == "" {
-		port = "5000"
+	if Profile == profile.DOCKER {
+		absPath, _ := filepath.Abs(StaticFilesDir)
+		router.PathPrefix("/").
+			Handler(http.FileServer(http.Dir(absPath)))
 	}
 
-	log.Printf("Running gateway on port: %s", port)
-
-	return port
+	return router
 }
