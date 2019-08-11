@@ -117,6 +117,7 @@ func setUpRoutes() *mux.Router {
 		Name("CategorySearch")
 
 	router.Path("/api/daily-deals").
+		Queries("page", "{page}").
 		HandlerFunc(rest.DailyDeals).
 		Name("DailyDeals")
 

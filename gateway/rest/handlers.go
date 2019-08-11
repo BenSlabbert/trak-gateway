@@ -13,12 +13,27 @@ import (
 )
 
 func DailyDeals(w http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	page := vars["page"]
+	pageReq := int32(1)
+
+	if page != "" {
+		parseInt, err := strconv.ParseInt(page, 10, 32)
+		if err != nil {
+			log.Warnf("Failed to convert: %s to int32", page)
+			// todo send err
+			return
+		}
+
+		pageReq = int32(parseInt)
+	}
+
 	resp, ok := gateway.GetPromotion(&pb.PromotionRequest{
 		Deal: &pb.PromotionRequest_DailyDeal{
 			DailyDeal: true,
 		},
 		PageRequest: &pb.PageRequestMessage{
-			Page:    0,
+			Page:    pageReq - 1,
 			PageLen: 12,
 		},
 	})
