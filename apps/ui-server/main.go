@@ -4,7 +4,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"trak-gateway/gateway"
+	"trak-gateway/gateway/grpc"
 	"trak-gateway/gateway/profile"
 	"trak-gateway/gateway/rest"
 
@@ -40,7 +40,7 @@ func getGatewayPort() string {
 		port = "5000"
 	}
 
-	log.Printf("Running gateway on port: %s", port)
+	log.Infof("Running gateway on port: %s", port)
 
 	return port
 }
@@ -52,13 +52,13 @@ func getProfile() string {
 		p = "DEV"
 	}
 
-	log.Printf("Running gateway in profile: %s", p)
+	log.Infof("Running gateway in profile: %s", p)
 
 	return p
 }
 
 func main() {
-	log.Println("Starting gateway")
+	log.Infof("Starting gateway")
 
 	// set up REST handlers for ReactJS
 	router := setUpRoutes()
@@ -72,7 +72,7 @@ func main() {
 		}
 	}()
 
-	defer gateway.CloseConnections()
+	defer grpc.CloseConnections()
 
 	// wait for Ctrl + C to exit
 	ch := make(chan os.Signal, 1)
@@ -120,6 +120,16 @@ func setUpRoutes() *mux.Router {
 		Queries("page", "{page}").
 		HandlerFunc(rest.DailyDeals).
 		Name("DailyDeals")
+
+	router.Path("/api/promotion").
+		Queries("id", "{id}", "page", "{page}").
+		HandlerFunc(rest.GetPromotion).
+		Name("GetPromotion")
+
+	router.Path("/api/all-promotions").
+		Queries("page", "{page}").
+		HandlerFunc(rest.GetAllPromotions).
+		Name("GetAllPromotions")
 
 	if Profile == profile.DOCKER {
 		absPath, _ := filepath.Abs(StaticFilesDir)

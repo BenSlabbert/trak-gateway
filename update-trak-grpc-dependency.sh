@@ -7,3 +7,4 @@ if [ $# -eq 0 ]
 fi
 
 go get github.com/BenSlabbert/trak-gRPC@"$1"
+go mod tidy

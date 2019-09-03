@@ -1,6 +1,6 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
-github.com/BenSlabbert/trak-gRPC v0.0.0-20190802130812-19fbdda270f0 h1:xe1HO+afkJe/ZeOOlMt4fPGpQ5lafzkE93beVZRm/Ks=
-github.com/BenSlabbert/trak-gRPC v0.0.0-20190802130812-19fbdda270f0/go.mod h1:JM2LU0UcguwW+iOPAkymKU/okq70l4kJj2kx/tLocrE=
+github.com/BenSlabbert/trak-gRPC v0.0.0-20190822100643-6e351d1e54c2 h1:alOhW8rTjyoTeQZyBmoO93gvqLrjWqfj7sh54CFkeJM=
+github.com/BenSlabbert/trak-gRPC v0.0.0-20190822100643-6e351d1e54c2/go.mod h1:JM2LU0UcguwW+iOPAkymKU/okq70l4kJj2kx/tLocrE=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=1.0.1-$(date +%s)
+VERSION=1.0.1-$(date '+%Y-%m-%d_%H-%M-%S')
 
 echo "Building Images with version: ${VERSION}"
 
