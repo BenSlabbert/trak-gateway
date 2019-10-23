@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"fmt"
 	pb "github.com/BenSlabbert/trak-gRPC/src/go"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
@@ -134,7 +135,24 @@ func CategorySearch(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	sendOK(w, resp)
+	var results []*pb.SearchResult
+	for _, r := range resp.Results {
+		id, e := strconv.ParseInt(r.Id, 10, 64)
+		if e != nil {
+			log.Warnf("Failed to convert %s to int64: %v", e)
+			continue
+		}
+		categoryResponse, grpcErr := grpc.GetCategory(&pb.CategoryRequest{CategoryId: id})
+
+		if grpcErr != nil {
+			sendError(w, grpcErr)
+			return
+		}
+
+		results = append(results, &pb.SearchResult{Id: fmt.Sprintf("%d", categoryResponse.BrandId), Name: categoryResponse.Name})
+	}
+
+	sendOK(w, &pb.SearchResponse{Results: results})
 }
 
 func BrandSearch(w http.ResponseWriter, req *http.Request) {
@@ -148,7 +166,24 @@ func BrandSearch(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	sendOK(w, resp)
+	var results []*pb.SearchResult
+	for _, r := range resp.Results {
+		id, e := strconv.ParseInt(r.Id, 10, 64)
+		if e != nil {
+			log.Warnf("Failed to convert %s to int64: %v", e)
+			continue
+		}
+		brandResponse, grpcErr := grpc.GetBrand(&pb.BrandRequest{BrandId: id})
+
+		if grpcErr != nil {
+			sendError(w, grpcErr)
+			return
+		}
+
+		results = append(results, &pb.SearchResult{Id: fmt.Sprintf("%d", brandResponse.BrandId), Name: brandResponse.Name})
+	}
+
+	sendOK(w, &pb.SearchResponse{Results: results})
 }
 
 func ProductSearch(w http.ResponseWriter, req *http.Request) {
@@ -162,7 +197,24 @@ func ProductSearch(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	sendOK(w, resp)
+	var results []*pb.SearchResult
+	for _, r := range resp.Results {
+		id, e := strconv.ParseInt(r.Id, 10, 64)
+		if e != nil {
+			log.Warnf("Failed to convert %s to int64: %v", e)
+			continue
+		}
+		productResponse, grpcErr := grpc.GetProduct(&pb.ProductRequest{ProductId: id})
+
+		if grpcErr != nil {
+			sendError(w, grpcErr)
+			return
+		}
+
+		results = append(results, &pb.SearchResult{Id: fmt.Sprintf("%d", productResponse.Product.Id), Name: productResponse.Product.Name})
+	}
+
+	sendOK(w, &pb.SearchResponse{Results: results})
 }
 
 func GetBrandById(w http.ResponseWriter, req *http.Request) {
