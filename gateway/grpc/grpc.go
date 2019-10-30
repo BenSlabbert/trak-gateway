@@ -78,27 +78,27 @@ func parseError(err error) *response.Error {
 }
 
 func unspecified(e *status.Status) *response.Error {
-	log.Warnf("gRPC Error:\nCode: %s\nMessage: %s", e.Code(), e.Message())
+	log.Warnf("gRPC Error: Code: %s Message: %s", e.Code(), e.Message())
 	return &response.Error{Message: e.Message(), Type: response.BadRequest}
 }
 
 func unimplemented(e *status.Status) *response.Error {
-	log.Warnf("gRPC Unimplemented Call Error:\nCode: %s\nMessage: %s", e.Code(), e.Message())
+	log.Warnf("gRPC Unimplemented Call Error: Code: %s Message: %s", e.Code(), e.Message())
 	return &response.Error{Message: "API is Unimplemented", Type: response.ServerError}
 }
 
 func aborted(e *status.Status) *response.Error {
-	log.Warnf("gRPC Aborted Call Error:\nCode: %s\nMessage: %s", e.Code(), e.Message())
+	log.Warnf("gRPC Aborted Call Error: Code: %s Message: %s", e.Code(), e.Message())
 	return &response.Error{Message: "Request took too long to complete", Type: response.ServerError}
 }
 
 func internalError(e *status.Status) *response.Error {
-	log.Warnf("gRPC Internal Error:\nCode: %s\nMessage: %s", e.Code(), e.Message())
+	log.Warnf("gRPC Internal Error: Code: %s Message: %s", e.Code(), e.Message())
 	return &response.Error{Message: "Internal Error", Type: response.ServerError}
 }
 
 func permissionDenied(e *status.Status) *response.Error {
-	log.Warnf("gRPC Permission Denied Error:\nCode: %s\nMessage: %s", e.Code(), e.Message())
+	log.Warnf("gRPC Permission Denied Error: Code: %s Message: %s", e.Code(), e.Message())
 	return &response.Error{Message: "Permission Denied", Type: response.PermissionDenied}
 }
 
@@ -114,7 +114,7 @@ func CloseConnections() {
 		e := apiClient.Close()
 
 		if e != nil {
-			log.Warnf("Failed to close apiClient grpc connection\n%v", e)
+			log.Warnf("Failed to close apiClient grpc connection: %v", e)
 		}
 	}
 
@@ -122,7 +122,7 @@ func CloseConnections() {
 		e := searchClient.Close()
 
 		if e != nil {
-			log.Warnf("Failed to close searchClient grpc connection\n%v", e)
+			log.Warnf("Failed to close searchClient grpc connection: %v", e)
 		}
 	}
 
