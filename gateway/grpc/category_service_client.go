@@ -7,7 +7,7 @@ import (
 )
 
 func GetCategory(req *pb.CategoryRequest) (*pb.BrandResponse, *response.Error) {
-	ctx, cancel := withDeadline(1000)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := categoryServiceClient.Category(ctx, req)

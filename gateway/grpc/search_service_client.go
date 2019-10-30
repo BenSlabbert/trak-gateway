@@ -7,7 +7,7 @@ import (
 )
 
 func BrandSearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error) {
-	ctx, cancel := withDeadline(1000)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := searchServiceClient.BrandSearch(ctx, req)
@@ -21,7 +21,7 @@ func BrandSearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error) {
 }
 
 func CategorySearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error) {
-	ctx, cancel := withDeadline(1000)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := searchServiceClient.CategorySearch(ctx, req)
@@ -35,7 +35,7 @@ func CategorySearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error)
 }
 
 func ProductSearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error) {
-	ctx, cancel := withDeadline(1000)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := searchServiceClient.ProductSearch(ctx, req)

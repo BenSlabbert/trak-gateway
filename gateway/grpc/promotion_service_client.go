@@ -7,7 +7,7 @@ import (
 )
 
 func GetPromotion(req *pb.PromotionRequest) (*pb.PromotionResponse, *response.Error) {
-	ctx, cancel := withDeadline(1000)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := promotionServiceClient.GetPromotion(ctx, req)
@@ -21,7 +21,7 @@ func GetPromotion(req *pb.PromotionRequest) (*pb.PromotionResponse, *response.Er
 }
 
 func GetAllPromotions(req *pb.GetAllPromotionsRequest) (*pb.GetAllPromotionsResponse, *response.Error) {
-	ctx, cancel := withDeadline(1000)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := promotionServiceClient.GetAllPromotions(ctx, req)

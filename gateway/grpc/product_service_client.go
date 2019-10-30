@@ -7,7 +7,7 @@ import (
 )
 
 func AddProduct(req *pb.AddProductRequest) (*pb.AddProductResponse, *response.Error) {
-	ctx, cancel := withDeadline(1000)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := productServiceClient.AddProduct(ctx, req)
@@ -21,7 +21,7 @@ func AddProduct(req *pb.AddProductRequest) (*pb.AddProductResponse, *response.Er
 }
 
 func GetProduct(req *pb.ProductRequest) (*pb.ProductResponse, *response.Error) {
-	ctx, cancel := withDeadline(500)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := productServiceClient.Product(ctx, req)

@@ -7,7 +7,7 @@ import (
 )
 
 func GetLatestItems() (*pb.LatestResponse, *response.Error) {
-	ctx, cancel := withDeadline(500)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := latestServiceClient.Latest(ctx, &pb.Empty{})

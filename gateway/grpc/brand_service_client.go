@@ -7,7 +7,7 @@ import (
 )
 
 func GetBrand(req *pb.BrandRequest) (*pb.BrandResponse, *response.Error) {
-	ctx, cancel := withDeadline(1000)
+	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
 	r, e := brandServiceClient.Brand(ctx, req)
