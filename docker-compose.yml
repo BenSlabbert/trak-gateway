@@ -1,0 +1,54 @@
+version: "3.7"
+
+services:
+  redis:
+    image: redis:5.0.6-alpine
+    command: redis-server --requirepass password
+    ports:
+      - 6379:6379
+
+  rds:
+    image: mariadb:10.4.8-bionic
+    ports:
+      - 3306:3306
+    volumes:
+      - rds-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=trak
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    stop_grace_period: 1m30s
+    labels:
+      - "description=Maria DB Relational DB"
+
+  # todo need to connect to nsqlookupd, see: https://stackoverflow.com/questions/48536963/nsq-cannot-consume-message-by-connecting-to-nsqlookupd
+  nsqlookupd:
+    network_mode: host
+    image: nsqio/nsq:v1.1.0
+    command: /nsqlookupd
+    ports:
+      - "4160:4160" # TCP
+      - "4161:4161" # HTTP
+
+  nsqd:
+    network_mode: host
+    image: nsqio/nsq:v1.1.0
+    command: /nsqd -lookupd-tcp-address=127.0.0.1:4160 -broadcast-address=127.0.0.1
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4150:4150"
+      - "4151:4151"
+
+  nsqadmin:
+    network_mode: host
+    image: nsqio/nsq:v1.1.0
+    command: /nsqadmin --lookupd-http-address=127.0.0.1:4161
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4171:4171"
+
+volumes:
+  rds-data:

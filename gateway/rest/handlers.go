@@ -139,7 +139,7 @@ func CategorySearch(w http.ResponseWriter, req *http.Request) {
 	for _, r := range resp.Results {
 		id, e := strconv.ParseInt(r.Id, 10, 64)
 		if e != nil {
-			log.Warnf("Failed to convert %s to int64: %v", e)
+			log.Warnf("Failed to convert %s to int64: %v", r.Id, e)
 			continue
 		}
 		categoryResponse, grpcErr := grpc.GetCategory(&pb.CategoryRequest{CategoryId: id})
@@ -170,7 +170,7 @@ func BrandSearch(w http.ResponseWriter, req *http.Request) {
 	for _, r := range resp.Results {
 		id, e := strconv.ParseInt(r.Id, 10, 64)
 		if e != nil {
-			log.Warnf("Failed to convert %s to int64: %v", e)
+			log.Warnf("Failed to convert %s to int64: %v", r.Id, e)
 			continue
 		}
 		brandResponse, grpcErr := grpc.GetBrand(&pb.BrandRequest{BrandId: id})
@@ -201,7 +201,7 @@ func ProductSearch(w http.ResponseWriter, req *http.Request) {
 	for _, r := range resp.Results {
 		id, e := strconv.ParseInt(r.Id, 10, 64)
 		if e != nil {
-			log.Warnf("Failed to convert %s to int64: %v", e)
+			log.Warnf("Failed to convert %s to int64: %v", r.Id, e)
 			continue
 		}
 		productResponse, grpcErr := grpc.GetProduct(&pb.ProductRequest{ProductId: id})

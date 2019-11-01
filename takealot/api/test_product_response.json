@@ -1,0 +1,736 @@
+{
+  "exchanges_and_returns": {
+    "tab_title": "Exchanges and Returns",
+    "copy": "### Free exchanges & returns for 30 days\n\nWrong size? Not quite what you wanted? You can exchange or return your purchase up to 30 days from the day you received it.\n\n1. Log your exchange or return request via your [Takealot Account profile](https://secure.takealot.com/account/).\n2. Prepare your return parcel.\n3. Wait for courier collection or drop off the parcel yourself.\n4. If approved, your account will be credited.\n\n[Find out more](https://www.takealot.com/help/fashion-exchanges-returns)"
+  },
+  "other_offers": {
+    "conditions": [
+      {
+        "count": 1,
+        "items": [
+          {
+            "delivery_charges": {},
+            "product_id": 83508576,
+            "price": 242,
+            "stock_availability": {
+              "status": "Shipped in 7 to 9 working days",
+              "is_leadtime": true,
+              "evt_status": "Shipped in 7 - 9 working days",
+              "distribution_centres": null,
+              "seasonal_message_info": null,
+              "when_do_i_get_it_text": "When do I get it?",
+              "is_imported": false,
+              "is_in_stock": false,
+              "display_seasonal_message": false,
+              "seasonal_message_text": null,
+              "display": true,
+              "when_do_i_get_it_info": "## When do I get it?\n\nOur picking, packing and delivery is linked to what you order, where you want it delivered and how you choose to pay, so delivery times can vary. Estimates are provided below to help you shop, but always check your order’s Estimated Delivery Date during checkout for the most accurate delivery information.\n\n### Standard Delivery\n\nShipping Time*                 | Cape Town, Johannesburg & Pretoria Delivery Time**   | Regional Area Delivery Time**   | Remote Area Delivery Time**\n-------------------------------|------------------------------------------------------|---------------------------------|------------------------------\nShipped in 3-5 working days    | 1-2 weeks                                            | 1-2 weeks                       | 2-3 weeks\nShipped in 5-7 working days    | 1-2 weeks                                            | 2-3 weeks                       | 2-3 weeks\nShipped in 7-10 working days   | 2-3 weeks                                            | 2-4 weeks                       | 2-4 weeks\nShipped in 10-15 working days  | 3-4 weeks                                            | 3-4 weeks                       | 3-4 weeks\nShipped in 15-20 working days  | 3-5 weeks                                            | 3-5 weeks                       | 3-5 weeks\n\n\n### Collections\n\nShipping time                 | Collect time\n------------------------------|---------------\nShipped in 3-5 working days   | 1-2 weeks\nShipped in 5-7 working days   | 1-2 weeks\nShipped in 7-10 working days  | 2-3 weeks\nShipped in 10-15 working days | 3-4 weeks\nShipped in 15-20 working days | 3-5 weeks\n\n\\* Shipping time indicates how long it takes a product to reach our warehouse from our supplier.\n\n** Delivery estimates include shipping times."
+            },
+            "event_data": {
+              "documents": {
+                "product": {
+                  "sku_id": 83508576,
+                  "product_line_id": 48894338,
+                  "purchase_price": 242,
+                  "in_stock": false,
+                  "market_place_listing": true,
+                  "lead_time": "Shipped in 7 to 9 working days"
+                }
+              }
+            },
+            "is_takealot": false,
+            "seller": {
+              "fulfilled_by_takealot": null,
+              "seller_id": 9991,
+              "display_name": "READERS WAREHOUSE"
+            },
+            "id": "other-buying-option-83508576"
+          }
+        ],
+        "from_price": 242,
+        "id": "id-new",
+        "condition": "New"
+      }
+    ],
+    "title": "Other Offers"
+  },
+  "stock_availability": {
+    "status": "In stock",
+    "is_leadtime": false,
+    "distribution_centres": [
+      {
+        "text": "JHB",
+        "info_type": "short",
+        "id": "distribution_centre_0",
+        "description": "This item is in stock in our Johannesburg warehouse and can be shipped from there."
+      },
+      {
+        "text": "CPT",
+        "info_type": "short",
+        "id": "distribution_centre_1",
+        "description": "This item is in stock in our Cape Town warehouse and can be shipped from there. You can also collect it yourself from our warehouse during the week or over weekends."
+      }
+    ],
+    "seasonal_message_info": null,
+    "when_do_i_get_it_text": "When do I get it?",
+    "is_imported": false,
+    "display_seasonal_message": false,
+    "seasonal_message_text": null,
+    "when_do_i_get_it_info": "## When do I get it?\n\nOur picking, packing and delivery is linked to what you order, where you want it delivered and how you choose to pay, so delivery times can vary.\nEstimates are provided below to help you shop, but always check your order’s Estimated Delivery Date during checkout for the most accurate delivery information.\n\n### Standard Delivery\n\nDelivery destination              | Delivery time\n----------------------------------|-----------------\nCape Town, Johannesburg, Pretoria | 2-5 working days\nRegional Area                     | 2-6 working days\nRemote Area                       | 3-7 working days\n\n### Premium Delivery Options\n\nOnly available in Main Centres (Cape Town, Joburg & Pretoria)\n\nDelivery type     | Delivery time                      | Cut Off time\n------------------|------------------------------------|-----------------------------\nSame Day Delivery | Same Day between 3pm - 7pm.        | Pay before 11am weekdays\nExpress Delivery  | Next Working Day between 7am - 7pm | Pay before 12pm previous day\nSaturday Delivery | Saturday between 11am - 7pm        | Pay before 12pm Friday\nSunday Delivery   | Sunday between 11am - 7pm.         | Pay before 12pm Saturday\n\n### Collections\n\nCollect Location                                | Collect time\n------------------------------------------------|-----------------\nCape Town warehouse                             | 1-4 working days\nPickup Point: Cape Town, Johannesburg, Pretoria | 2-5 working days\nPickup Point: Regional Area                     | 2-6 working days\nPickup Point: Remote Area                       | 3-7 working days\n\nCollection times vary, please wait for your Ready to Collect email before visiting the pickup point."
+  },
+  "meta": {
+    "link_data": {
+      "path": "/rest/{api_version}/product-details/{plid}?platform={platform}",
+      "fields": {
+        "platform": "desktop",
+        "api_version": "v-1-8-0",
+        "plid": "PLID48894338"
+      }
+    },
+    "href": "https://api.takealot.com/rest/v-1-8-0/product-details/PLID48894338?platform=desktop",
+    "date_retrieved": "2019-10-30T15:49:13.740048",
+    "identifier": "PLID48894338",
+    "type": "ProductDetails",
+    "display": false
+  },
+  "seo": {
+    "title": "Mythos | Buy Online in South Africa | takealot.com",
+    "alternate": null,
+    "description": null,
+    "canonical": null
+  },
+  "badges": {
+    "items": [
+      {
+        "type": "saving",
+        "id": "badge-0",
+        "value": "23% off"
+      }
+    ]
+  },
+  "buybox": {
+    "is_preorder": false,
+    "delivery_charges": {},
+    "promotion_qty": null,
+    "product_id": 68557620,
+    "add_to_cart_text": "Add to Cart",
+    "loyalty_prices": [
+      {
+        "display_text": "eB1,490",
+        "prices": [
+          1490
+        ],
+        "info_mode": null,
+        "id": "loyaltyprices-0",
+        "description": null
+      },
+      {
+        "display_text": "Discovery Miles 1,490",
+        "prices": [
+          1490
+        ],
+        "info_mode": null,
+        "id": "loyaltyprices-1",
+        "description": null
+      },
+      {
+        "display_text": "On Credit: R14 / month",
+        "prices": [
+          14
+        ],
+        "info_mode": "long",
+        "id": "loyaltyprices-2",
+        "info_text": "## Can I buy this on credit?\n\nYes. If you pay with Mobicred, you can repay the full amount in monthly instalments, instead of all at once.\n\nThe On Credit amount shown is based on 12 monthly repayments (including interest charged at 20.5%* per year and excluding Mobicred's set-up and service fees).\n\nOnce you have a Mobicred account, simply select Mobicred as your payment option when you checkout.\n\n### Don't have a Mobicred account yet?\n\nBefore you add an item to your cart, you'll need to apply for a Mobicred account via the Mobicred website.\n\n### Please note:\n\nYour Mobicred application will be processed in 1 business day once all required documents have been submitted.\n\n[Apply to Mobicred now](https://www.mobicred.co.za/register/?merchantID=1575)\n\n\\* Annual interest subject to change"
+      }
+    ],
+    "product_line_id": 48894338,
+    "variants_call_to_action": null,
+    "multibuy_label": null,
+    "multibuy_display": false,
+    "is_digital": false,
+    "is_free_shipping_available": false,
+    "is_add_to_wishlist_available": true,
+    "is_add_to_cart_available": true,
+    "prices": [
+      149
+    ],
+    "pretty_price": "R 149",
+    "listing_price": 195,
+    "promotion_qty_display_text": null
+  },
+  "title": "Mythos",
+  "breadcrumbs": {
+    "items": [
+      {
+        "type": "department",
+        "id": 3,
+        "name": "Books",
+        "slug": "books"
+      },
+      {
+        "type": "category",
+        "id": 21952,
+        "name": "More Ways to Shop",
+        "slug": "more-ways-to-shop-21952"
+      }
+    ]
+  },
+  "customers_also_bought": {
+    "href": "https://api.takealot.com/rest/v-1-8-0/product-details/PLID48894338/customers-also-bought?platform=desktop",
+    "link_data": {
+      "path": "/rest/{api_version}/product-details/{plid}/customers-also-bought?platform={platform}",
+      "fields": {
+        "platform": "desktop",
+        "api_version": "v-1-8-0",
+        "plid": "PLID48894338"
+      }
+    }
+  },
+  "top_navigation": {
+    "items": [
+      {
+        "foreground": "#333333",
+        "font_styling": null,
+        "text": "Books",
+        "href": "/books",
+        "background": "#ededed",
+        "id": "topnav-0"
+      },
+      {
+        "foreground": "#333333",
+        "font_styling": [],
+        "text": "Afrikaanse Winkel",
+        "href": "/promotion/afrikaansewinkel",
+        "background": "#ededed",
+        "id": "topnav-1"
+      },
+      {
+        "foreground": "#333333",
+        "font_styling": [],
+        "text": "eBooks",
+        "href": "/books/ebooks",
+        "background": "#ededed",
+        "id": "topnav-2"
+      },
+      {
+        "foreground": "#333333",
+        "font_styling": [],
+        "text": "Fiction",
+        "href": "/books/fiction",
+        "background": "#ededed",
+        "id": "topnav-3"
+      },
+      {
+        "foreground": "#333",
+        "font_styling": [],
+        "text": "Non-Fiction",
+        "href": "/books/nonfiction",
+        "background": "#ededed",
+        "id": "topnav-4"
+      },
+      {
+        "foreground": "#333",
+        "font_styling": [],
+        "text": "Inspired Reading",
+        "href": "/books/more_ways_to_shop",
+        "background": "#ededed",
+        "id": "topnav-5"
+      },
+      {
+        "foreground": "#333",
+        "font_styling": [],
+        "text": "Cookbooks",
+        "href": "/books/cookbooks",
+        "background": "#ededed",
+        "id": "topnav-6"
+      },
+      {
+        "foreground": "#333333",
+        "font_styling": [],
+        "text": "Children & Teens",
+        "href": "/books/children",
+        "background": "#ededed",
+        "id": "topnav-7"
+      },
+      {
+        "foreground": "#333333",
+        "font_styling": [],
+        "text": "SA School Books",
+        "href": "/books/schoolbooks",
+        "background": "#ededed",
+        "id": "topnav-8"
+      },
+      {
+        "foreground": "#333333",
+        "font_styling": [],
+        "text": "Academic & UNISA",
+        "href": "/books/academic",
+        "background": "#ededed",
+        "id": "topnav-9"
+      }
+    ]
+  },
+  "product_information": {
+    "items": [
+      {
+        "displayable_text": "- [Books](/books) / [More Ways to Shop](/books/more-ways-to-shop-21952)\n- [Books](/books) / [Books](/books/books-13883) / [Fiction](/books/fiction-14301) / [Fantasy](/books/fantasy-15910)\n- [Books](/books) / [Books](/books/books-13883) / [Language & Literature](/books/language-literature-14425) / [Literature](/books/literature-14878) / [Poetry](/books/poetry-15097)",
+        "display_name": "Categories",
+        "value": [
+          [
+            {
+              "slug": "books",
+              "id": 3,
+              "name": "Books"
+            },
+            {
+              "name": "More Ways to Shop",
+              "parent": null,
+              "level": 1,
+              "slug": "more-ways-to-shop-21952",
+              "dept": 3,
+              "id": 21952,
+              "children": []
+            }
+          ],
+          [
+            {
+              "slug": "books",
+              "id": 3,
+              "name": "Books"
+            },
+            {
+              "name": "Books",
+              "parent": null,
+              "level": 1,
+              "slug": "books-13883",
+              "dept": 3,
+              "id": 13883,
+              "children": []
+            },
+            {
+              "name": "Fiction",
+              "parent": 13883,
+              "level": 2,
+              "slug": "fiction-14301",
+              "dept": 3,
+              "id": 14301,
+              "children": []
+            },
+            {
+              "name": "Fantasy",
+              "parent": 14301,
+              "level": 3,
+              "slug": "fantasy-15910",
+              "dept": 3,
+              "id": 15910,
+              "children": []
+            }
+          ],
+          [
+            {
+              "slug": "books",
+              "id": 3,
+              "name": "Books"
+            },
+            {
+              "name": "Books",
+              "parent": null,
+              "level": 1,
+              "slug": "books-13883",
+              "dept": 3,
+              "id": 13883,
+              "children": []
+            },
+            {
+              "name": "Language & Literature",
+              "parent": 13883,
+              "level": 2,
+              "slug": "language-literature-14425",
+              "dept": 3,
+              "id": 14425,
+              "children": []
+            },
+            {
+              "name": "Literature",
+              "parent": 14425,
+              "level": 3,
+              "slug": "literature-14878",
+              "dept": 3,
+              "id": 14878,
+              "children": []
+            },
+            {
+              "name": "Poetry",
+              "parent": 14878,
+              "level": 4,
+              "slug": "poetry-15097",
+              "dept": 3,
+              "id": 15097,
+              "children": []
+            }
+          ]
+        ],
+        "source": "productline-categories",
+        "content_type": "text/markdown",
+        "id": "categories-0"
+      },
+      {
+        "displayable_text": "Limited \\(6 months\\)",
+        "display_name": "Warranty",
+        "item_type": "warranty",
+        "value": {
+          "type": {
+            "name": "Limited",
+            "id": 2
+          },
+          "period": {
+            "value": 6,
+            "unit": "m"
+          }
+        },
+        "source": "product-line-attribute-service",
+        "content_type": "text/markdown",
+        "id": "attributes-0"
+      },
+      {
+        "displayable_text": "- 9781405934138",
+        "display_name": "Barcode",
+        "item_type": "barcode",
+        "value": [
+          "9781405934138"
+        ],
+        "source": "tsin-barcodes",
+        "content_type": "text/markdown",
+        "id": "attributes-1"
+      },
+      {
+        "displayable_text": "9781405934138",
+        "display_name": "ISBN",
+        "item_type": "isbn",
+        "value": "9781405934138",
+        "source": "product-line-meta",
+        "content_type": "text/markdown",
+        "id": "attributes-2"
+      },
+      {
+        "displayable_text": "- [Stephen Fry](/all?filter=Author:Stephen+Fry)",
+        "display_name": "Author",
+        "item_type": "author",
+        "value": [
+          "Stephen Fry"
+        ],
+        "source": "product-line-attribute-service",
+        "content_type": "text/markdown",
+        "id": "attributes-3"
+      },
+      {
+        "displayable_text": "<img src='https://static.takealot.com/images/Flag_United_Kingdom.svg' alt='United Kingdom'/> United Kingdom",
+        "display_name": "Country",
+        "item_type": "country",
+        "value": "UK",
+        "source": "product-line-meta",
+        "content_type": "text/html",
+        "id": "attributes-4"
+      },
+      {
+        "displayable_text": "1 x Book",
+        "display_name": "What's in the box",
+        "item_type": "what_s_in_the_box",
+        "value": "1 x Book",
+        "source": "product-line-attribute-service",
+        "content_type": "text/markdown",
+        "id": "attributes-5"
+      },
+      {
+        "displayable_text": "Mythos",
+        "display_name": "Title",
+        "item_type": "title",
+        "value": "Mythos",
+        "source": "product-line-meta",
+        "content_type": "text/markdown",
+        "id": "attributes-6"
+      }
+    ],
+    "tab_title": "Product Information",
+    "categories": {
+      "displayable_text": "- [Books](/books) / [More Ways to Shop](/books/more-ways-to-shop-21952)\n- [Books](/books) / [Books](/books/books-13883) / [Fiction](/books/fiction-14301) / [Fantasy](/books/fantasy-15910)\n- [Books](/books) / [Books](/books/books-13883) / [Language & Literature](/books/language-literature-14425) / [Literature](/books/literature-14878) / [Poetry](/books/poetry-15097)",
+      "display_name": "Categories",
+      "value": [
+        [
+          {
+            "slug": "books",
+            "id": 3,
+            "name": "Books"
+          },
+          {
+            "name": "More Ways to Shop",
+            "parent": null,
+            "level": 1,
+            "slug": "more-ways-to-shop-21952",
+            "dept": 3,
+            "id": 21952,
+            "children": []
+          }
+        ],
+        [
+          {
+            "slug": "books",
+            "id": 3,
+            "name": "Books"
+          },
+          {
+            "name": "Books",
+            "parent": null,
+            "level": 1,
+            "slug": "books-13883",
+            "dept": 3,
+            "id": 13883,
+            "children": []
+          },
+          {
+            "name": "Fiction",
+            "parent": 13883,
+            "level": 2,
+            "slug": "fiction-14301",
+            "dept": 3,
+            "id": 14301,
+            "children": []
+          },
+          {
+            "name": "Fantasy",
+            "parent": 14301,
+            "level": 3,
+            "slug": "fantasy-15910",
+            "dept": 3,
+            "id": 15910,
+            "children": []
+          }
+        ],
+        [
+          {
+            "slug": "books",
+            "id": 3,
+            "name": "Books"
+          },
+          {
+            "name": "Books",
+            "parent": null,
+            "level": 1,
+            "slug": "books-13883",
+            "dept": 3,
+            "id": 13883,
+            "children": []
+          },
+          {
+            "name": "Language & Literature",
+            "parent": 13883,
+            "level": 2,
+            "slug": "language-literature-14425",
+            "dept": 3,
+            "id": 14425,
+            "children": []
+          },
+          {
+            "name": "Literature",
+            "parent": 14425,
+            "level": 3,
+            "slug": "literature-14878",
+            "dept": 3,
+            "id": 14878,
+            "children": []
+          },
+          {
+            "name": "Poetry",
+            "parent": 14878,
+            "level": 4,
+            "slug": "poetry-15097",
+            "dept": 3,
+            "id": 15097,
+            "children": []
+          }
+        ]
+      ],
+      "source": "productline-categories",
+      "content_type": "text/markdown",
+      "id": "categories-0"
+    }
+  },
+  "data_layer": {
+    "sku": 51806240,
+    "categoryname": [
+      "More Ways to Shop"
+    ],
+    "totalPrice": 149,
+    "name": "Mythos",
+    "productlineSku": "PLID48894338-51806240",
+    "departmentname": "Books",
+    "event": "product",
+    "departmentid": 3,
+    "pageType": "product",
+    "categoryid": [
+      21952
+    ],
+    "prodid": "PLID48894338",
+    "quantity": 1
+  },
+  "desktop_href": "https://www.takealot.com/mythos/PLID48894338",
+  "event_data": {
+    "documents": {
+      "product": {
+        "original_price": 195,
+        "sku_id": 68557620,
+        "product_line_id": 48894338,
+        "market_place_listing": false,
+        "in_stock": true,
+        "purchase_price": 149,
+        "lead_time": "In stock - shipped from CPT or JHB"
+      }
+    }
+  },
+  "flixmedia": {
+    "language": "za",
+    "ean": "9781405934138",
+    "mpn": "9781405934138",
+    "brand": null,
+    "tab_title": "Featured Content",
+    "distributor": "6320",
+    "fallback_language": "en"
+  },
+  "core": {
+    "star_rating": null,
+    "subtitle": null,
+    "title": "Mythos",
+    "brand": null,
+    "formats": [
+      {
+        "idFormatType": 1,
+        "type": "Books",
+        "id": 20,
+        "link_data": {
+          "action": "search",
+          "context": "navigation",
+          "parameters": {
+            "search": {
+              "filters": {
+                "Available": true,
+                "Format": "Paperback+%2F+softback"
+              }
+            }
+          }
+        },
+        "name": "Paperback / softback"
+      }
+    ],
+    "slug": "mythos",
+    "reviews": null,
+    "brand_url": null,
+    "authors": [
+      {
+        "idAuthor": -1,
+        "link_data": {
+          "fields": {
+            "author_slug": "Stephen+Fry"
+          },
+          "path": "/all?filter=Author:{author_slug}"
+        },
+        "Author": "Stephen Fry"
+      }
+    ],
+    "id": 48894338
+  },
+  "sharing": {
+    "url": "https://www.takealot.com/mythos/PLID48894338",
+    "copy": {
+      "body": {
+        "email": "Check this out on takealot: Mythos%0Ahttps://www.takealot.com/mythos/PLID48894338",
+        "twitter": "Mythos available to buy online at @TAKEALOT We offer fast, reliable delivery to your door.",
+        "facebook": "I love this product on takealot.com: Mythos https://www.takealot.com/mythos/PLID48894338",
+        "whatsapp": "Check this out on takealot.com, Mythos https://www.takealot.com/mythos/PLID48894338",
+        "pinterest": "Mythos | Buy Online in South Africa | https://www.takealot.com/mythos/PLID48894338"
+      },
+      "subject": {
+        "email": "Check this out on takealot: Mythos"
+      }
+    },
+    "enabled": [
+      "facebook",
+      "twitter",
+      "pinterest",
+      "email",
+      "whatsapp"
+    ]
+  },
+  "description": {
+    "tab_title": "Description",
+    "html": "*** Pre-order Mythos by Stephen Fry now ***The Greek myths are the greatest stories ever told, passed down through millennia and inspiring writers and artists as varied as Shakespeare, Michelangelo, James Joyce and Walt Disney.They are embedded deeply in the traditions, tales and cultural DNA of the West. In Stephen Fry's hands the stories of the titans and gods become a brilliantly entertaining account of ribaldry and revelry, warfare and worship, debauchery, love affairs and life lessons, slayings and suicides, triumphs and tragedies.You'll fall in love with Zeus, marvel at the birth of Athena, wince at Cronus and Gaia's revenge on Ouranos, weep with King Midas and hunt with the beautiful and ferocious Artemis.Thoroughly spellbinding, informative and moving, Stephen Fry's Mythos perfectly captures these stories for the modern age - in all their rich and deeply human relevance.<br><br><b>Review:</b><br><br>Wit and erudition are impressively evident . . . Read by Fry with his accustomed ebullient showmanship [he] gives the legends modern resonance by telling them with a contemporary colloquial twist' -- AUDIOBOOK of the WEEK * The Times * Mythos is the best thing he's written since his superb first novel . . . it is entertaining and edifying - one cannot really ask for more than that * The Telegraph * Fry's lively writing certainly conveys his lifelong passion for Greek myths . . . It's a rollicking good read * The Independent * Fry reimagines the Greek myths with wit, warmth and humanity, bringing them into the modern age. A welcome addition to any bookshelf * Book Bag * Mythos is Stephen's vivid retelling of the Greek myths. Bringing to life the Gods, monsters and mortals of Ancient Greece, he reimagines their astonishing stories for the modern world. * Express and Star * Perfect for the 21st Century. Ebullient, funny, Fry retells the Greek myths with elegance * The Times * A wondrous new immersion in ancient stories we only thought weknew. Page to page, Mythos is brilliant, funny, erudite, inventive, surprising and enthralling -- Richard North Patterson * - * [Fry] exhibits prodigious learning, a great facility with words, and enormous erudition and enthusiasm * Mail on Sunday * Lively, humorous and intimate, this retelling has real charm * The Guardian *<p>What's in the box<br />\n1 x Book</p>"
+  },
+  "bullet_point_attributes": {
+    "items": [
+      {
+        "description": "## What does this mean?\n\nYou can pay for this item with cash when your driver delivers your order.\n\n### How does it work?\n\nSelect Cash On Delivery (COD) as your payment option when you checkout.\nHave the exact amount of cash ready for our friendly delivery driver when he arrives.\n\n### Is COD available on every order?\n\nNo. We don’t offer COD for:\n\n-   Digital products (e.g. eBooks, gift vouchers or airtime)\n-   Customised products (e.g. a sports shirt printed with a personalised name)\n-   Orders totalling R5,000 or more\n-   Orders being collected from Takealot pickup points\n-   Delivery addresses falling outside of our Takealot Delivery Team area\n\n\n### If your order is eligible for COD, it will be displayed as a payment option at checkout.",
+        "positive": true,
+        "text": "Eligible for Cash on Delivery.",
+        "info_mode": "long",
+        "type": "eligible_for_cod",
+        "id": "bullet_point_0"
+      },
+      {
+        "description": "## Hassle-Free Exchanges & Returns for 30 Days\n\n### **Returns**\n\nIf you are not completely satisfied, simply return the items to us in their original condition and packaging within 30 days of receipt and we will issue a credit which can be used to place a new order.\n\n### Exchanges  (Fashion, sportswear and shoes only)\n\nThe item must be unworn and unused (other than trials) with the original tags still attached. Packaging should be returned in an undamaged condition with the item.\n\n### When does this policy not apply?\n\nIf the item is:\n- older than 30 days\n- opened, unsealed, used or missing any accessories\n- a digital product such as an eBook, electronic voucher, gaming code or other digital downloads;\n- an audio or video recording or computer software that has been unsealed;\n- a newspaper, periodical or magazine;\n- a foodstuff, beverage, or other product intended for everyday consumption;\n- a nursing or maternity product that has been unsealed, including (but not limited to) breast pumps, bottles, formula, maternity underwear, nappies and wipes;\n- a beauty product or fragrance which has been used;\n- a product which has been personalised or made to your specifications.\n\n\nFind out more about [Exchanges & Returns](https://secure.takealot.com/help#returns).",
+        "positive": true,
+        "text": "Hassle-Free Exchanges & Returns for 30 Days.",
+        "info_mode": "long",
+        "type": "hassle_free_exchanges_and_returns",
+        "id": "bullet_point_1"
+      },
+      {
+        "description": "Limited warranty, with certain exclusions, as defined by the manufacturer. Please consult the manufacturer for further details.",
+        "positive": true,
+        "text": "6-Month Limited Warranty.",
+        "info_mode": "short",
+        "type": "warranty",
+        "id": "bullet_point_2"
+      }
+    ]
+  },
+  "gallery": {
+    "images": [
+      "https://media.takealot.com/covers_isbn/9781405934138-{size}.jpg"
+    ],
+    "size_guide": {
+      "href": "https://api.takealot.com/rest/v-1-8-0/product-details/size-guide?platform=desktop",
+      "link_data": {
+        "path": "/rest/{api_version}/product-details/size-guide?platform={platform}",
+        "fields": {
+          "platform": "desktop",
+          "api_version": "v-1-8-0"
+        }
+      }
+    }
+  },
+  "reviews": {
+    "count": 0,
+    "star_rating": null,
+    "link_data": {
+      "path": "/rest/{api_version}/product-details/{plid}/reviews?platform={platform}",
+      "fields": {
+        "platform": "desktop",
+        "api_version": "v-1-8-0",
+        "plid": "PLID48894338"
+      }
+    },
+    "tab_title": "Reviews",
+    "href": "https://api.takealot.com/rest/v-1-8-0/product-details/PLID48894338/reviews?platform=desktop",
+    "latest_review": null
+  },
+  "frequently_bought_together": {
+    "href": "https://api.takealot.com/rest/v-1-8-0/product-details/PLID48894338/frequently-bought-together?platform=desktop",
+    "link_data": {
+      "path": "/rest/{api_version}/product-details/{plid}/frequently-bought-together?platform={platform}",
+      "fields": {
+        "platform": "desktop",
+        "api_version": "v-1-8-0",
+        "plid": "PLID48894338"
+      }
+    }
+  }
+}

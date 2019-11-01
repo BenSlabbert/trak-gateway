@@ -1,0 +1,1198 @@
+{
+  "uuid": "1592f1db32ad41cd950bf9566ba81d53",
+  "results": {
+    "start": 0,
+    "next_is_after": "[174.72241,53331013]",
+    "previous_is_before": "[423.45587,44948410]",
+    "num_found": 2,
+    "facets": [
+      {
+        "name": "Type",
+        "display_name": "Department",
+        "type": "field",
+        "entries": [
+          {
+            "filter": "Type:16",
+            "name": "Cellphones & Wearables",
+            "display_name": "Cellphones & Wearables",
+            "num_docs": 2
+          }
+        ]
+      },
+      {
+        "name": "Brand",
+        "display_name": "Brand",
+        "type": "field",
+        "entries": [
+          {
+            "filter": "Brand:Huawei",
+            "name": "Huawei",
+            "display_name": "Huawei",
+            "num_docs": 2
+          }
+        ]
+      },
+      {
+        "name": "Availability",
+        "display_name": "Availability",
+        "type": "field",
+        "entries": [
+          {
+            "filter": "Shipping:0",
+            "name": "0",
+            "display_name": "In Stock",
+            "num_docs": 2
+          },
+          {
+            "filter": "Shipping:3",
+            "name": "3",
+            "display_name": "Up to 3 days",
+            "num_docs": 2
+          },
+          {
+            "filter": "Shipping:5",
+            "name": "5",
+            "display_name": "Up to 5 days",
+            "num_docs": 2
+          },
+          {
+            "filter": "Shipping:7",
+            "name": "7",
+            "display_name": "Up to 7 days",
+            "num_docs": 2
+          },
+          {
+            "filter": "Shipping:12",
+            "name": "12",
+            "display_name": "Up to 12 days",
+            "num_docs": 2
+          },
+          {
+            "filter": "Shipping:15",
+            "name": "15",
+            "display_name": "Up to 15 days",
+            "num_docs": 2
+          }
+        ]
+      },
+      {
+        "name": "Price",
+        "display_name": "Price",
+        "type": "range",
+        "entries": [
+          {
+            "filter": "Price:3000-5000",
+            "display_name": "R 3000 - R 5000",
+            "start": "3000",
+            "end": "5000",
+            "num_docs": 2
+          }
+        ]
+      },
+      {
+        "name": "Rating",
+        "display_name": "Rating",
+        "type": "range",
+        "entries": [
+          {
+            "filter": "Rating:4.5-5.5",
+            "display_name": "5 Stars",
+            "start": "4.5",
+            "end": "5.5",
+            "num_docs": 1
+          },
+          {
+            "filter": "Rating:3.5-4.5",
+            "display_name": "4 Stars",
+            "start": "3.5",
+            "end": "4.5",
+            "num_docs": 1
+          }
+        ]
+      },
+      {
+        "name": "Promotions",
+        "display_name": "Promotions",
+        "type": "field",
+        "entries": [
+          {
+            "filter": "Promotions:58597",
+            "name": "58597",
+            "display_name": "58597",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58268",
+            "name": "58268",
+            "display_name": "58268",
+            "num_docs": 6619
+          },
+          {
+            "filter": "Promotions:58336",
+            "name": "58336",
+            "display_name": "58336",
+            "num_docs": 1490
+          },
+          {
+            "filter": "Promotions:58328",
+            "name": "58328",
+            "display_name": "58328",
+            "num_docs": 1023
+          },
+          {
+            "filter": "Promotions:58500",
+            "name": "58500",
+            "display_name": "58500",
+            "num_docs": 1011
+          },
+          {
+            "filter": "Promotions:58566",
+            "name": "58566",
+            "display_name": "58566",
+            "num_docs": 419
+          },
+          {
+            "filter": "Promotions:58322",
+            "name": "58322",
+            "display_name": "58322",
+            "num_docs": 346
+          },
+          {
+            "filter": "Promotions:58490",
+            "name": "58490",
+            "display_name": "58490",
+            "num_docs": 306
+          },
+          {
+            "filter": "Promotions:58253",
+            "name": "58253",
+            "display_name": "58253",
+            "num_docs": 283
+          },
+          {
+            "filter": "Promotions:58334",
+            "name": "58334",
+            "display_name": "58334",
+            "num_docs": 252
+          },
+          {
+            "filter": "Promotions:58384",
+            "name": "58384",
+            "display_name": "58384",
+            "num_docs": 252
+          },
+          {
+            "filter": "Promotions:51860",
+            "name": "51860",
+            "display_name": "51860",
+            "num_docs": 183
+          },
+          {
+            "filter": "Promotions:58562",
+            "name": "58562",
+            "display_name": "58562",
+            "num_docs": 148
+          },
+          {
+            "filter": "Promotions:54742",
+            "name": "54742",
+            "display_name": "54742",
+            "num_docs": 141
+          },
+          {
+            "filter": "Promotions:58582",
+            "name": "58582",
+            "display_name": "58582",
+            "num_docs": 128
+          },
+          {
+            "filter": "Promotions:50967",
+            "name": "50967",
+            "display_name": "50967",
+            "num_docs": 71
+          },
+          {
+            "filter": "Promotions:58337",
+            "name": "58337",
+            "display_name": "58337",
+            "num_docs": 68
+          },
+          {
+            "filter": "Promotions:56832",
+            "name": "56832",
+            "display_name": "56832",
+            "num_docs": 65
+          },
+          {
+            "filter": "Promotions:58338",
+            "name": "58338",
+            "display_name": "58338",
+            "num_docs": 60
+          },
+          {
+            "filter": "Promotions:57803",
+            "name": "57803",
+            "display_name": "57803",
+            "num_docs": 58
+          },
+          {
+            "filter": "Promotions:58581",
+            "name": "58581",
+            "display_name": "58581",
+            "num_docs": 51
+          },
+          {
+            "filter": "Promotions:58375",
+            "name": "58375",
+            "display_name": "58375",
+            "num_docs": 46
+          },
+          {
+            "filter": "Promotions:58565",
+            "name": "58565",
+            "display_name": "58565",
+            "num_docs": 36
+          },
+          {
+            "filter": "Promotions:51848",
+            "name": "51848",
+            "display_name": "51848",
+            "num_docs": 34
+          },
+          {
+            "filter": "Promotions:58230",
+            "name": "58230",
+            "display_name": "58230",
+            "num_docs": 27
+          },
+          {
+            "filter": "Promotions:57804",
+            "name": "57804",
+            "display_name": "57804",
+            "num_docs": 25
+          },
+          {
+            "filter": "Promotions:58574",
+            "name": "58574",
+            "display_name": "58574",
+            "num_docs": 24
+          },
+          {
+            "filter": "Promotions:58270",
+            "name": "58270",
+            "display_name": "58270",
+            "num_docs": 23
+          },
+          {
+            "filter": "Promotions:58670",
+            "name": "58670",
+            "display_name": "58670",
+            "num_docs": 23
+          },
+          {
+            "filter": "Promotions:54795",
+            "name": "54795",
+            "display_name": "54795",
+            "num_docs": 22
+          },
+          {
+            "filter": "Promotions:58522",
+            "name": "58522",
+            "display_name": "58522",
+            "num_docs": 21
+          },
+          {
+            "filter": "Promotions:57518",
+            "name": "57518",
+            "display_name": "57518",
+            "num_docs": 19
+          },
+          {
+            "filter": "Promotions:58527",
+            "name": "58527",
+            "display_name": "58527",
+            "num_docs": 17
+          },
+          {
+            "filter": "Promotions:58538",
+            "name": "58538",
+            "display_name": "58538",
+            "num_docs": 17
+          },
+          {
+            "filter": "Promotions:58585",
+            "name": "58585",
+            "display_name": "58585",
+            "num_docs": 17
+          },
+          {
+            "filter": "Promotions:54368",
+            "name": "54368",
+            "display_name": "54368",
+            "num_docs": 16
+          },
+          {
+            "filter": "Promotions:57571",
+            "name": "57571",
+            "display_name": "57571",
+            "num_docs": 16
+          },
+          {
+            "filter": "Promotions:58269",
+            "name": "58269",
+            "display_name": "58269",
+            "num_docs": 16
+          },
+          {
+            "filter": "Promotions:58530",
+            "name": "58530",
+            "display_name": "58530",
+            "num_docs": 16
+          },
+          {
+            "filter": "Promotions:55725",
+            "name": "55725",
+            "display_name": "55725",
+            "num_docs": 15
+          },
+          {
+            "filter": "Promotions:57430",
+            "name": "57430",
+            "display_name": "57430",
+            "num_docs": 13
+          },
+          {
+            "filter": "Promotions:57683",
+            "name": "57683",
+            "display_name": "57683",
+            "num_docs": 13
+          },
+          {
+            "filter": "Promotions:58579",
+            "name": "58579",
+            "display_name": "58579",
+            "num_docs": 13
+          },
+          {
+            "filter": "Promotions:58580",
+            "name": "58580",
+            "display_name": "58580",
+            "num_docs": 13
+          },
+          {
+            "filter": "Promotions:58590",
+            "name": "58590",
+            "display_name": "58590",
+            "num_docs": 13
+          },
+          {
+            "filter": "Promotions:56873",
+            "name": "56873",
+            "display_name": "56873",
+            "num_docs": 12
+          },
+          {
+            "filter": "Promotions:58591",
+            "name": "58591",
+            "display_name": "58591",
+            "num_docs": 12
+          },
+          {
+            "filter": "Promotions:56996",
+            "name": "56996",
+            "display_name": "56996",
+            "num_docs": 11
+          },
+          {
+            "filter": "Promotions:58308",
+            "name": "58308",
+            "display_name": "58308",
+            "num_docs": 11
+          },
+          {
+            "filter": "Promotions:58528",
+            "name": "58528",
+            "display_name": "58528",
+            "num_docs": 11
+          },
+          {
+            "filter": "Promotions:58569",
+            "name": "58569",
+            "display_name": "58569",
+            "num_docs": 11
+          },
+          {
+            "filter": "Promotions:58314",
+            "name": "58314",
+            "display_name": "58314",
+            "num_docs": 10
+          },
+          {
+            "filter": "Promotions:58529",
+            "name": "58529",
+            "display_name": "58529",
+            "num_docs": 10
+          },
+          {
+            "filter": "Promotions:58134",
+            "name": "58134",
+            "display_name": "58134",
+            "num_docs": 9
+          },
+          {
+            "filter": "Promotions:58372",
+            "name": "58372",
+            "display_name": "58372",
+            "num_docs": 9
+          },
+          {
+            "filter": "Promotions:57418",
+            "name": "57418",
+            "display_name": "57418",
+            "num_docs": 8
+          },
+          {
+            "filter": "Promotions:54915",
+            "name": "54915",
+            "display_name": "54915",
+            "num_docs": 7
+          },
+          {
+            "filter": "Promotions:58264",
+            "name": "58264",
+            "display_name": "58264",
+            "num_docs": 7
+          },
+          {
+            "filter": "Promotions:58315",
+            "name": "58315",
+            "display_name": "58315",
+            "num_docs": 7
+          },
+          {
+            "filter": "Promotions:58162",
+            "name": "58162",
+            "display_name": "58162",
+            "num_docs": 6
+          },
+          {
+            "filter": "Promotions:58589",
+            "name": "58589",
+            "display_name": "58589",
+            "num_docs": 6
+          },
+          {
+            "filter": "Promotions:56732",
+            "name": "56732",
+            "display_name": "56732",
+            "num_docs": 5
+          },
+          {
+            "filter": "Promotions:57254",
+            "name": "57254",
+            "display_name": "57254",
+            "num_docs": 5
+          },
+          {
+            "filter": "Promotions:57789",
+            "name": "57789",
+            "display_name": "57789",
+            "num_docs": 5
+          },
+          {
+            "filter": "Promotions:58473",
+            "name": "58473",
+            "display_name": "58473",
+            "num_docs": 5
+          },
+          {
+            "filter": "Promotions:58535",
+            "name": "58535",
+            "display_name": "58535",
+            "num_docs": 5
+          },
+          {
+            "filter": "Promotions:58577",
+            "name": "58577",
+            "display_name": "58577",
+            "num_docs": 5
+          },
+          {
+            "filter": "Promotions:57800",
+            "name": "57800",
+            "display_name": "57800",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:57850",
+            "name": "57850",
+            "display_name": "57850",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:57857",
+            "name": "57857",
+            "display_name": "57857",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:57862",
+            "name": "57862",
+            "display_name": "57862",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:57865",
+            "name": "57865",
+            "display_name": "57865",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:58097",
+            "name": "58097",
+            "display_name": "58097",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:58381",
+            "name": "58381",
+            "display_name": "58381",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:58399",
+            "name": "58399",
+            "display_name": "58399",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:58572",
+            "name": "58572",
+            "display_name": "58572",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:58593",
+            "name": "58593",
+            "display_name": "58593",
+            "num_docs": 4
+          },
+          {
+            "filter": "Promotions:54571",
+            "name": "54571",
+            "display_name": "54571",
+            "num_docs": 3
+          },
+          {
+            "filter": "Promotions:58533",
+            "name": "58533",
+            "display_name": "58533",
+            "num_docs": 3
+          },
+          {
+            "filter": "Promotions:58576",
+            "name": "58576",
+            "display_name": "58576",
+            "num_docs": 3
+          },
+          {
+            "filter": "Promotions:56319",
+            "name": "56319",
+            "display_name": "56319",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:57794",
+            "name": "57794",
+            "display_name": "57794",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:57798",
+            "name": "57798",
+            "display_name": "57798",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58298",
+            "name": "58298",
+            "display_name": "58298",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58462",
+            "name": "58462",
+            "display_name": "58462",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58470",
+            "name": "58470",
+            "display_name": "58470",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58499",
+            "name": "58499",
+            "display_name": "58499",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58501",
+            "name": "58501",
+            "display_name": "58501",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58502",
+            "name": "58502",
+            "display_name": "58502",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58512",
+            "name": "58512",
+            "display_name": "58512",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58514",
+            "name": "58514",
+            "display_name": "58514",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58515",
+            "name": "58515",
+            "display_name": "58515",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58516",
+            "name": "58516",
+            "display_name": "58516",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58573",
+            "name": "58573",
+            "display_name": "58573",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58575",
+            "name": "58575",
+            "display_name": "58575",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58578",
+            "name": "58578",
+            "display_name": "58578",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58586",
+            "name": "58586",
+            "display_name": "58586",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58587",
+            "name": "58587",
+            "display_name": "58587",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58594",
+            "name": "58594",
+            "display_name": "58594",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58595",
+            "name": "58595",
+            "display_name": "58595",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:58596",
+            "name": "58596",
+            "display_name": "58596",
+            "num_docs": 2
+          },
+          {
+            "filter": "Promotions:57024",
+            "name": "57024",
+            "display_name": "57024",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:57285",
+            "name": "57285",
+            "display_name": "57285",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:57468",
+            "name": "57468",
+            "display_name": "57468",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:57667",
+            "name": "57667",
+            "display_name": "57667",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:57790",
+            "name": "57790",
+            "display_name": "57790",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:58145",
+            "name": "58145",
+            "display_name": "58145",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:58313",
+            "name": "58313",
+            "display_name": "58313",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:58326",
+            "name": "58326",
+            "display_name": "58326",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:58377",
+            "name": "58377",
+            "display_name": "58377",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:58506",
+            "name": "58506",
+            "display_name": "58506",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:58541",
+            "name": "58541",
+            "display_name": "58541",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:58542",
+            "name": "58542",
+            "display_name": "58542",
+            "num_docs": 1
+          },
+          {
+            "filter": "Promotions:58567",
+            "name": "58567",
+            "display_name": "58567",
+            "num_docs": 1
+          }
+        ]
+      }
+    ],
+    "filters": [
+      {
+        "filter": "Promotions:58597",
+        "title": "Promotions",
+        "num_docs": 2,
+        "display_name": "Promotions",
+        "display_value": "58597",
+        "type": "field",
+        "name": "58597"
+      }
+    ],
+    "breadcrumbs": [],
+    "productlines": [
+      {
+        "rating": {
+          "count": 6,
+          "average": 5
+        },
+        "subtitle": null,
+        "exclusive": false,
+        "web_selling_price": 4150,
+        "saving": "16%",
+        "availability": {
+          "jhb": 28,
+          "min": 0,
+          "max": 0,
+          "seller": false,
+          "supplier": false,
+          "cpt": 0
+        },
+        "sellerlistingid": 85864033,
+        "uuid": "PLID44948410",
+        "title": "Huawei P10 64GB Dual Sim - Black",
+        "quotable": false,
+        "soldout_daily_deals": null,
+        "promote_price": true,
+        "prepaid": false,
+        "webPriceRange": null,
+        "preselect": {},
+        "authors": null,
+        "dailydeal": false,
+        "variants": [],
+        "reviews": 6,
+        "formats": [],
+        "voucher": false,
+        "selling_price": 4150,
+        "colourvariants": false,
+        "has_variants": false,
+        "id": 44948410,
+        "priceRangeOld": null,
+        "seller": {
+          "id": 29823281,
+          "name": "HASHOOK"
+        },
+        "promotions_qty": {
+          "50967": 28,
+          "58268": 27,
+          "58597": 19
+        },
+        "priceRange": null,
+        "dailydeal_qty": {},
+        "old_selling_price": 4999,
+        "buybox_used": {
+          "total_results": 1,
+          "is_takealot": false,
+          "min_price": 5071,
+          "sub_condition_types": {
+            "unboxed": 1
+          },
+          "sku_id": 59680838
+        },
+        "available": true,
+        "product": null,
+        "ebook": false,
+        "has_skus": false,
+        "active": true,
+        "buybox": {
+          "total_results": 7,
+          "is_takealot": false,
+          "min_price": 4189,
+          "sku_id": 85864033
+        },
+        "promotions": [
+          {
+            "deal_id": 1928968,
+            "color": null,
+            "qty": 19,
+            "showleftnav": false,
+            "id": 58597,
+            "product_qualifying_quantity": 0,
+            "display_name": "Buy Box DS - November 2019",
+            "showtopnav": false,
+            "showtimer": false,
+            "start": 1572435000,
+            "department": null,
+            "showflyout": false,
+            "showsidebanner": false,
+            "price": 4189,
+            "is_lead_time_allowed": false,
+            "marketing_subsidy": 0,
+            "active": true,
+            "end": 1575064800,
+            "slug": null,
+            "landingpage": "",
+            "name": "OFF-buy-box-ds---november-2019-2019-10-30",
+            "promotion_qualifying_quantity": 1,
+            "promotion_price": null,
+            "position": 999,
+            "group_id": 1,
+            "supplier_subsidy": 0
+          },
+          {
+            "deal_id": 1914949,
+            "color": null,
+            "qty": 27,
+            "showleftnav": false,
+            "id": 58268,
+            "product_qualifying_quantity": 1,
+            "display_name": "Clearance",
+            "showtopnav": false,
+            "showtimer": false,
+            "start": 1571813100,
+            "department": null,
+            "showflyout": false,
+            "showsidebanner": false,
+            "price": 4869,
+            "is_lead_time_allowed": false,
+            "marketing_subsidy": 0,
+            "active": true,
+            "end": 1574403000,
+            "slug": "58268",
+            "landingpage": "",
+            "name": "OFF-clearance-2019-10-23",
+            "promotion_qualifying_quantity": 1,
+            "promotion_price": null,
+            "position": 999,
+            "group_id": 1,
+            "supplier_subsidy": 0
+          },
+          {
+            "deal_id": 1617390,
+            "color": null,
+            "qty": 28,
+            "showleftnav": false,
+            "id": 50967,
+            "product_qualifying_quantity": 0,
+            "display_name": "Tech Deals",
+            "showtopnav": false,
+            "showtimer": false,
+            "start": 1480683600,
+            "department": null,
+            "showflyout": false,
+            "showsidebanner": false,
+            "price": 5999,
+            "is_lead_time_allowed": false,
+            "marketing_subsidy": 0,
+            "active": true,
+            "end": 1582927140,
+            "slug": "cellular-on-promotion",
+            "landingpage": "",
+            "name": "CD-tech-deals-2016-12-02",
+            "promotion_qualifying_quantity": 1,
+            "promotion_price": null,
+            "position": 999,
+            "group_id": 1,
+            "supplier_subsidy": 0
+          }
+        ],
+        "web_saving": "16%",
+        "dates": {
+          "expected": null,
+          "preorder": null,
+          "released": "2017-05-08 00:00:00"
+        },
+        "server_info": {
+          "data_timestamp": "2019-10-31 21:44:10",
+          "ts": 1572551050,
+          "server": "catalogue-api-7b6df749d8-lggtt"
+        },
+        "cover": {
+          "url": "http://takealot.s3.amazonaws.com/covers_tsins/47795157/6901443177837-1.jpg",
+          "filename": "6901443177837-1.jpg",
+          "modified": 1494262224,
+          "key": "covers_tsins/47795157/6901443177837-1.jpg",
+          "size": 226188
+        },
+        "uri": "/huawei-p10-64gb-dual-sim-black/PLID44948410",
+        "departments": [
+          16
+        ],
+        "views": {
+          "badges": {
+            "entries": [
+              {
+                "id": "badge-0",
+                "type": "saving",
+                "value": "16% off"
+              }
+            ],
+            "app_entries": [
+              {
+                "id": "badge-0",
+                "type": "saving",
+                "value": "16% off"
+              }
+            ],
+            "promotion_id": 58597
+          }
+        }
+      },
+      {
+        "rating": {
+          "count": 1,
+          "average": 4
+        },
+        "subtitle": null,
+        "exclusive": false,
+        "web_selling_price": 4189,
+        "saving": "47%",
+        "availability": {
+          "jhb": 4,
+          "min": 5,
+          "max": 7,
+          "seller": false,
+          "supplier": false,
+          "cpt": 14
+        },
+        "sellerlistingid": null,
+        "uuid": "PLID53331013",
+        "title": "Huawei P10 64GB Dual Sim - Silver",
+        "quotable": false,
+        "soldout_daily_deals": null,
+        "promote_price": true,
+        "prepaid": false,
+        "webPriceRange": null,
+        "preselect": {},
+        "authors": null,
+        "dailydeal": false,
+        "variants": [],
+        "reviews": 1,
+        "formats": [],
+        "voucher": false,
+        "selling_price": 4189,
+        "colourvariants": false,
+        "has_variants": false,
+        "id": 53331013,
+        "priceRangeOld": null,
+        "seller": {
+          "id": null,
+          "name": null
+        },
+        "promotions_qty": {
+          "58268": 14,
+          "58597": 10
+        },
+        "priceRange": null,
+        "dailydeal_qty": {},
+        "old_selling_price": 7999,
+        "available": true,
+        "product": {
+          "ispreorder": false,
+          "id": 81845941
+        },
+        "ebook": false,
+        "has_skus": false,
+        "active": true,
+        "buybox": {
+          "total_results": 4,
+          "is_takealot": true,
+          "min_price": 4189,
+          "sku_id": 81845941
+        },
+        "promotions": [
+          {
+            "deal_id": 1928969,
+            "color": null,
+            "qty": 10,
+            "showleftnav": false,
+            "id": 58597,
+            "product_qualifying_quantity": 0,
+            "display_name": "Buy Box DS - November 2019",
+            "showtopnav": false,
+            "showtimer": false,
+            "start": 1572435000,
+            "department": null,
+            "showflyout": false,
+            "showsidebanner": false,
+            "price": 4189,
+            "is_lead_time_allowed": false,
+            "marketing_subsidy": 0,
+            "active": true,
+            "end": 1575064800,
+            "slug": null,
+            "landingpage": "",
+            "name": "OFF-buy-box-ds---november-2019-2019-10-30",
+            "promotion_qualifying_quantity": 1,
+            "promotion_price": null,
+            "position": 999,
+            "group_id": 1,
+            "supplier_subsidy": 0
+          },
+          {
+            "deal_id": 1915507,
+            "color": null,
+            "qty": 14,
+            "showleftnav": false,
+            "id": 58268,
+            "product_qualifying_quantity": 1,
+            "display_name": "Clearance",
+            "showtopnav": false,
+            "showtimer": false,
+            "start": 1571813100,
+            "department": null,
+            "showflyout": false,
+            "showsidebanner": false,
+            "price": 5039,
+            "is_lead_time_allowed": false,
+            "marketing_subsidy": 0,
+            "active": true,
+            "end": 1574403000,
+            "slug": "58268",
+            "landingpage": "",
+            "name": "OFF-clearance-2019-10-23",
+            "promotion_qualifying_quantity": 1,
+            "promotion_price": null,
+            "position": 999,
+            "group_id": 1,
+            "supplier_subsidy": 0
+          }
+        ],
+        "web_saving": "47%",
+        "dates": {
+          "expected": null,
+          "preorder": null,
+          "released": "2018-11-27 00:00:00"
+        },
+        "server_info": {
+          "data_timestamp": "2019-10-31 21:19:27",
+          "ts": 1572549567,
+          "server": "catalogue-api-7b6df749d8-h4jk8"
+        },
+        "cover": {
+          "url": "http://takealot.s3.amazonaws.com/covers_tsins/56311929/6901443177820-1.jpg",
+          "filename": "6901443177820-1.jpg",
+          "modified": 1543299333,
+          "key": "covers_tsins/56311929/6901443177820-1.jpg",
+          "size": 47727
+        },
+        "uri": "/huawei-p10-64gb-dual-sim-silver/PLID53331013",
+        "departments": [
+          16
+        ],
+        "views": {
+          "badges": {
+            "entries": [
+              {
+                "id": "badge-0",
+                "type": "saving",
+                "value": "47% off"
+              }
+            ],
+            "app_entries": [
+              {
+                "id": "badge-0",
+                "type": "saving",
+                "value": "47% off"
+              }
+            ],
+            "promotion_id": 58597
+          }
+        }
+      }
+    ]
+  },
+  "params": {
+    "version": [
+      "1-8-0"
+    ],
+    "rows": [
+      "100"
+    ],
+    "start": [
+      "0"
+    ],
+    "detail": [
+      "listing"
+    ],
+    "filter": [
+      "Available:true",
+      "Promotions:58597"
+    ]
+  },
+  "backend": ""
+}
