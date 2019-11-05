@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/go-resty/resty/v2"
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 const ProductUrlFormat = "https://api.takealot.com/rest/v-1-8-0/product-details/PLID%d?platform=desktop"
@@ -54,9 +55,12 @@ func FetchPLIDsOnPromotion(promotionID uint) ([]uint, error) {
 
 func FetchProduct(plID uint) (*ProductResponse, error) {
 	url := fmt.Sprintf(ProductUrlFormat, plID)
-	client := resty.New().SetRedirectPolicy(resty.FlexibleRedirectPolicy(5))
+	client := resty.New().
+		SetRedirectPolicy(resty.FlexibleRedirectPolicy(5)).
+		SetTimeout(10 * time.Second)
 
 	resp, err := client.R().Get(url)
+	client.GetClient().CloseIdleConnections()
 
 	if err != nil {
 		return nil, err
@@ -81,9 +85,9 @@ func FetchProduct(plID uint) (*ProductResponse, error) {
 
 func FetchPromotions() (*PromotionsResponse, error) {
 	client := resty.New().SetRedirectPolicy(resty.FlexibleRedirectPolicy(5))
-
 	resp, err := client.R().Get(PromotionsUrl)
 
+	client.GetClient().CloseIdleConnections()
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"context"
 	"errors"
 	"github.com/bsm/redislock"
 	"github.com/go-redis/redis"
@@ -29,17 +30,26 @@ func ReleaseRedisLock(lock *redislock.Lock) error {
 	return nil
 }
 
-func ObtainRedisLock(client *redislock.Client, key string) *redislock.Lock {
-	lock, err := client.Obtain(key, 5*time.Second, nil)
+func ObtainRedisLock(client *redislock.Client, key string) (*redislock.Lock, error) {
+	options := &redislock.Options{
+		RetryStrategy: redislock.LimitRetry(redislock.LinearBackoff(1*time.Second), 5),
+		Metadata:      "",
+		Context:       context.Background(),
+	}
+	lock, err := client.Obtain(key, 5*time.Second, options)
 	if err == redislock.ErrNotObtained {
-		log.Warnf("could not obtain lock: %s, sleep and retry...", key)
-		<-time.NewTicker(250 * time.Millisecond).C
-		return ObtainRedisLock(client, key)
+		log.Warnf("could not obtain lock: %s", key)
+		return nil, errors.New("failed to obtain lock")
 	} else if err != nil {
 		log.Fatalln(err)
 	}
-	log.Debugf("obtained lock with key: %s", key)
-	return lock
+	duration, err := lock.TTL()
+	if err != nil {
+		log.Warnf("failed to get lock ttl: %v", err)
+		return nil, errors.New("failed to obtain lock")
+	}
+	log.Debugf("obtained lock with duration: %s key: %s", duration.String(), key)
+	return lock, nil
 }
 
 func CloseRedisClient(client *redis.Client) {

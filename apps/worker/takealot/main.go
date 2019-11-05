@@ -2,12 +2,9 @@ package main
 
 import (
 	"encoding/binary"
-	"errors"
 	"flag"
 	"fmt"
-	pb "github.com/BenSlabbert/trak-gRPC/src/go"
 	"github.com/bsm/redislock"
-	"github.com/golang/protobuf/proto"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -18,17 +15,12 @@ import (
 	"net/http/pprof"
 	"os"
 	"os/signal"
-	"strings"
 	"time"
 	"trak-gateway/connection"
-	"trak-gateway/takealot/api"
 	"trak-gateway/takealot/env"
 	"trak-gateway/takealot/model"
 	"trak-gateway/takealot/queue"
 )
-
-// todo replace this
-var DB *gorm.DB
 
 func ExposePPROF(port int) {
 	// todo look into memory reporting
@@ -83,33 +75,50 @@ func main() {
 		MaxOpenConns:    100,
 	}
 	db, e := connection.GetMariaDB(opts)
-	DB = db
 	if e != nil {
 		log.Errorf("failed to get db connection: %v", e)
 		os.Exit(1)
 	}
 
-	defer connection.CloseMariaDB(DB)
-
-	model.MigrateModels(DB)
+	model.MigrateModels(db)
+	connection.CloseMariaDB(db)
 
 	if takealotEnv.MasterNode {
-		go creatProductChanTaskFactory(DB)
+		go creatProductChanTaskFactory()
 	}
 
 	var consumers []*nsq.Consumer
+	var newProductTasks []*queue.NSQNewProductTask
 	for i := 0; i < takealotEnv.Nsq.NumberOfNewProductConsumers; i++ {
+		db, e := connection.GetMariaDB(opts)
+		if e != nil {
+			log.Fatalf("failed to get db connection: %v", e)
+		}
+		client := connection.CreateRedisClient()
+		newProductTask := &queue.NSQNewProductTask{
+			DB:         db,
+			LockClient: redislock.New(client),
+			Producer:   queue.CreateNSQProducer(),
+		}
+		newProductTasks = append(newProductTasks, newProductTask)
 		s := uuid.New().String()[:6]
 		c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-new-product-worker-%d", s, i), queue.NewProductQueue, "worker")
-		c.AddHandler(nsq.HandlerFunc(HandleNSQNewProductMessage))
+		c.AddHandler(nsq.HandlerFunc(newProductTask.HandleMessage))
 		queue.ConnectConsumer(c)
 		consumers = append(consumers, c)
 	}
 
+	var scheduledTasks []*queue.NSQScheduledTask
 	for i := 0; i < takealotEnv.Nsq.NumberOfScheduledTaskConsumers; i++ {
+		db, e := connection.GetMariaDB(opts)
+		if e != nil {
+			log.Fatalf("failed to get db connection: %v", e)
+		}
+		scheduledTask := &queue.NSQScheduledTask{DB: db, Producer: queue.CreateNSQProducer()}
+		scheduledTasks = append(scheduledTasks, scheduledTask)
 		s := uuid.New().String()[:6]
 		c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-scheduled-task-worker-%d", s, i), queue.NewScheduledTaskQueue, "worker")
-		c.AddHandler(nsq.HandlerFunc(HandleNSQScheduledTaskMessage))
+		c.AddHandler(nsq.HandlerFunc(scheduledTask.HandleMessage))
 		queue.ConnectConsumer(c)
 		consumers = append(consumers, c)
 	}
@@ -124,9 +133,33 @@ func main() {
 	for _, c := range consumers {
 		c.Stop()
 	}
+
+	for _, t := range newProductTasks {
+		t.Quit()
+	}
+
+	for _, t := range scheduledTasks {
+		t.Quit()
+	}
 }
 
-func creatProductChanTaskFactory(db *gorm.DB) {
+func creatProductChanTaskFactory() {
+	takealotEnv := env.LoadEnv()
+	opts := connection.MariaDBConnectOpts{
+		Host:            takealotEnv.DB.Host,
+		Port:            takealotEnv.DB.Port,
+		Database:        takealotEnv.DB.Database,
+		User:            takealotEnv.DB.Username,
+		Password:        takealotEnv.DB.Password,
+		ConnMaxLifetime: time.Hour,
+		MaxIdleConns:    10,
+		MaxOpenConns:    100,
+	}
+	db, e := connection.GetMariaDB(opts)
+	if e != nil {
+		log.Fatalf("failed to get db connection: %v", e)
+	}
+
 	nsqProducer := queue.CreateNSQProducer()
 	defer nsqProducer.Stop()
 	ticker := time.NewTicker(10 * time.Second)
@@ -208,212 +241,4 @@ func PublishNewProductTasks(db *gorm.DB, nsqProducer *nsq.Producer) {
 	if err != nil {
 		log.Warnf("failed to upsert takealot crawler: %v", err)
 	}
-}
-
-func PersistProduct(plID uint, productResponse *api.ProductResponse) (uint, error) {
-	product := &model.ProductModel{}
-	product.PLID = plID
-	product.MapResponseToModel(productResponse)
-	product, err := model.UpsertProductModel(product, DB)
-	if err != nil {
-		log.Error("failed to persist product model!")
-		return 0, errors.New("failed to persist product entity")
-	}
-
-	nsqProducer := queue.CreateNSQProducer()
-	defer nsqProducer.Stop()
-	sr := &pb.SearchResult{Id: fmt.Sprintf("%d", product.ID), Name: product.Title}
-
-	if bytes, err := proto.Marshal(sr); err == nil {
-		err := nsqProducer.Publish(queue.ProductDigestQueue, bytes)
-		if err != nil {
-			log.Warnf("failed to publish to nsq: %v", err)
-		}
-	}
-
-	return product.ID, nil
-}
-
-func HandleNSQScheduledTaskMessage(message *nsq.Message) error {
-	taskID := binary.LittleEndian.Uint32(message.Body)
-	var messageIDBytes []byte
-	for _, b := range message.ID {
-		messageIDBytes = append(messageIDBytes, b)
-	}
-	messageID := string(messageIDBytes)
-
-	log.Infof("%s: handling scheduled task", messageID)
-
-	nsqProducer := queue.CreateNSQProducer()
-	defer nsqProducer.Stop()
-
-	switch taskID {
-	case uint32(queue.PromotionsScheduledTask):
-		promotionsResponse, err := api.FetchPromotions()
-		if err != nil {
-			log.Warnf("%s: failed to fetch promotions: %v", messageID, err)
-			return err
-		}
-
-		for _, r := range promotionsResponse.Response {
-			promotionModel := &model.PromotionModel{}
-			promotionModel.PromotionID = r.ID
-			promotionModel.End = r.End
-			promotionModel.Start = r.Start
-			promotionModel.DisplayName = r.ShortDisplayName
-
-			promotionModel, err := model.UpsertPromotionModel(promotionModel, DB)
-
-			if err != nil {
-				log.Warn(err.Error())
-				return err
-			}
-
-			pliDsOnPromotion, err := api.FetchPLIDsOnPromotion(promotionModel.PromotionID)
-
-			if err != nil {
-				log.Warn(err.Error())
-				return err
-			}
-
-			for _, plID := range pliDsOnPromotion {
-				a := make([]byte, 4)
-				binary.LittleEndian.PutUint32(a, uint32(plID))
-				log.Infof("pushing plID: %d to queue", plID)
-				err := nsqProducer.Publish(queue.NewProductQueue, a)
-				if err != nil {
-					log.Warnf("failed to publish to nsq: %v", err)
-				}
-
-				err = model.CreateProductPromotionLinkModel(plID, promotionModel.ID, DB)
-				if err != nil {
-					log.Warn(err.Error())
-					return err
-				}
-			}
-		}
-	}
-
-	return nil
-}
-
-func HandleNSQNewProductMessage(message *nsq.Message) error {
-	plID := uint(binary.LittleEndian.Uint32(message.Body))
-	var messageIDBytes []byte
-	for _, b := range message.ID {
-		messageIDBytes = append(messageIDBytes, b)
-	}
-	messageID := string(messageIDBytes)
-	log.Infof("%s: handle create product message for plID: %d messageRetries: %d", messageID, plID, message.Attempts)
-
-	client := connection.CreateRedisClient()
-	defer connection.CloseRedisClient(client)
-
-	lockClient := redislock.New(client)
-	productResponse, err := api.FetchProduct(plID)
-
-	if err != nil {
-		log.Warnf(err.Error())
-		return nil
-	}
-
-	lock := connection.ObtainRedisLock(lockClient, fmt.Sprintf("plID-%d", plID))
-	productID, err := PersistProduct(plID, productResponse)
-	if e := connection.ReleaseRedisLock(lock); e != nil {
-		log.Warnf("%s: %s", messageID, e.Error())
-	}
-
-	if err != nil {
-		log.Warn(err.Error())
-		return err
-	}
-
-	for _, img := range productResponse.Gallery.Images {
-		imageModel := &model.ProductImageModel{}
-		imageModel.ProductID = productID
-		imageModel.URLFormat = img
-		imageModel, err := model.CreateProductImageModel(imageModel, DB)
-
-		if err != nil {
-			log.Warn(err.Error())
-			return err
-		}
-	}
-
-	price := &model.PriceModel{}
-	price.CurrentPrice = productResponse.EventData.Documents.Product.PurchasePrice
-	price.ListPrice = productResponse.EventData.Documents.Product.OriginalPrice
-	price.ProductID = productID
-	price, err = model.CreatePrice(price, DB)
-	if err != nil {
-		log.Errorf("%s: failed to persist product model!", messageID)
-		return err
-	}
-
-	if productResponse.Core.Brand != nil {
-		lock = connection.ObtainRedisLock(lockClient, fmt.Sprintf("brand-%s", *productResponse.Core.Brand))
-
-		err := PersistBrand(productResponse, productID)
-		if e := connection.ReleaseRedisLock(lock); e != nil {
-			log.Warnf("%s: %s", messageID, e.Error())
-		}
-		if err != nil {
-			log.Warn(err.Error())
-			return err
-		}
-	}
-
-	categories := make(map[string]string)
-	for _, v := range productResponse.ProductInformation.Categories.Value {
-		for _, i := range v {
-			upper := strings.ToUpper(i.Name)
-			categories[upper] = upper
-		}
-	}
-
-	for _, c := range categories {
-		lock = connection.ObtainRedisLock(lockClient, fmt.Sprintf("category-%s", c))
-		err := PersistCategory(c, productID)
-		if e := connection.ReleaseRedisLock(lock); e != nil {
-			log.Warnf("%s: %s", messageID, e.Error())
-		}
-		if err != nil {
-			log.Warn(err.Error())
-			return err
-		}
-	}
-
-	return nil
-}
-
-func PersistCategory(category string, productID uint) error {
-	categoryModel := &model.CategoryModel{}
-	categoryModel.Name = category
-	categoryModel, err := model.UpsertCategoryModel(categoryModel, DB)
-	if err != nil {
-		log.Error("failed to persist product model!")
-		return errors.New("failed to persist product entity")
-	}
-	err = model.CreateProductCategoryLinkModel(productID, categoryModel.ID, DB)
-	if err != nil {
-		log.Error("failed to persist product model!")
-		return errors.New("failed to persist product entity")
-	}
-	return nil
-}
-
-func PersistBrand(productResponse *api.ProductResponse, productID uint) error {
-	brand := &model.BrandModel{}
-	brand.Name = *productResponse.Core.Brand
-	brand, err := model.UpsertBrandModel(brand, DB)
-	if err != nil {
-		log.Error("failed to persist product model!")
-		return errors.New("failed to persist product entity")
-	}
-	err = model.CreateProductBrandLinkModel(productID, brand.ID, DB)
-	if err != nil {
-		log.Error("failed to persist product model!")
-		return errors.New("failed to persist product entity")
-	}
-	return nil
 }

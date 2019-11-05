@@ -16,7 +16,10 @@ services:
       - NSQD_URL=nsqd:4150
       - NSQD_NUMBER_OF_NEW_PRODUCT_CONSUMERS=10
       - NSQD_NUMBER_OF_SCHEDULED_TASK_CONSUMERS=1
+      - PPROF_PORT=8080
     restart: on-failure
+    ports:
+      - 8080:8080
     depends_on:
       - redis
       - rds
