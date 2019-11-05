@@ -50,7 +50,7 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 		return err
 	}
 
-	productID, err := task.PersistProduct(plID, productResponse)
+	productID, err := task.persistProduct(plID, productResponse)
 	if e := connection.ReleaseRedisLock(lock); e != nil {
 		log.Warnf("%s: %s", messageID, e.Error())
 	}
@@ -89,7 +89,7 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 			return err
 		}
 
-		err := task.PersistBrand(productResponse, productID)
+		err := task.persistBrand(productResponse, productID)
 		if e := connection.ReleaseRedisLock(lock); e != nil {
 			log.Warnf("%s: %s", messageID, e.Error())
 		}
@@ -114,7 +114,7 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 			return err
 		}
 
-		err := task.PersistCategory(c, productID)
+		err := task.persistCategory(c, productID)
 		if e := connection.ReleaseRedisLock(lock); e != nil {
 			log.Warnf("%s: %s", messageID, e.Error())
 		}
@@ -127,7 +127,7 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 	return nil
 }
 
-func (task *NSQNewProductTask) PersistProduct(plID uint, productResponse *api.ProductResponse) (uint, error) {
+func (task *NSQNewProductTask) persistProduct(plID uint, productResponse *api.ProductResponse) (uint, error) {
 	product := &model.ProductModel{}
 	product.PLID = plID
 	product.MapResponseToModel(productResponse)
@@ -149,7 +149,7 @@ func (task *NSQNewProductTask) PersistProduct(plID uint, productResponse *api.Pr
 	return product.ID, nil
 }
 
-func (task *NSQNewProductTask) PersistCategory(category string, productID uint) error {
+func (task *NSQNewProductTask) persistCategory(category string, productID uint) error {
 	categoryModel := &model.CategoryModel{}
 	categoryModel.Name = category
 	categoryModel, err := model.UpsertCategoryModel(categoryModel, task.DB)
@@ -165,7 +165,7 @@ func (task *NSQNewProductTask) PersistCategory(category string, productID uint) 
 	return nil
 }
 
-func (task *NSQNewProductTask) PersistBrand(productResponse *api.ProductResponse, productID uint) error {
+func (task *NSQNewProductTask) persistBrand(productResponse *api.ProductResponse, productID uint) error {
 	brand := &model.BrandModel{}
 	brand.Name = *productResponse.Core.Brand
 	brand, err := model.UpsertBrandModel(brand, task.DB)

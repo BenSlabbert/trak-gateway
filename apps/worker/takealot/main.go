@@ -23,18 +23,8 @@ import (
 )
 
 func ExposePPROF(port int) {
-	// todo look into memory reporting
-	//var mem runtime.MemStats
-	//runtime.ReadMemStats(&mem)
-	//log.Println(mem.Alloc)
-	//log.Println(mem.TotalAlloc)
-	//log.Println(mem.HeapAlloc)
-	//log.Println(mem.HeapSys)
-
-	// Create a new router
 	router := mux.NewRouter()
 
-	// Register pprof handlers
 	router.HandleFunc("/debug/pprof/", pprof.Index)
 	router.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
 	router.HandleFunc("/debug/pprof/profile", pprof.Profile)
@@ -63,7 +53,6 @@ func main() {
 	// todo make this configurable (on/off)
 	ExposePPROF(takealotEnv.PPROFEnv.PPROFPort)
 
-	log.Tracef("loading env: %v", takealotEnv)
 	opts := connection.MariaDBConnectOpts{
 		Host:            takealotEnv.DB.Host,
 		Port:            takealotEnv.DB.Port,
@@ -74,17 +63,13 @@ func main() {
 		MaxIdleConns:    10,
 		MaxOpenConns:    100,
 	}
-	db, e := connection.GetMariaDB(opts)
-	if e != nil {
-		log.Errorf("failed to get db connection: %v", e)
-		os.Exit(1)
+
+	if err := MigrateDB(takealotEnv, opts); err != nil {
+		log.Fatalf("Failed to migrate db: %v", err)
 	}
 
-	model.MigrateModels(db)
-	connection.CloseMariaDB(db)
-
 	if takealotEnv.MasterNode {
-		go creatProductChanTaskFactory()
+		go CreateProductChanTaskFactory(opts)
 	}
 
 	var consumers []*nsq.Consumer
@@ -143,18 +128,20 @@ func main() {
 	}
 }
 
-func creatProductChanTaskFactory() {
-	takealotEnv := env.LoadEnv()
-	opts := connection.MariaDBConnectOpts{
-		Host:            takealotEnv.DB.Host,
-		Port:            takealotEnv.DB.Port,
-		Database:        takealotEnv.DB.Database,
-		User:            takealotEnv.DB.Username,
-		Password:        takealotEnv.DB.Password,
-		ConnMaxLifetime: time.Hour,
-		MaxIdleConns:    10,
-		MaxOpenConns:    100,
+func MigrateDB(e env.TakealotEnv, opts connection.MariaDBConnectOpts) error {
+	log.Tracef("loading env: %v", e)
+	db, err := connection.GetMariaDB(opts)
+	if err != nil {
+		log.Errorf("failed to get db connection: %v", err)
+		return err
 	}
+	model.MigrateModels(db)
+	connection.CloseMariaDB(db)
+	return nil
+}
+
+// todo need better name
+func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts) {
 	db, e := connection.GetMariaDB(opts)
 	if e != nil {
 		log.Fatalf("failed to get db connection: %v", e)
@@ -183,7 +170,6 @@ func creatProductChanTaskFactory() {
 
 func PublishPromotionScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
 	scheduledTaskModel, ok := model.FindScheduledTaskModelByName(model.PromotionsScheduledTask, db)
-	var err error
 
 	if !ok {
 		// create task
@@ -193,7 +179,7 @@ func PublishPromotionScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
 		scheduledTaskModel.NextRun = nextRun
 		scheduledTaskModel.LastRun = time.Unix(0, 0)
 		scheduledTaskModel.Name = model.PromotionsScheduledTask
-		scheduledTaskModel, err = model.UpsertScheduledTaskModel(scheduledTaskModel, db)
+		_, err := model.UpsertScheduledTaskModel(scheduledTaskModel, db)
 		if err != nil {
 			log.Warnf("failed to upsert ScheduledTaskModel: %v", err)
 			return
