@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=1.1.0-${TRAVIS_BUILD_NUMBER}
+VERSION=2.0.0-${TRAVIS_BUILD_NUMBER}
 
 echo "Building Images with version: ${VERSION} travis build number: ${TRAVIS_BUILD_NUMBER}"
 
