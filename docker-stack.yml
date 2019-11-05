@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   worker-master:
-    image: benjaminslabbert/trak_worker:1.0.1-2019-11-01_13-40-54
+    image: benjaminslabbert/trak_worker:2.0.0-16
     environment:
       - GORM_LOG_SQL=false
       - MASTER_NODE=true
@@ -17,9 +17,15 @@ services:
       - NSQD_NUMBER_OF_NEW_PRODUCT_CONSUMERS=10
       - NSQD_NUMBER_OF_SCHEDULED_TASK_CONSUMERS=1
     restart: on-failure
+    depends_on:
+      - redis
+      - rds
+      - nsqd
+      - nsqlookupd
+      - nsqadmin
 
   worker-slave:
-    image: benjaminslabbert/trak_worker:1.0.1-2019-11-01_13-40-54
+    image: benjaminslabbert/trak_worker:2.0.0-16
     environment:
       - GORM_LOG_SQL=false
       - MASTER_NODE=false
@@ -34,6 +40,26 @@ services:
       - NSQD_NUMBER_OF_NEW_PRODUCT_CONSUMERS=10
       - NSQD_NUMBER_OF_SCHEDULED_TASK_CONSUMERS=1
     restart: on-failure
+    depends_on:
+      - redis
+      - rds
+      - nsqd
+      - nsqlookupd
+      - nsqadmin
+
+  search:
+    image: benjaminslabbert/trak_search:2.0.0-16
+    environment:
+      - SONIC_PASSWORD=password
+      - SONIC_PORT=1491
+      - SONIC_HOST=sonic
+      - GRPC_PORT=50052
+      - NSQD_URL=nsqd:4150
+    restart: on-failure
+    ports:
+      - 50052:50052
+    depends_on:
+      - sonic
 
   redis:
     image: redis:5.0.6-alpine
@@ -106,3 +132,4 @@ services:
 
 volumes:
   rds-data:
+  sonic-data:
