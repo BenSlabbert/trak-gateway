@@ -2,7 +2,7 @@
 
 VERSION=1.1.0-$(date '+%Y-%m-%d_%H-%M-%S')
 
-echo "Building Images with version: ${VERSION}"
+echo "Building Images with version: ${VERSION} travis build number: ${TRAVIS_BUILD_NUMBER}"
 
 docker build -t benjaminslabbert/trak_gateway:"${VERSION}" -f ./apps/ui-server/Dockerfile .
 docker build -t benjaminslabbert/trak_worker:"${VERSION}" -f ./apps/worker/takealot/Dockerfile .
