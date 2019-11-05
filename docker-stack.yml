@@ -1,0 +1,108 @@
+version: "3.7"
+
+services:
+  worker-master:
+    image: benjaminslabbert/trak_worker:1.0.1-2019-11-01_13-40-54
+    environment:
+      - GORM_LOG_SQL=false
+      - MASTER_NODE=true
+      - DB_HOST=rds
+      - DB_PORT=3306
+      - DB_DATABASE=trak
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
+      - REDIS_URL=redis:6379
+      - REDIS_PASSWORD=password
+      - NSQD_URL=nsqd:4150
+      - NSQD_NUMBER_OF_NEW_PRODUCT_CONSUMERS=10
+      - NSQD_NUMBER_OF_SCHEDULED_TASK_CONSUMERS=1
+    restart: on-failure
+
+  worker-slave:
+    image: benjaminslabbert/trak_worker:1.0.1-2019-11-01_13-40-54
+    environment:
+      - GORM_LOG_SQL=false
+      - MASTER_NODE=false
+      - DB_HOST=rds
+      - DB_PORT=3306
+      - DB_DATABASE=trak
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
+      - REDIS_URL=redis:6379
+      - REDIS_PASSWORD=password
+      - NSQD_URL=nsqd:4150
+      - NSQD_NUMBER_OF_NEW_PRODUCT_CONSUMERS=10
+      - NSQD_NUMBER_OF_SCHEDULED_TASK_CONSUMERS=1
+    restart: on-failure
+
+  redis:
+    image: redis:5.0.6-alpine
+    command: redis-server --requirepass password
+    ports:
+      - 6379:6379
+    restart: on-failure
+
+  rds:
+    image: mariadb:10.4.8-bionic
+    ports:
+      - 3306:3306
+    volumes:
+      - rds-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=trak
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    stop_grace_period: 1m30s
+    labels:
+      - "description=Maria DB Relational DB"
+    restart: on-failure
+
+  # todo need to connect to nsqlookupd, see: https://stackoverflow.com/questions/48536963/nsq-cannot-consume-message-by-connecting-to-nsqlookupd
+  nsqlookupd:
+    image: nsqio/nsq:v1.2.0
+    command: /nsqlookupd
+    ports:
+      - "4160:4160" # TCP
+      - "4161:4161" # HTTP
+    restart: on-failure
+
+  nsqd:
+    image: nsqio/nsq:v1.2.0
+    command: /nsqd -lookupd-tcp-address=nsqlookupd:4160 -broadcast-address=nsqd
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4150:4150"
+      - "4151:4151"
+    restart: on-failure
+
+  nsqadmin:
+    image: nsqio/nsq:v1.2.0
+    command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4171:4171"
+    restart: on-failure
+
+  sonic:
+    image: valeriansaliou/sonic:v1.2.3
+    ports:
+      - 1491:1491
+    volumes:
+      - sonic-data:/usr/src/sonic
+      - ./sonic/sonic.cfg:/etc/sonic.cfg
+
+  portainer:
+    image: portainer/portainer:1.22.1
+    ports:
+      - 9000:9000
+    restart: on-failure
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - "admin-password=admin123"
+
+volumes:
+  rds-data:

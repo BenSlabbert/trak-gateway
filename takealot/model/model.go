@@ -71,8 +71,10 @@ func UpsertPromotionModel(model *PromotionModel, db *gorm.DB) (*PromotionModel, 
 	if dbModel.ID == 0 {
 		tx.Create(model)
 	} else {
+		// todo verify this isn't a problem
 		tx.Save(model)
 	}
+
 	e := tx.Commit().Error
 
 	if e != nil {

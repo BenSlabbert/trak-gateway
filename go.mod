@@ -3,7 +3,8 @@ module trak-gateway
 go 1.12
 
 require (
-	github.com/BenSlabbert/trak-gRPC v0.0.0-20191022085631-852ea30eb6f8
+	github.com/BenSlabbert/go-sonic v0.0.0-20191105070433-3ee57a51f253
+	github.com/BenSlabbert/trak-gRPC v0.0.0-20191105075159-1fb945095872
 	github.com/bsm/redislock v0.4.0
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-resty/resty/v2 v2.1.0

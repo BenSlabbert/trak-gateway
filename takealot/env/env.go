@@ -25,11 +25,16 @@ type NSQEnv struct {
 	NumberOfScheduledTaskConsumers int
 }
 
+type PPROFEnv struct {
+	PPROFPort int
+}
+
 type TakealotEnv struct {
 	DB         DBEnv
 	Redis      RedisEnv
 	MasterNode bool
 	Nsq        NSQEnv
+	PPROFEnv   PPROFEnv
 }
 
 func LoadEnv() TakealotEnv {
@@ -51,13 +56,28 @@ func LoadEnv() TakealotEnv {
 			NumberOfNewProductConsumers:    getNsqProductConsumers(),
 			NumberOfScheduledTaskConsumers: getNsqScheduledTaskConsumers(),
 		},
+		PPROFEnv: PPROFEnv{PPROFPort: getPPROFPort()},
 	}
+}
+
+func getPPROFPort() int {
+	e := os.Getenv("PPROF_PORT")
+
+	if e != "" {
+		i, err := strconv.ParseInt(e, 10, 0)
+		if err != nil {
+			log.Warnf("failed to parse string '%s' to int, setting to default 8080", e)
+			i = 8080
+		}
+		return int(i)
+	}
+	return 8080
 }
 
 func getNsqScheduledTaskConsumers() int {
 	e := os.Getenv("NSQD_NUMBER_OF_SCHEDULED_TASK_CONSUMERS")
 
-	if e == "" {
+	if e != "" {
 		i, err := strconv.ParseInt(e, 10, 0)
 		if err != nil {
 			log.Warnf("failed to parse string '%s' to int, setting to default 1", e)
@@ -71,7 +91,7 @@ func getNsqScheduledTaskConsumers() int {
 func getNsqProductConsumers() int {
 	e := os.Getenv("NSQD_NUMBER_OF_NEW_PRODUCT_CONSUMERS")
 
-	if e == "" {
+	if e != "" {
 		i, err := strconv.ParseInt(e, 10, 0)
 		if err != nil {
 			log.Warnf("failed to parse string '%s' to int, setting to default 3", e)
@@ -148,7 +168,7 @@ func getDBDataBase() string {
 func getDBPort() int {
 	e := os.Getenv("DB_PORT")
 
-	if e == "" {
+	if e != "" {
 		i, err := strconv.ParseInt(e, 10, 0)
 		if err != nil {
 			log.Warnf("failed to parse string '%s' to int, setting to default 3306", e)

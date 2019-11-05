@@ -5,12 +5,17 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	pb "github.com/BenSlabbert/trak-gRPC/src/go"
 	"github.com/bsm/redislock"
+	"github.com/golang/protobuf/proto"
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
+	"net/http"
+	"net/http/pprof"
 	"os"
 	"os/signal"
 	"strings"
@@ -25,6 +30,35 @@ import (
 // todo replace this
 var DB *gorm.DB
 
+func ExposePPROF(port int) {
+	// todo look into memory reporting
+	//var mem runtime.MemStats
+	//runtime.ReadMemStats(&mem)
+	//log.Println(mem.Alloc)
+	//log.Println(mem.TotalAlloc)
+	//log.Println(mem.HeapAlloc)
+	//log.Println(mem.HeapSys)
+
+	// Create a new router
+	router := mux.NewRouter()
+
+	// Register pprof handlers
+	router.HandleFunc("/debug/pprof/", pprof.Index)
+	router.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	router.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	router.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+
+	router.Handle("/debug/pprof/goroutine", pprof.Handler("goroutine"))
+	router.Handle("/debug/pprof/heap", pprof.Handler("heap"))
+	router.Handle("/debug/pprof/threadcreate", pprof.Handler("threadcreate"))
+	router.Handle("/debug/pprof/block", pprof.Handler("block"))
+
+	go func() {
+		err := http.ListenAndServe(fmt.Sprintf(":%d", port), router)
+		log.Warnf("failed to serve on port %d: %v", port, err)
+	}()
+}
+
 func main() {
 	verbose := flag.Bool("v", false, "set verbose logging")
 	flag.Parse()
@@ -34,6 +68,9 @@ func main() {
 	}
 
 	takealotEnv := env.LoadEnv()
+	// todo make this configurable (on/off)
+	ExposePPROF(takealotEnv.PPROFEnv.PPROFPort)
+
 	log.Tracef("loading env: %v", takealotEnv)
 	opts := connection.MariaDBConnectOpts{
 		Host:            takealotEnv.DB.Host,
@@ -63,7 +100,7 @@ func main() {
 	var consumers []*nsq.Consumer
 	for i := 0; i < takealotEnv.Nsq.NumberOfNewProductConsumers; i++ {
 		s := uuid.New().String()[:6]
-		c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-new-product-worker-%d", s, i), queue.NewProductQueue)
+		c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-new-product-worker-%d", s, i), queue.NewProductQueue, "worker")
 		c.AddHandler(nsq.HandlerFunc(HandleNSQNewProductMessage))
 		queue.ConnectConsumer(c)
 		consumers = append(consumers, c)
@@ -71,7 +108,7 @@ func main() {
 
 	for i := 0; i < takealotEnv.Nsq.NumberOfScheduledTaskConsumers; i++ {
 		s := uuid.New().String()[:6]
-		c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-scheduled-task-worker-%d", s, i), queue.NewScheduledTaskQueue)
+		c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-scheduled-task-worker-%d", s, i), queue.NewScheduledTaskQueue, "worker")
 		c.AddHandler(nsq.HandlerFunc(HandleNSQScheduledTaskMessage))
 		queue.ConnectConsumer(c)
 		consumers = append(consumers, c)
@@ -181,6 +218,17 @@ func PersistProduct(plID uint, productResponse *api.ProductResponse) (uint, erro
 	if err != nil {
 		log.Error("failed to persist product model!")
 		return 0, errors.New("failed to persist product entity")
+	}
+
+	nsqProducer := queue.CreateNSQProducer()
+	defer nsqProducer.Stop()
+	sr := &pb.SearchResult{Id: fmt.Sprintf("%d", product.ID), Name: product.Title}
+
+	if bytes, err := proto.Marshal(sr); err == nil {
+		err := nsqProducer.Publish(queue.ProductDigestQueue, bytes)
+		if err != nil {
+			log.Warnf("failed to publish to nsq: %v", err)
+		}
 	}
 
 	return product.ID, nil

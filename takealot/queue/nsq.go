@@ -6,8 +6,9 @@ import (
 	"trak-gateway/takealot/env"
 )
 
-const NewProductQueue string = "new-product-queue"
 const NewScheduledTaskQueue string = "new-scheduled-task-queue"
+const NewProductQueue string = "new-product-queue"
+const ProductDigestQueue string = "product-digest-queue"
 
 type ScheduledTask uint32
 
@@ -22,14 +23,14 @@ func ConnectConsumer(consumer *nsq.Consumer) {
 	log.Println("connected to NSQ")
 }
 
-func CreateNSQConsumer(clientID string, topic string) *nsq.Consumer {
-	validChannelName := nsq.IsValidChannelName("worker")
+func CreateNSQConsumer(clientID, topic, channel string) *nsq.Consumer {
+	validChannelName := nsq.IsValidChannelName(channel)
 	if !validChannelName {
-		log.Fatalf("invalid channel name: %s", "worker")
+		log.Fatalf("invalid channel name: %s", channel)
 	}
 	config := nsq.NewConfig()
 	config.ClientID = clientID
-	consumer, _ := nsq.NewConsumer(topic, "worker", config)
+	consumer, _ := nsq.NewConsumer(topic, channel, config)
 	return consumer
 }
 
