@@ -128,7 +128,7 @@ func main() {
 	}
 }
 
-func MigrateDB(e env.TakealotEnv, opts connection.MariaDBConnectOpts) error {
+func MigrateDB(e env.TrakEnv, opts connection.MariaDBConnectOpts) error {
 	log.Tracef("loading env: %v", e)
 	db, err := connection.GetMariaDB(opts)
 	if err != nil {

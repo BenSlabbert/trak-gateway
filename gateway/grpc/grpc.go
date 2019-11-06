@@ -13,15 +13,9 @@ import (
 	"trak-gateway/gateway/response"
 )
 
-var apiClient *grpc.ClientConn
+// todo refactor to not use these
 var searchClient *grpc.ClientConn
-
-var brandServiceClient pb.BrandServiceClient
 var searchServiceClient pb.SearchServiceClient
-var latestServiceClient pb.LatestServiceClient
-var productServiceClient pb.ProductServiceClient
-var categoryServiceClient pb.CategoryServiceClient
-var promotionServiceClient pb.PromotionServiceClient
 
 func init() {
 	apiGRPCHost := os.Getenv("API_GRPC_HOST")
@@ -32,21 +26,10 @@ func init() {
 	}
 
 	if searchGRPCHost == "" {
-		apiGRPCHost = ":50052"
+		searchGRPCHost = ":50052"
 	}
 
 	var grpcErr error
-	apiClient, grpcErr = grpc.Dial(apiGRPCHost, grpc.WithInsecure(), grpc.WithDefaultCallOptions(grpc.UseCompressor(gzip.Name)))
-
-	if grpcErr != nil {
-		log.Fatalf("Failed to connect: %v", grpcErr)
-	}
-
-	brandServiceClient = pb.NewBrandServiceClient(apiClient)
-	latestServiceClient = pb.NewLatestServiceClient(apiClient)
-	productServiceClient = pb.NewProductServiceClient(apiClient)
-	categoryServiceClient = pb.NewCategoryServiceClient(apiClient)
-	promotionServiceClient = pb.NewPromotionServiceClient(apiClient)
 
 	searchClient, grpcErr = grpc.Dial(searchGRPCHost, grpc.WithInsecure(), grpc.WithDefaultCallOptions(grpc.UseCompressor(gzip.Name)))
 
@@ -109,14 +92,6 @@ func withDeadline(millis int) (context.Context, context.CancelFunc) {
 
 func CloseConnections() {
 	log.Infof("Closing gRPC connections...")
-
-	if apiClient != nil {
-		e := apiClient.Close()
-
-		if e != nil {
-			log.Warnf("Failed to close apiClient grpc connection: %v", e)
-		}
-	}
 
 	if searchClient != nil {
 		e := searchClient.Close()

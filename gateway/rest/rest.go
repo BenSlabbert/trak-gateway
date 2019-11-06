@@ -49,6 +49,7 @@ func writeError(e response.Error, w http.ResponseWriter) {
 	write(w, bytes)
 }
 
+// todo send proto []byte instead of json
 func sendOK(w http.ResponseWriter, message proto.Message) {
 	m := jsonpb.Marshaler{}
 	result, _ := m.MarshalToString(message)

@@ -4,11 +4,16 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"time"
+	"trak-gateway/connection"
 	"trak-gateway/gateway/grpc"
 	"trak-gateway/gateway/profile"
 	"trak-gateway/gateway/rest"
+	"trak-gateway/takealot/env"
+	"trak-gateway/takealot/model"
 
 	"github.com/gorilla/mux"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -60,8 +65,33 @@ func getProfile() string {
 func main() {
 	log.Infof("Starting gateway")
 
-	// set up REST handlers for ReactJS
-	router := setUpRoutes()
+	takealotEnv := env.LoadEnv()
+	opts := connection.MariaDBConnectOpts{
+		Host:            takealotEnv.DB.Host,
+		Port:            takealotEnv.DB.Port,
+		Database:        takealotEnv.DB.Database,
+		User:            takealotEnv.DB.Username,
+		Password:        takealotEnv.DB.Password,
+		ConnMaxLifetime: time.Hour,
+		MaxIdleConns:    10,
+		MaxOpenConns:    100,
+	}
+
+	db, e := connection.GetMariaDB(opts)
+
+	if e != nil {
+		log.Fatalf("failed to get mariadb connection: %v", e)
+	}
+
+	model.MigrateModels(db)
+	handler := &rest.Handler{
+		DB:          db,
+		RedisClient: connection.CreateRedisClient(),
+	}
+
+	defer handler.Quit()
+
+	router := setUpRoutes(handler)
 	http.Handle("/", router)
 
 	go func() {
@@ -82,53 +112,53 @@ func main() {
 	<-ch
 }
 
-func setUpRoutes() *mux.Router {
+func setUpRoutes(handler *rest.Handler) *mux.Router {
 	router := mux.NewRouter()
 
 	router.Path("/api/latest").
-		HandlerFunc(rest.LatestHandler).
+		HandlerFunc(handler.LatestHandler).
 		Name("LatestHandler")
 
 	router.Path("/api/product/{productId:[0-9]+}").
-		HandlerFunc(rest.GetProductById).
+		HandlerFunc(handler.GetProductById).
 		Name("GetProductById")
 
 	router.Path("/api/brand/{brandId}").
-		HandlerFunc(rest.GetBrandById).
+		HandlerFunc(handler.GetBrandById).
 		Name("GetBrandById")
 
 	router.Path("/api/category/{categoryId}").
-		HandlerFunc(rest.GetCategoryId).
+		HandlerFunc(handler.GetCategoryId).
 		Name("GetCategoryId")
 
 	router.Path("/api/search/product").
 		Queries("s", "{s}").
-		HandlerFunc(rest.ProductSearch).
+		HandlerFunc(handler.ProductSearch).
 		Name("ProductSearch")
 
 	router.Path("/api/search/brand").
 		Queries("s", "{s}").
-		HandlerFunc(rest.BrandSearch).
+		HandlerFunc(handler.BrandSearch).
 		Name("BrandSearch")
 
 	router.Path("/api/search/category").
 		Queries("s", "{s}").
-		HandlerFunc(rest.CategorySearch).
+		HandlerFunc(handler.CategorySearch).
 		Name("CategorySearch")
 
 	router.Path("/api/daily-deals").
 		Queries("page", "{page}").
-		HandlerFunc(rest.DailyDeals).
+		HandlerFunc(handler.DailyDeals).
 		Name("DailyDeals")
 
 	router.Path("/api/promotion").
 		Queries("id", "{id}", "page", "{page}").
-		HandlerFunc(rest.GetPromotion).
+		HandlerFunc(handler.GetPromotion).
 		Name("GetPromotion")
 
 	router.Path("/api/all-promotions").
 		Queries("page", "{page}").
-		HandlerFunc(rest.GetAllPromotions).
+		HandlerFunc(handler.GetAllPromotions).
 		Name("GetAllPromotions")
 
 	if Profile == profile.DOCKER {

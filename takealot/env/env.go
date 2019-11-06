@@ -29,7 +29,7 @@ type PPROFEnv struct {
 	PPROFPort int
 }
 
-type TakealotEnv struct {
+type TrakEnv struct {
 	DB         DBEnv
 	Redis      RedisEnv
 	MasterNode bool
@@ -37,8 +37,8 @@ type TakealotEnv struct {
 	PPROFEnv   PPROFEnv
 }
 
-func LoadEnv() TakealotEnv {
-	return TakealotEnv{
+func LoadEnv() TrakEnv {
+	return TrakEnv{
 		DB: DBEnv{
 			Host:     getDBHost(),
 			Port:     getDBPort(),

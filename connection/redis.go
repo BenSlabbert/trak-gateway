@@ -17,7 +17,7 @@ func CreateRedisClient() *redis.Client {
 		Addr:       e.Redis.URL,
 		Password:   e.Redis.Password,
 		MaxRetries: 3,
-		PoolSize:   1,
+		PoolSize:   3,
 		OnConnect:  onConnect,
 	})
 }

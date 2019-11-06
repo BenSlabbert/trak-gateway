@@ -22,25 +22,6 @@ services:
     labels:
       - "description=Maria DB Relational DB"
 
-  search:
-    image: benjaminslabbert/trak_search:1.0.4-2019-10-24
-    ports:
-      - 50052
-    environment:
-      - SONIC_HOST=sonic
-      - SONIC_PORT=1491
-      - SONIC_PASSWORD=password
-      - SONIC_POOL_SIZE=2
-      - SONIC_TIMEOUT_CONN=5000
-      - SONIC_TIMEOUT_READ=5000
-      - JAVA_OPTS=-Xmx64m -Xms64m -XX:+TieredCompilation -Xss256k -Xverify:none -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+CMSClassUnloadingEnabled -XshowSettings:vm -XX:NativeMemoryTracking=summary -XX:+UnlockDiagnosticVMOptions -XX:+PrintNMTStatistics -XX:+HeapDumpOnOutOfMemoryError -noverify
-    depends_on:
-      - redis
-    labels:
-      - "description=Trak Search, searches on Sonic"
-    stop_grace_period: 1m30s
-    restart: on-failure
-
   sonic:
     image: valeriansaliou/sonic:v1.2.3
     ports:

@@ -3,6 +3,7 @@ package search
 import (
 	"github.com/BenSlabbert/go-sonic/sonic"
 	log "github.com/sirupsen/logrus"
+	"runtime"
 	"time"
 )
 
@@ -162,8 +163,7 @@ func (ss *SonicSearch) Ingest(collection, bucket, object, text string) error {
 
 func (ss *SonicSearch) IngestBulk(collection, bucket string, records []sonic.IngestBulkRecord) []sonic.IngestBulkError {
 	ingest := <-ss.ingestConnPool
-	// only use 1 routine here
-	errs := ingest.BulkPush(collection, bucket, 1, records)
+	errs := ingest.BulkPush(collection, bucket, runtime.NumCPU(), records)
 	ss.ingestConnPool <- ingest
 	return errs
 }

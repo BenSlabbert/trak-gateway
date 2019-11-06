@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	pb "github.com/BenSlabbert/trak-gRPC/src/go"
-	"github.com/golang/protobuf/proto"
 	"github.com/google/uuid"
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	_ "google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/reflection"
 	"net"
 	"os"
@@ -57,9 +57,16 @@ func run() error {
 		}
 	}()
 
-	// todo created nsq consumer for sonic digest
+	createSonicSearch, err := search.CreateSonicSearch()
+	if err != nil {
+		log.Fatalf("failed ot create sonic search pool: %v", err)
+	}
+
+	productDigest := &search.NSQProductDigest{SonicSearch: createSonicSearch}
+	defer productDigest.Quit()
+
 	c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-product-digest", uuid.New().String()[:6]), queue.ProductDigestQueue, "sonic")
-	c.AddHandler(nsq.HandlerFunc(HandleNSQProductDigest))
+	c.AddHandler(nsq.HandlerFunc(productDigest.HandleNSQProductDigest))
 	queue.ConnectConsumer(c)
 	defer c.Stop()
 
@@ -76,39 +83,6 @@ func run() error {
 
 	log.Infof("Closing the listener")
 	_ = lis.Close()
-
-	return nil
-}
-
-func HandleNSQProductDigest(message *nsq.Message) error {
-	var messageIDBytes []byte
-	for _, b := range message.ID {
-		messageIDBytes = append(messageIDBytes, b)
-	}
-	messageID := string(messageIDBytes)
-
-	sr := &pb.SearchResult{}
-	e := proto.Unmarshal(message.Body, sr)
-
-	if e != nil {
-		log.Warnf("%s: failed to unmarshal message to proto", messageID)
-	}
-
-	sonicSearch, err := search.CreateSonicSearch()
-
-	if err != nil {
-		log.Errorf("failed to create sonic connection: %v", err)
-		return err
-	}
-
-	defer sonicSearch.Quit()
-
-	e = sonicSearch.Ingest(search.ProductCollection, search.ProductBucket, sr.Id, sr.Name)
-
-	if e != nil {
-		log.Errorf("failed to ingest %s:%s into sonic: %v", sr.Id, sr.Name, err)
-		return err
-	}
 
 	return nil
 }

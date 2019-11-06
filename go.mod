@@ -3,11 +3,12 @@ module trak-gateway
 go 1.12
 
 require (
-	github.com/BenSlabbert/go-sonic v0.0.0-20191105070433-3ee57a51f253
+	github.com/BenSlabbert/go-sonic v0.0.0-20191106070808-c1097a6b606b
 	github.com/BenSlabbert/trak-gRPC v0.0.0-20191105075159-1fb945095872
 	github.com/bsm/redislock v0.4.0
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-resty/resty/v2 v2.1.0
+	github.com/gogo/protobuf v1.2.0
 	github.com/golang/protobuf v1.3.1
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.7.3
