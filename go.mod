@@ -8,7 +8,6 @@ require (
 	github.com/bsm/redislock v0.4.0
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-resty/resty/v2 v2.1.0
-	github.com/gogo/protobuf v1.2.0
 	github.com/golang/protobuf v1.3.1
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.7.3

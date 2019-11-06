@@ -193,12 +193,12 @@ type ProductResponse struct {
 	EventData   struct {
 		Documents struct {
 			Product struct {
-				OriginalPrice      float32 `json:"original_price"`
+				OriginalPrice      float64 `json:"original_price"`
 				SkuID              int     `json:"sku_id"`
 				ProductLineID      int     `json:"product_line_id"`
 				MarketPlaceListing bool    `json:"market_place_listing"`
 				InStock            bool    `json:"in_stock"`
-				PurchasePrice      float32 `json:"purchase_price"`
+				PurchasePrice      float64 `json:"purchase_price"`
 				LeadTime           string  `json:"lead_time"`
 			} `json:"product"`
 		} `json:"documents"`
