@@ -128,8 +128,8 @@ func setUpRoutes(handler *rest.Handler) *mux.Router {
 		Name("GetBrandById")
 
 	router.Path("/api/category/{categoryId}").
-		HandlerFunc(handler.GetCategoryId).
-		Name("GetCategoryId")
+		HandlerFunc(handler.GetCategoryById).
+		Name("GetCategoryById")
 
 	router.Path("/api/search/product").
 		Queries("s", "{s}").

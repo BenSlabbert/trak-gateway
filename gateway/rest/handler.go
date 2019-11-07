@@ -1,8 +1,6 @@
 package rest
 
 import (
-	"bytes"
-	"compress/zlib"
 	"fmt"
 	pb "github.com/BenSlabbert/trak-gRPC/src/go"
 	"github.com/go-redis/redis"
@@ -10,11 +8,10 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
-	"io/ioutil"
-	"math"
 	"strconv"
 	"time"
 	"trak-gateway/connection"
+	"trak-gateway/gateway/builder"
 	"trak-gateway/gateway/grpc"
 	"trak-gateway/gateway/response"
 	"trak-gateway/takealot/model"
@@ -32,47 +29,28 @@ func (h *Handler) Quit() {
 	connection.CloseRedisClient(h.RedisClient)
 }
 
-func (h *Handler) redisGet(key string) (*[]byte, error) {
+func (h *Handler) redisGet(key string, msg proto.Message) error {
 	data, err := h.RedisClient.Get(key).Bytes()
-
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	r, err := zlib.NewReader(bytes.NewReader(data))
+	// we have cached response
+	err = proto.Unmarshal(data, msg)
 	if err != nil {
-		log.Errorf("failed to decompress message: %v", err)
-		return nil, err
+		log.Warnf("failed to unmarshal bytes to proto")
+		return err
 	}
-	err = r.Close()
-	if err != nil {
-		log.Errorf("failed to close reader: %v", err)
-		return nil, err
-	}
-
-	uncompressed, err := ioutil.ReadAll(r)
-
-	return &uncompressed, nil
+	return err
 }
 
-func (h *Handler) redisSet(key string, data *[]byte, duration time.Duration) {
-	var b bytes.Buffer
-	w := zlib.NewWriter(&b)
-
-	_, err := w.Write(*data)
+func (h *Handler) redisSet(key string, msg proto.Message) {
+	d, err := proto.Marshal(msg)
 
 	if err != nil {
-		log.Warnf("failed to compress data: %v", err)
-		return
+		log.Warnf("failed to marshall proto to bytes: %v", err)
 	}
-
-	err = w.Close()
-	if err != nil {
-		log.Errorf("failed to close writer: %v", err)
-		return
-	}
-
-	h.RedisClient.Set(key, b.Bytes(), 5*time.Minute)
+	h.RedisClient.Set(key, d, 10*time.Minute)
 }
 
 func (h *Handler) GetAllPromotions(w http.ResponseWriter, req *http.Request) {
@@ -95,17 +73,11 @@ func (h *Handler) GetAllPromotions(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("GetAllPromotions-%d", pageReq)
-	data, err := h.redisGet(redisKey)
+	resp := &pb.GetAllPromotionsResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.GetAllPromotionsResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
 	promotionMessages := make([]*pb.PromotionMessage, 0)
@@ -120,7 +92,7 @@ func (h *Handler) GetAllPromotions(w http.ResponseWriter, req *http.Request) {
 		})
 	}
 
-	resp := &pb.GetAllPromotionsResponse{
+	resp = &pb.GetAllPromotionsResponse{
 		Promotions: promotionMessages,
 		// todo paging...
 		PageResponse: &pb.PageResponse{
@@ -131,16 +103,7 @@ func (h *Handler) GetAllPromotions(w http.ResponseWriter, req *http.Request) {
 		},
 	}
 
-	d, err := proto.Marshal(resp)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
+	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
 
@@ -177,44 +140,31 @@ func (h *Handler) GetPromotion(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("GetPromotion-%d-%d", pageReq, promotionIdReq)
-	data, err := h.redisGet(redisKey)
+	resp := &pb.PromotionResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.PromotionResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
 	productMessages := make([]*pb.ProductMessage, 0)
 	products := model.FindProductsByPromotion(promotionIdReq, pageReq, 12, h.DB)
 
+	// todo run in own goroutines
 	for _, pm := range products {
-		price := "0"
-		priceModel, ok := model.FindProductLatestPrice(pm.ID, h.DB)
-		if ok {
-			price = fmt.Sprintf("%f", priceModel.CurrentPrice)
+		pmb := builder.ProductMessageBuilder{
+			DB:           h.DB,
+			ID:           pm.ID,
+			ProductModel: pm,
 		}
 
-		imageURL := "0"
-		imageModel, ok := model.FindProductImageModel(pm.ID, h.DB)
-		if ok {
-			imageURL = imageModel.FormatURL(model.ProductImageSizePreview)
+		msg, _ := pmb.Build()
+		if msg != nil {
+			productMessages = append(productMessages, msg)
 		}
-		productMessages = append(productMessages, &pb.ProductMessage{
-			Name:       pm.Title,
-			ProductUrl: pm.URL,
-			ImageUrl:   imageURL,
-			Price:      price,
-			Id:         int64(pm.ID),
-		})
 	}
 
-	resp := &pb.PromotionResponse{
+	resp = &pb.PromotionResponse{
 		Products: productMessages,
 		// todo paging...
 		PageResponse: &pb.PageResponse{
@@ -225,16 +175,7 @@ func (h *Handler) GetPromotion(w http.ResponseWriter, req *http.Request) {
 		},
 	}
 
-	d, err := proto.Marshal(resp)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
+	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
 
@@ -258,17 +199,11 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("DailyDeals-%d", pageReq)
-	data, err := h.redisGet(redisKey)
+	resp := &pb.PromotionResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.PromotionResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
 	promotionModel, ok := model.FindLatestDailyDealPromotion(h.DB)
@@ -282,28 +217,21 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 	productMessages := make([]*pb.ProductMessage, 0)
 	products := model.FindProductsByPromotion(promotionModel.ID, pageReq, 12, h.DB)
 
+	// todo run in own goroutines
 	for _, pm := range products {
-		price := "0"
-		priceModel, ok := model.FindProductLatestPrice(pm.ID, h.DB)
-		if ok {
-			price = fmt.Sprintf("%f", priceModel.CurrentPrice)
+		pmb := builder.ProductMessageBuilder{
+			DB:           h.DB,
+			ID:           pm.ID,
+			ProductModel: pm,
 		}
 
-		imageURL := "0"
-		imageModel, ok := model.FindProductImageModel(pm.ID, h.DB)
-		if ok {
-			imageURL = imageModel.FormatURL(model.ProductImageSizePreview)
+		msg, _ := pmb.Build()
+		if msg != nil {
+			productMessages = append(productMessages, msg)
 		}
-		productMessages = append(productMessages, &pb.ProductMessage{
-			Name:       pm.Title,
-			ProductUrl: pm.URL,
-			ImageUrl:   imageURL,
-			Price:      price,
-			Id:         int64(pm.ID),
-		})
 	}
 
-	resp := &pb.PromotionResponse{
+	resp = &pb.PromotionResponse{
 		Products: productMessages,
 		// todo paging...
 		PageResponse: &pb.PageResponse{
@@ -314,16 +242,7 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 		},
 	}
 
-	d, err := proto.Marshal(resp)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
+	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
 
@@ -333,17 +252,11 @@ func (h *Handler) CategorySearch(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("CategorySearch-%s", s)
-	data, err := h.redisGet(redisKey)
+	resp := &pb.SearchResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.SearchResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
 	resp, grpcErr := grpc.CategorySearch(&pb.SearchRequest{Search: s})
@@ -378,18 +291,9 @@ func (h *Handler) CategorySearch(w http.ResponseWriter, req *http.Request) {
 		})
 	}
 
-	searchResponse := &pb.SearchResponse{Results: results}
-	d, err := proto.Marshal(searchResponse)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
-	sendOK(w, searchResponse)
+	resp = &pb.SearchResponse{Results: results}
+	h.redisSet(redisKey, resp)
+	sendOK(w, resp)
 }
 
 func (h *Handler) BrandSearch(w http.ResponseWriter, req *http.Request) {
@@ -398,17 +302,11 @@ func (h *Handler) BrandSearch(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("BrandSearch-%s", s)
-	data, err := h.redisGet(redisKey)
+	resp := &pb.SearchResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.SearchResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
 	resp, grpcErr := grpc.BrandSearch(&pb.SearchRequest{Search: s})
@@ -443,18 +341,9 @@ func (h *Handler) BrandSearch(w http.ResponseWriter, req *http.Request) {
 		})
 	}
 
-	searchResponse := &pb.SearchResponse{Results: results}
-	d, err := proto.Marshal(searchResponse)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
-	sendOK(w, searchResponse)
+	resp = &pb.SearchResponse{Results: results}
+	h.redisSet(redisKey, resp)
+	sendOK(w, resp)
 }
 
 func (h *Handler) ProductSearch(w http.ResponseWriter, req *http.Request) {
@@ -463,17 +352,11 @@ func (h *Handler) ProductSearch(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("ProductSearch-%s", s)
-	data, err := h.redisGet(redisKey)
+	resp := &pb.SearchResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.SearchResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
 	resp, grpcErr := grpc.ProductSearch(&pb.SearchRequest{Search: s})
@@ -508,18 +391,9 @@ func (h *Handler) ProductSearch(w http.ResponseWriter, req *http.Request) {
 		})
 	}
 
-	searchResponse := &pb.SearchResponse{Results: results}
-	d, err := proto.Marshal(searchResponse)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
-	sendOK(w, searchResponse)
+	resp = &pb.SearchResponse{Results: results}
+	h.redisSet(redisKey, resp)
+	sendOK(w, resp)
 }
 
 // todo add pagination in request
@@ -535,17 +409,11 @@ func (h *Handler) GetBrandById(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("GetBrandById-%d", brandId)
-	data, err := h.redisGet(redisKey)
+	resp := &pb.BrandResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.BrandResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
 	brandModel, ok := model.FindBrandModel(uint(brandId), h.DB)
@@ -563,56 +431,29 @@ func (h *Handler) GetBrandById(w http.ResponseWriter, req *http.Request) {
 
 	// todo do these in their own goroutine
 	for _, pm := range productModels {
-		price := "0"
-		priceModel, ok := model.FindProductLatestPrice(pm.ID, h.DB)
-		if ok {
-			price = fmt.Sprintf("%f", priceModel.CurrentPrice)
+		pmb := builder.ProductMessageBuilder{
+			DB:           h.DB,
+			ID:           pm.ID,
+			ProductModel: pm,
 		}
 
-		imageURL := "0"
-		imageModel, ok := model.FindProductImageModel(pm.ID, h.DB)
-		if ok {
-			imageURL = imageModel.FormatURL(model.ProductImageSizePreview)
+		msg, _ := pmb.Build()
+		if msg != nil {
+			products = append(products, msg)
 		}
-
-		msg := &pb.ProductMessage{
-			Name:       pm.Title,
-			ProductUrl: pm.URL,
-			Price:      price,
-			ImageUrl:   imageURL,
-			Id:         int64(pm.ID),
-			Brand: &pb.BrandMessage{
-				Id:   int64(brandModel.ID),
-				Name: brandModel.Name,
-			},
-			// todo
-			Categories: nil,
-		}
-
-		products = append(products, msg)
 	}
 
-	resp := &pb.BrandResponse{
+	resp = &pb.BrandResponse{
 		BrandId:  int64(brandId),
 		Name:     brandModel.Name,
 		Products: products,
 	}
-
-	d, err := proto.Marshal(resp)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
+	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
 
 // todo add pagination in request
-func (h *Handler) GetCategoryId(w http.ResponseWriter, req *http.Request) {
+func (h *Handler) GetCategoryById(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	categoryId, e := strconv.ParseUint(vars["categoryId"], 10, 64)
 
@@ -623,18 +464,12 @@ func (h *Handler) GetCategoryId(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// check redis for cache
-	redisKey := fmt.Sprintf("GetCategoryId-%d", categoryId)
-	data, err := h.redisGet(redisKey)
+	redisKey := fmt.Sprintf("GetCategoryById-%d", categoryId)
+	resp := &pb.CategoryResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.CategoryResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
 	categoryModel, ok := model.FindCategoryModel(uint(categoryId), h.DB)
@@ -652,47 +487,23 @@ func (h *Handler) GetCategoryId(w http.ResponseWriter, req *http.Request) {
 
 	// todo do these in their own goroutine
 	for _, pm := range productModels {
-		price := "0"
-		priceModel, ok := model.FindProductLatestPrice(pm.ID, h.DB)
-		if ok {
-			price = fmt.Sprintf("%f", priceModel.CurrentPrice)
+		pmb := builder.ProductMessageBuilder{
+			DB:           h.DB,
+			ID:           pm.ID,
+			ProductModel: pm,
 		}
 
-		imageURL := "0"
-		imageModel, ok := model.FindProductImageModel(pm.ID, h.DB)
-		if ok {
-			imageURL = imageModel.FormatURL(model.ProductImageSizePreview)
+		msg, _ := pmb.Build()
+		if msg != nil {
+			products = append(products, msg)
 		}
-
-		msg := &pb.ProductMessage{
-			Name:       pm.Title,
-			ProductUrl: pm.URL,
-			Price:      price,
-			ImageUrl:   imageURL,
-			Id:         int64(pm.ID),
-			// todo populate brand and category
-			Brand:      nil,
-			Categories: nil,
-		}
-
-		products = append(products, msg)
 	}
-	resp := &pb.CategoryResponse{
+	resp = &pb.CategoryResponse{
 		CategoryId: int64(categoryModel.ID),
 		Name:       categoryModel.Name,
 		Products:   products,
 	}
-
-	d, err := proto.Marshal(resp)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
+	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
 
@@ -708,165 +519,39 @@ func (h *Handler) GetProductById(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("GetProductById-%d", productId)
-	data, err := h.redisGet(redisKey)
+	resp := &pb.ProductResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.ProductResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
-	productModel, ok := model.FindProductModel(uint(productId), h.DB)
+	pmb := builder.ProductMessageBuilder{
+		DB: h.DB,
+		ID: uint(productId),
+	}
 
-	if !ok {
+	productMessage, e := pmb.Build()
+	if e != nil {
 		sendError(w, &response.Error{
-			Message: fmt.Sprintf("No category for ID: %d", uint(productId)),
+			Message: fmt.Sprintf("No product for ID: %d", uint(productId)),
 			Type:    response.ServerError,
 		})
 		return
 	}
 
-	prices := model.FindProductLatestPrices(productModel.ID, 0, 30, h.DB)
-
-	price := ""
-	if len(prices) > 0 {
-		price = fmt.Sprintf("%f", prices[0].CurrentPrice)
+	statsBuilder := builder.ProductStatsBuilder{
+		DB:        h.DB,
+		ProductID: uint(productId),
 	}
 
-	imageURL := "0"
-	imageModel, ok := model.FindProductImageModel(productModel.ID, h.DB)
-	if ok {
-		imageURL = imageModel.FormatURL(model.ProductImageSizePreview)
-	}
+	statsResponse, _ := statsBuilder.Build()
 
-	brandModel, ok := model.FindProductBrand(productModel.ID, h.DB)
-	if !ok {
-		log.Warnf("No brand for productID: %d", productModel.ID)
-		brandModel = &model.BrandModel{
-			Model: gorm.Model{ID: 0},
-			Name:  "UNKNOWN",
-		}
-	}
-
-	categories := make([]*pb.CategoryMessage, 0)
-	categoryModels := model.FindProductCategories(productModel.ID, h.DB)
-
-	for _, cm := range categoryModels {
-		categories = append(categories, &pb.CategoryMessage{
-			Id:   int64(cm.ID),
-			Name: cm.Name,
-		})
-	}
-
-	productMessage := &pb.ProductMessage{
-		Name:       productModel.Title,
-		ProductUrl: productModel.URL,
-		Price:      price,
-		ImageUrl:   imageURL,
-		Id:         int64(productModel.ID),
-		Brand: &pb.BrandMessage{
-			Id:   int64(brandModel.ID),
-			Name: brandModel.Name,
-		},
-		Categories: categories,
-	}
-
-	labels := make([]string, 0)
-	for _, p := range prices {
-		labels = append(labels, p.CreatedAt.String())
-	}
-
-	dataSets := make([]*pb.ChartDataSetMessage, 0)
-
-	priceData := make([]int64, 0)
-	for _, p := range prices {
-		priceData = append(priceData, int64(p.CurrentPrice))
-	}
-
-	dataSets = append(dataSets, &pb.ChartDataSetMessage{
-		Label:                "current",
-		FillColor:            "rgba(220,220,220,0.2)",
-		StrokeColor:          "rgba(220,220,220,1)",
-		PointColor:           "rgba(220,220,220,1)",
-		PointStrokeColor:     "#fff",
-		PointHighlightFill:   "#fff",
-		PointHighlightStroke: "rgba(220,220,220,1)",
-		Data:                 priceData,
-	})
-
-	priceData = make([]int64, 0)
-	for _, p := range prices {
-		priceData = append(priceData, int64(p.ListPrice))
-	}
-
-	dataSets = append(dataSets, &pb.ChartDataSetMessage{
-		Label:                "listed",
-		FillColor:            "rgba(151,187,205,0.2)",
-		StrokeColor:          "rgba(151,187,205,0.2)",
-		PointColor:           "rgba(151,187,205,1)",
-		PointStrokeColor:     "#fff",
-		PointHighlightFill:   "#fff",
-		PointHighlightStroke: "rgba(151,187,205,1)",
-		Data:                 priceData,
-	})
-
-	chartData := &pb.ChartDataMessage{
-		Labels:   labels,
-		DataSets: dataSets,
-	}
-
-	min := math.MaxFloat64
-	max := float64(0)
-	total := float64(0)
-	isFirst := true
-	for _, p := range prices {
-		if isFirst {
-			isFirst = false
-			min = p.CurrentPrice
-			max = p.CurrentPrice
-		}
-		total += p.CurrentPrice
-		if p.CurrentPrice < min {
-			min = p.CurrentPrice
-		}
-
-		if p.CurrentPrice > max {
-			max = p.CurrentPrice
-		}
-	}
-
-	mean := total
-	if len(prices) > 0 {
-		mean = math.Round(total / float64(len(prices)))
-	}
-
-	statsResponse := &pb.ProductStatsResponse{
-		MinPrice:  int64(min),
-		MaxPrice:  int64(max),
-		MeanPrice: mean,
-		ChartData: chartData,
-	}
-
-	resp := &pb.ProductResponse{
+	resp = &pb.ProductResponse{
 		Product: productMessage,
 		Stats:   statsResponse,
 	}
-
-	d, err := proto.Marshal(resp)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
+	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
 
@@ -874,50 +559,33 @@ func (h *Handler) GetProductById(w http.ResponseWriter, req *http.Request) {
 func (h *Handler) LatestHandler(w http.ResponseWriter, req *http.Request) {
 	// check redis for cache
 	redisKey := "Latest"
-	data, err := h.redisGet(redisKey)
+	resp := &pb.LatestResponse{}
+	err := h.redisGet(redisKey, resp)
 	if err == nil {
-		// we have cached response
-		resp := &pb.LatestResponse{}
-		err := proto.Unmarshal(*data, resp)
-		if err != nil {
-			log.Warnf("failed to unmarshal bytes to proto")
-		} else {
-			sendOK(w, resp)
-			return
-		}
+		sendOK(w, resp)
+		return
 	}
 
 	products := model.FindLatestProducts(0, 12, h.DB)
 	productMessages := make([]*pb.ProductMessage, 0)
 
+	// todo run in own goroutines
 	for _, p := range products {
-		imageModel, ok := model.FindProductImageModel(p.ID, h.DB)
-		imageURL := ""
-		if ok {
-			imageURL = imageModel.FormatURL(model.ProductImageSizePreview)
+		pmb := builder.ProductMessageBuilder{
+			DB:           h.DB,
+			ID:           p.ID,
+			ProductModel: p,
 		}
-		productMessages = append(productMessages, &pb.ProductMessage{
-			Name:       p.Title,
-			ProductUrl: p.URL,
-			ImageUrl:   imageURL,
-			Id:         int64(p.ID),
-		})
+		msg, _ := pmb.Build()
+		if msg != nil {
+			productMessages = append(productMessages, msg)
+		}
 	}
 
-	resp := &pb.LatestResponse{
+	resp = &pb.LatestResponse{
 		Products: productMessages,
 		Page:     nil,
 	}
-
-	d, err := proto.Marshal(resp)
-
-	if err != nil {
-		log.Warnf("failed to marshall proto to bytes: %v", err)
-	}
-
-	if len(d) > 0 {
-		h.redisSet(redisKey, &d, 5*time.Minute)
-	}
-
+	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
