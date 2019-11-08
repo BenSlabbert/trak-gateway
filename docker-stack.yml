@@ -9,6 +9,14 @@ services:
       - SEARCH_GRPC_HOST=search:50052
       - PROFILE=docker
       - PPROF_ENABLED=false
+      - DB_HOST=rds
+      - DB_PORT=3306
+      - DB_DATABASE=trak
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
+      - REDIS_URL=redis:6379
+      - REDIS_PASSWORD=password
+    restart: on-failure
     ports:
       - 5000:5000
     depends_on:
