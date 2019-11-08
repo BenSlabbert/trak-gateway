@@ -30,12 +30,18 @@ type PPROFEnv struct {
 	PPROFPort    int
 }
 
+type Crawler struct {
+	NumberOfNewProductTasks int
+	TakealotInitialPLID     uint
+}
+
 type TrakEnv struct {
 	DB         DBEnv
 	Redis      RedisEnv
 	MasterNode bool
 	Nsq        NSQEnv
 	PPROFEnv   PPROFEnv
+	Crawler    Crawler
 }
 
 func LoadEnv() TrakEnv {
@@ -61,7 +67,39 @@ func LoadEnv() TrakEnv {
 			PPROFPort:    getPPROFPort(),
 			PPROFEnabled: getPPROFEnabled(),
 		},
+		Crawler: Crawler{
+			NumberOfNewProductTasks: getNumberOfNewProductTasks(),
+			TakealotInitialPLID:     getTakealotInitialPLID(),
+		},
 	}
+}
+
+func getTakealotInitialPLID() uint {
+	e := os.Getenv("CRAWLER_TAKEALOT_INITIAL_PLID")
+
+	if e != "" {
+		i, err := strconv.ParseUint(e, 10, 32)
+		if err != nil {
+			log.Warnf("failed to parse string '%s' to int, setting to default 41469985", e)
+			i = 41469985
+		}
+		return uint(i)
+	}
+	return uint(41469985)
+}
+
+func getNumberOfNewProductTasks() int {
+	e := os.Getenv("CRAWLER_NUMBER_OF_NEW_PRODUCT_TASKS")
+
+	if e != "" {
+		i, err := strconv.ParseInt(e, 10, 0)
+		if err != nil {
+			log.Warnf("failed to parse string '%s' to int, setting to default 10", e)
+			i = 10
+		}
+		return int(i)
+	}
+	return 10
 }
 
 func getPPROFEnabled() bool {

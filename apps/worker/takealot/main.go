@@ -57,7 +57,7 @@ func main() {
 	}
 
 	if takealotEnv.MasterNode {
-		go CreateProductChanTaskFactory(opts)
+		go CreateProductChanTaskFactory(opts, takealotEnv)
 	}
 
 	var consumers []*nsq.Consumer
@@ -129,7 +129,7 @@ func MigrateDB(e env.TrakEnv, opts connection.MariaDBConnectOpts) error {
 }
 
 // todo need better name
-func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts) {
+func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts, trakEnv env.TrakEnv) {
 	db, e := connection.GetMariaDB(opts)
 	if e != nil {
 		log.Fatalf("failed to get db connection: %v", e)
@@ -150,7 +150,7 @@ func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts) {
 				break
 			}
 
-			PublishNewProductTasks(db, nsqProducer)
+			PublishNewProductTasks(db, nsqProducer, trakEnv.Crawler)
 			PublishPromotionScheduledTask(db, nsqProducer)
 		}
 	}
@@ -194,13 +194,13 @@ func PublishPromotionScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
 	}
 }
 
-func PublishNewProductTasks(db *gorm.DB, nsqProducer *nsq.Producer) {
+func PublishNewProductTasks(db *gorm.DB, nsqProducer *nsq.Producer, crawlerEnv env.Crawler) {
 	crawler, ok := model.FindCrawlerModelByName("Takealot", db)
 	if !ok {
-		crawler = &model.CrawlerModel{Name: "Takealot", LastPLID: 41469985}
+		crawler = &model.CrawlerModel{Name: "Takealot", LastPLID: crawlerEnv.TakealotInitialPLID}
 	}
 	count := 0
-	for count < 50 {
+	for count < crawlerEnv.NumberOfNewProductTasks {
 		crawler.LastPLID++
 		a := make([]byte, 4)
 		binary.LittleEndian.PutUint32(a, uint32(crawler.LastPLID))
