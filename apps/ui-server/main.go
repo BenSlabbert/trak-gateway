@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"time"
 	"trak-gateway/connection"
 	"trak-gateway/gateway/grpc"
+	"trak-gateway/gateway/metrics"
 	"trak-gateway/gateway/profile"
 	"trak-gateway/gateway/rest"
 	"trak-gateway/takealot/env"
@@ -66,7 +68,8 @@ func main() {
 	log.Infof("Starting gateway")
 
 	takealotEnv := env.LoadEnv()
-	opts := connection.MariaDBConnectOpts{
+
+	db, e := connection.GetMariaDB(connection.MariaDBConnectOpts{
 		Host:            takealotEnv.DB.Host,
 		Port:            takealotEnv.DB.Port,
 		Database:        takealotEnv.DB.Database,
@@ -75,9 +78,7 @@ func main() {
 		ConnMaxLifetime: time.Hour,
 		MaxIdleConns:    10,
 		MaxOpenConns:    100,
-	}
-
-	db, e := connection.GetMariaDB(opts)
+	})
 
 	if e != nil {
 		log.Fatalf("failed to get mariadb connection: %v", e)
@@ -90,6 +91,17 @@ func main() {
 	}
 
 	defer handler.Quit()
+
+	if takealotEnv.PPROFEnv.PPROFEnabled {
+		log.Infof("exposing pprof and db stats on port: %d", takealotEnv.PPROFEnv.PPROFPort)
+		router := mux.NewRouter()
+		metrics.ExposePPROF(router)
+		metrics.ExposeDBStats(router, db)
+		go func() {
+			err := http.ListenAndServe(fmt.Sprintf(":%d", takealotEnv.PPROFEnv.PPROFPort), router)
+			log.Warnf("failed to serve on port %d: %v", takealotEnv.PPROFEnv.PPROFPort, err)
+		}()
+	}
 
 	router := setUpRoutes(handler)
 	http.Handle("/", router)

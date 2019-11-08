@@ -12,34 +12,15 @@ import (
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
 	"net/http"
-	"net/http/pprof"
 	"os"
 	"os/signal"
 	"time"
 	"trak-gateway/connection"
+	"trak-gateway/gateway/metrics"
 	"trak-gateway/takealot/env"
 	"trak-gateway/takealot/model"
 	"trak-gateway/takealot/queue"
 )
-
-func ExposePPROF(port int) {
-	router := mux.NewRouter()
-
-	router.HandleFunc("/debug/pprof/", pprof.Index)
-	router.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
-	router.HandleFunc("/debug/pprof/profile", pprof.Profile)
-	router.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
-
-	router.Handle("/debug/pprof/goroutine", pprof.Handler("goroutine"))
-	router.Handle("/debug/pprof/heap", pprof.Handler("heap"))
-	router.Handle("/debug/pprof/threadcreate", pprof.Handler("threadcreate"))
-	router.Handle("/debug/pprof/block", pprof.Handler("block"))
-
-	go func() {
-		err := http.ListenAndServe(fmt.Sprintf(":%d", port), router)
-		log.Warnf("failed to serve on port %d: %v", port, err)
-	}()
-}
 
 func main() {
 	verbose := flag.Bool("v", false, "set verbose logging")
@@ -50,8 +31,15 @@ func main() {
 	}
 
 	takealotEnv := env.LoadEnv()
-	// todo make this configurable (on/off)
-	ExposePPROF(takealotEnv.PPROFEnv.PPROFPort)
+	if takealotEnv.PPROFEnv.PPROFEnabled {
+		log.Infof("exposing pprof on port: %d", takealotEnv.PPROFEnv.PPROFPort)
+		router := mux.NewRouter()
+		metrics.ExposePPROF(router)
+		go func() {
+			err := http.ListenAndServe(fmt.Sprintf(":%d", takealotEnv.PPROFEnv.PPROFPort), router)
+			log.Warnf("failed to serve on port %d: %v", takealotEnv.PPROFEnv.PPROFPort, err)
+		}()
+	}
 
 	opts := connection.MariaDBConnectOpts{
 		Host:            takealotEnv.DB.Host,

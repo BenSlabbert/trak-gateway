@@ -26,7 +26,8 @@ type NSQEnv struct {
 }
 
 type PPROFEnv struct {
-	PPROFPort int
+	PPROFEnabled bool
+	PPROFPort    int
 }
 
 type TrakEnv struct {
@@ -56,8 +57,19 @@ func LoadEnv() TrakEnv {
 			NumberOfNewProductConsumers:    getNsqProductConsumers(),
 			NumberOfScheduledTaskConsumers: getNsqScheduledTaskConsumers(),
 		},
-		PPROFEnv: PPROFEnv{PPROFPort: getPPROFPort()},
+		PPROFEnv: PPROFEnv{
+			PPROFPort:    getPPROFPort(),
+			PPROFEnabled: getPPROFEnabled(),
+		},
 	}
+}
+
+func getPPROFEnabled() bool {
+	e := os.Getenv("PPROF_ENABLED")
+	if e == "true" {
+		return true
+	}
+	return false
 }
 
 func getPPROFPort() int {

@@ -1,6 +1,20 @@
 version: "3.7"
 
 services:
+
+  gateway:
+    image: benjaminslabbert/trak_gateway:latest
+    environment:
+      - API_PORT=5000
+      - SEARCH_GRPC_HOST=search:50052
+      - PROFILE=docker
+      - PPROF_ENABLED=false
+    ports:
+      - 5000:5000
+    depends_on:
+      - redis
+      - rds
+
   worker-master:
     image: benjaminslabbert/trak_worker:latest
     environment:
@@ -16,7 +30,7 @@ services:
       - NSQD_URL=nsqd:4150
       - NSQD_NUMBER_OF_NEW_PRODUCT_CONSUMERS=10
       - NSQD_NUMBER_OF_SCHEDULED_TASK_CONSUMERS=1
-      - PPROF_PORT=8080
+      - PPROF_ENABLED=false
     restart: on-failure
     ports:
       - 8080:8080
@@ -42,6 +56,7 @@ services:
       - NSQD_URL=nsqd:4150
       - NSQD_NUMBER_OF_NEW_PRODUCT_CONSUMERS=10
       - NSQD_NUMBER_OF_SCHEDULED_TASK_CONSUMERS=1
+      - PPROF_ENABLED=false
     restart: on-failure
     depends_on:
       - redis

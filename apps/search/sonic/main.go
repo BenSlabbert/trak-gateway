@@ -5,15 +5,19 @@ import (
 	"fmt"
 	pb "github.com/BenSlabbert/trak-gRPC/src/go"
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	_ "google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/reflection"
 	"net"
+	"net/http"
 	"os"
 	"os/signal"
+	"trak-gateway/gateway/metrics"
 	"trak-gateway/search"
+	"trak-gateway/takealot/env"
 	"trak-gateway/takealot/queue"
 )
 
@@ -21,6 +25,17 @@ func run() error {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
+
+	takealotEnv := env.LoadEnv()
+	if takealotEnv.PPROFEnv.PPROFEnabled {
+		log.Infof("exposing pprof on port: %d", takealotEnv.PPROFEnv.PPROFPort)
+		router := mux.NewRouter()
+		metrics.ExposePPROF(router)
+		go func() {
+			err := http.ListenAndServe(fmt.Sprintf(":%d", takealotEnv.PPROFEnv.PPROFPort), router)
+			log.Warnf("failed to serve on port %d: %v", takealotEnv.PPROFEnv.PPROFPort, err)
+		}()
+	}
 
 	serverPort := os.Getenv("GRPC_PORT")
 

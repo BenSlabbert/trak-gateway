@@ -1,6 +1,6 @@
 module trak-gateway
 
-go 1.12
+go 1.13
 
 require (
 	github.com/BenSlabbert/go-sonic v0.0.0-20191106070808-c1097a6b606b
