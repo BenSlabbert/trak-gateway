@@ -1,5 +1,5 @@
 ARG CODE_PATH=/app/gateway
-ARG BUILD_PATH=$CODE_PATH/apps/ui-server
+ARG BUILD_PATH=$CODE_PATH/apps/gateway
 ARG APPNAME=gateway
 ARG CERT_PATH=/etc/ssl/certs/ca-certificates.crt
 
@@ -17,6 +17,9 @@ COPY . $CODE_PATH
 
 WORKDIR $CODE_PATH
 RUN go mod download
+
+RUN CGO_ENABLED=0 go test ./...
+RUN CGO_ENABLED=0 go vet ./...
 
 WORKDIR $BUILD_PATH
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $APPNAME
