@@ -13,7 +13,6 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/jinzhu/gorm v1.9.11
 	github.com/nsqio/go-nsq v1.0.7
-	github.com/prometheus/common v0.2.0
 	github.com/sirupsen/logrus v1.4.2
 	google.golang.org/grpc v1.22.1
 )
