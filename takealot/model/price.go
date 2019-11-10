@@ -41,7 +41,7 @@ func CreatePrice(model *PriceModel, db *gorm.DB) (*PriceModel, error) {
 func FindProductLatestPrices(productID uint, page, size int, db *gorm.DB) []*PriceModel {
 	prices := make([]*PriceModel, 0)
 	db.Model(&PriceModel{}).
-		Offset(page).
+		Offset(page*size).
 		Limit(size).
 		Order("id desc").
 		Where("product_id = ?", productID).

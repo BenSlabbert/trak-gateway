@@ -21,11 +21,11 @@ func migrateProductPromotionLinkModel(db *gorm.DB) {
 	db.AutoMigrate(&ProductPromotionLinkModel{})
 }
 
-func FindProductPLIDsByPromotion(promotionID uint, page, size int, db *gorm.DB) []uint {
+func FindProductPLIDsByPromotion(promotionID uint, page, size int, db *gorm.DB) ([]uint, QueryPage) {
 	arr := make([]*ProductPromotionLinkModel, 0)
 	db.Model(&ProductPromotionLinkModel{}).
 		Order("id desc").
-		Offset(page).
+		Offset(page*size).
 		Limit(size).
 		Where("promotion_id = ?", promotionID).
 		Find(&arr)
@@ -34,7 +34,29 @@ func FindProductPLIDsByPromotion(promotionID uint, page, size int, db *gorm.DB) 
 	for _, a := range arr {
 		ids = append(ids, a.ProductPLID)
 	}
-	return ids
+
+	count := uint(0)
+
+	db.Model(&ProductPromotionLinkModel{}).
+		Where("promotion_id = ?", promotionID).
+		Count(&count)
+
+	pages := count/uint(size) + 1
+	isFirst := page == 0
+	isLast := false
+
+	if len(arr) < size {
+		isLast = true
+	}
+
+	return ids, QueryPage{
+		CurrentPage: uint(page),
+		LastPage:    pages,
+		TotalItems:  count,
+		PageSize:    uint(size),
+		IsFirstPage: isFirst,
+		IsLastPage:  isLast,
+	}
 }
 
 func CreateProductPromotionLinkModel(productPLID, PromotionID uint, db *gorm.DB) error {

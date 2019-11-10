@@ -29,7 +29,7 @@ func FindLatestProducts(page, size int, db *gorm.DB) ([]*ProductModel, QueryPage
 	arr := make([]*ProductModel, 0)
 	db.Model(&ProductModel{}).
 		Order("id desc").
-		Offset(page).
+		Offset(page * size).
 		Limit(size).
 		Find(&arr)
 
@@ -59,7 +59,7 @@ func FindProductsByCategory(categoryID uint, page, size int, db *gorm.DB) []*Pro
 	arr := make([]*ProductCategoryLinkModel, 0)
 
 	db.Model(&ProductCategoryLinkModel{}).
-		Offset(page).
+		Offset(page*size).
 		Limit(size).
 		Where("category_id = ?", categoryID).
 		Find(&arr)
@@ -111,7 +111,7 @@ func FindProductsByBrand(brandID uint, page, size int, db *gorm.DB) []*ProductMo
 	arr := make([]*ProductBrandLinkModel, 0)
 
 	db.Model(&ProductBrandLinkModel{}).
-		Offset(page).
+		Offset(page*size).
 		Limit(size).
 		Where("brand_id = ?", brandID).
 		Find(&arr)
@@ -180,31 +180,12 @@ func UpsertProductModel(model *ProductModel, db *gorm.DB) (*ProductModel, error)
 
 func FindProductsByPromotion(promotionID uint, page, size int, db *gorm.DB) ([]*ProductModel, QueryPage) {
 	arr := make([]*ProductModel, 0)
-	plIDs := FindProductPLIDsByPromotion(promotionID, page, size, db)
+	plIDs, queryPage := FindProductPLIDsByPromotion(promotionID, page, size, db)
 	db.Model(&ProductModel{}).
 		Where("pl_id in (?)", plIDs).
 		Find(&arr)
 
-	count := uint(0)
-
-	db.Model(&ProductModel{}).Count(&count)
-
-	pages := count/uint(size) + 1
-	isFirst := page == 0
-	isLast := false
-
-	if len(arr) < size {
-		isLast = true
-	}
-
-	return arr, QueryPage{
-		CurrentPage: uint(page),
-		LastPage:    pages,
-		TotalItems:  count,
-		PageSize:    uint(size),
-		IsFirstPage: isFirst,
-		IsLastPage:  isLast,
-	}
+	return arr, queryPage
 }
 
 func (p *ProductModel) MapResponseToModel(resp *api.ProductResponse) {
