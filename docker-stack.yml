@@ -7,7 +7,7 @@ services:
     environment:
       - API_PORT=5000
       - SEARCH_GRPC_HOST=search:50052
-      - PROFILE=docker
+      - PROFILE=DOCKER
       - PPROF_ENABLED=false
       - DB_HOST=rds
       - DB_PORT=3306
@@ -16,9 +16,10 @@ services:
       - DB_PASSWORD=password
       - REDIS_URL=redis:6379
       - REDIS_PASSWORD=password
+      - NSQD_URL=nsqd:4150
     restart: on-failure
     ports:
-      - 5000:5000
+      - 5555:5000
     depends_on:
       - redis
       - rds
