@@ -25,7 +25,7 @@ WORKDIR /
 RUN mkdir static
 WORKDIR /static
 
-RUN wget -O ui.zip https://github.com/BenSlabbert/trak-ui/releases/download/v1.1.7/ui.zip
+RUN wget -O ui.zip https://github.com/BenSlabbert/trak-ui/releases/download/2.0.0/ui.zip
 RUN unzip ui.zip && rm ui.zip
 
 ########################################################################################################################
