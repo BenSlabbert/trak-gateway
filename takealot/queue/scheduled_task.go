@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"github.com/jinzhu/gorm"
 	"github.com/nsqio/go-nsq"
-	"github.com/prometheus/common/log"
+	log "github.com/sirupsen/logrus"
 	"trak-gateway/connection"
 	"trak-gateway/takealot/api"
 	"trak-gateway/takealot/model"
@@ -22,7 +22,7 @@ func (task *NSQScheduledTask) Quit() {
 
 func (task *NSQScheduledTask) HandleMessage(message *nsq.Message) error {
 	taskID := binary.LittleEndian.Uint32(message.Body)
-	var messageIDBytes []byte
+	messageIDBytes := make([]byte, 0)
 	for _, b := range message.ID {
 		messageIDBytes = append(messageIDBytes, b)
 	}
@@ -38,6 +38,7 @@ func (task *NSQScheduledTask) HandleMessage(message *nsq.Message) error {
 			return err
 		}
 
+		promotions := make([]*model.PromotionModel, 0)
 		for _, r := range promotionsResponse.Response {
 			promotionModel := &model.PromotionModel{}
 			promotionModel.PromotionID = r.ID
@@ -45,37 +46,46 @@ func (task *NSQScheduledTask) HandleMessage(message *nsq.Message) error {
 			promotionModel.Start = r.Start
 			promotionModel.DisplayName = r.ShortDisplayName
 
-			promotionModel, err := model.UpsertPromotionModel(promotionModel, task.DB)
+			promotionModel, err = model.UpsertPromotionModel(promotionModel, task.DB)
 
 			if err != nil {
 				log.Warn(err.Error())
 				return err
 			}
-
-			pliDsOnPromotion, err := api.FetchPLIDsOnPromotion(promotionModel.PromotionID)
-
-			if err != nil {
-				log.Warn(err.Error())
-				return err
-			}
-
-			for _, plID := range pliDsOnPromotion {
-				a := make([]byte, 4)
-				binary.LittleEndian.PutUint32(a, uint32(plID))
-				log.Infof("pushing plID: %d to queue", plID)
-				err := task.Producer.Publish(NewProductQueue, a)
-				if err != nil {
-					log.Warnf("failed to publish to nsq: %v", err)
-				}
-
-				err = model.CreateProductPromotionLinkModel(plID, promotionModel.ID, task.DB)
-				if err != nil {
-					log.Warn(err.Error())
-					return err
-				}
-			}
+			promotions = append(promotions, promotionModel)
 		}
+
+		for _, promotionModel := range promotions {
+			promotionModel := promotionModel
+			go task.createPromotionProducts(promotionModel)
+		}
+	default:
+		log.Warnf("unknown taskID: %d", taskID)
 	}
 
 	return nil
+}
+
+func (task *NSQScheduledTask) createPromotionProducts(promotionModel *model.PromotionModel) {
+	log.Infof("createPromotionProducts promotionID: %d", promotionModel.PromotionID)
+
+	pliDsOnPromotion, err := api.FetchPLIDsOnPromotion(promotionModel.PromotionID)
+	if err != nil {
+		log.Warn(err.Error())
+		return
+	}
+	for _, plID := range pliDsOnPromotion {
+		a := make([]byte, 4)
+		binary.LittleEndian.PutUint32(a, uint32(plID))
+		log.Infof("pushing plID: %d to queue", plID)
+		err := task.Producer.Publish(NewProductQueue, a)
+		if err != nil {
+			log.Warnf("failed to publish to nsq: %v", err)
+		}
+		err = model.CreateProductPromotionLinkModel(plID, promotionModel.ID, task.DB)
+		if err != nil {
+			log.Warn(err.Error())
+			return
+		}
+	}
 }

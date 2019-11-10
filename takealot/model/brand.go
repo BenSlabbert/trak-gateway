@@ -16,7 +16,27 @@ func (*BrandModel) TableName() string {
 }
 
 func migrateBrandModel(db *gorm.DB) {
-	db.AutoMigrate(&BrandModel{})
+	model := &BrandModel{}
+	db.AutoMigrate(model)
+
+	db.Model(model).Where("name = ?", "UNKNOWN").FirstOrInit(model)
+
+	if model.ID == 0 {
+		model.Name = "UNKNOWN"
+		db.Create(model)
+	}
+}
+
+func FindDefaultBrand(db *gorm.DB) *BrandModel {
+	model := &BrandModel{}
+
+	db.Model(model).Where("name = ?", "UNKNOWN").FirstOrInit(model)
+
+	if model.ID == 0 {
+		return nil
+	}
+
+	return model
 }
 
 func FindBrandModel(id uint, db *gorm.DB) (*BrandModel, bool) {

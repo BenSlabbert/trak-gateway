@@ -4,7 +4,7 @@ import (
 	pb "github.com/BenSlabbert/trak-gRPC/src/go"
 	"github.com/golang/protobuf/proto"
 	"github.com/nsqio/go-nsq"
-	"github.com/prometheus/common/log"
+	log "github.com/sirupsen/logrus"
 )
 
 type NSQProductDigest struct {
@@ -16,7 +16,7 @@ func (d *NSQProductDigest) Quit() {
 }
 
 func (d *NSQProductDigest) HandleNSQProductDigest(message *nsq.Message) error {
-	var messageIDBytes []byte
+	messageIDBytes := make([]byte, 0)
 	for _, b := range message.ID {
 		messageIDBytes = append(messageIDBytes, b)
 	}
@@ -29,6 +29,7 @@ func (d *NSQProductDigest) HandleNSQProductDigest(message *nsq.Message) error {
 		log.Warnf("%s: failed to unmarshal message to proto", messageID)
 	}
 
+	log.Infof("%s: digesting product: %s", messageID, sr.Name)
 	e = d.SonicSearch.Ingest(ProductCollection, ProductBucket, sr.Id, sr.Name)
 
 	if e != nil {

@@ -13,14 +13,16 @@ const ProductUrlFormat = "https://api.takealot.com/rest/v-1-8-0/product-details/
 const PromotionsUrl = "https://api.takealot.com/rest/v-1-8-0/promotions"
 const PLIDsOnPromotionUrlFormat = "https://api.takealot.com/rest/v-1-8-0/productlines/search?rows=100&daily_deals_rows=100&start=%d&detail=listing&filter=Available:true&filter=Promotions:%d"
 
+// this can take a while...
 func FetchPLIDsOnPromotion(promotionID uint) ([]uint, error) {
-	var plIDS []uint
+	plIDS := make([]uint, 0)
 	start := 0
-	lastPage := 1
 
-	for start < lastPage {
+	for {
 		url := fmt.Sprintf(PLIDsOnPromotionUrlFormat, start, promotionID)
-		client := resty.New().SetRedirectPolicy(resty.FlexibleRedirectPolicy(5))
+		client := resty.New().
+			SetRedirectPolicy(resty.FlexibleRedirectPolicy(5)).
+			SetTimeout(10 * time.Second)
 
 		resp, err := client.R().Get(url)
 
@@ -28,7 +30,7 @@ func FetchPLIDsOnPromotion(promotionID uint) ([]uint, error) {
 			return nil, err
 		}
 
-		log.Debugf("fetch Product returned with HTTP status code: %d", resp.StatusCode())
+		log.Debugf("FetchPLIDsOnPromotion returned with HTTP status code: %d", resp.StatusCode())
 
 		if !resp.IsSuccess() {
 			log.Warnf("no promotion for promotionID: %d", promotionID)
@@ -42,8 +44,11 @@ func FetchPLIDsOnPromotion(promotionID uint) ([]uint, error) {
 			return nil, err
 		}
 
-		lastPage = plIDsOnPromotion.Results.NumFound
-		start++
+		start += 100
+
+		if len(plIDsOnPromotion.Results.ProductLines) == 0 {
+			break
+		}
 
 		for _, pl := range plIDsOnPromotion.Results.ProductLines {
 			plIDS = append(plIDS, pl.ID)
@@ -66,10 +71,9 @@ func FetchProduct(plID uint) (*ProductResponse, error) {
 		return nil, err
 	}
 
-	log.Debugf("fetch Product returned with HTTP status code: %d", resp.StatusCode())
+	log.Debugf("FetchProduct PLID: %d  returned with HTTP status code: %d", plID, resp.StatusCode())
 
 	if !resp.IsSuccess() {
-		log.Warnf("no product for PLID: %d", plID)
 		return nil, errors.New(fmt.Sprintf("no product for PLID: %d", plID))
 	}
 
@@ -84,7 +88,9 @@ func FetchProduct(plID uint) (*ProductResponse, error) {
 }
 
 func FetchPromotions() (*PromotionsResponse, error) {
-	client := resty.New().SetRedirectPolicy(resty.FlexibleRedirectPolicy(5))
+	client := resty.New().
+		SetRedirectPolicy(resty.FlexibleRedirectPolicy(5)).
+		SetTimeout(10 * time.Second)
 	resp, err := client.R().Get(PromotionsUrl)
 
 	client.GetClient().CloseIdleConnections()
@@ -92,7 +98,7 @@ func FetchPromotions() (*PromotionsResponse, error) {
 		return nil, err
 	}
 
-	log.Debugf("fetch Product returned with HTTP status code: %d", resp.StatusCode())
+	log.Debugf("FetchPromotions returned with HTTP status code: %d", resp.StatusCode())
 
 	if !resp.IsSuccess() {
 		log.Warnf("no promotions available")

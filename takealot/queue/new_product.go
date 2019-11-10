@@ -10,7 +10,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/jinzhu/gorm"
 	"github.com/nsqio/go-nsq"
-	"github.com/prometheus/common/log"
+	log "github.com/sirupsen/logrus"
 	"strings"
 	"trak-gateway/connection"
 	"trak-gateway/takealot/api"
@@ -30,7 +30,7 @@ func (task *NSQNewProductTask) Quit() {
 
 func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 	plID := uint(binary.LittleEndian.Uint32(message.Body))
-	var messageIDBytes []byte
+	messageIDBytes := make([]byte, 0)
 	for _, b := range message.ID {
 		messageIDBytes = append(messageIDBytes, b)
 	}
@@ -48,6 +48,23 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 	if err != nil {
 		log.Warn(err.Error())
 		return err
+	}
+
+	// if the product exists, only do the price
+	if id, exists := model.ProductModelExists(plID, task.DB); exists {
+		price := &model.PriceModel{}
+		price.CurrentPrice = productResponse.EventData.Documents.Product.PurchasePrice
+		price.ListPrice = productResponse.EventData.Documents.Product.OriginalPrice
+		price.ProductID = id
+		price, err = model.CreatePrice(price, task.DB)
+		if err != nil {
+			log.Errorf("%s: failed to persist product model!", messageID)
+			return err
+		}
+		if e := connection.ReleaseRedisLock(lock); e != nil {
+			log.Warnf("%s: %s", messageID, e.Error())
+		}
+		return nil
 	}
 
 	productID, err := task.persistProduct(plID, productResponse)

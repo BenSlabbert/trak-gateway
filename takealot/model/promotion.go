@@ -4,8 +4,17 @@ import (
 	"context"
 	"database/sql"
 	"github.com/jinzhu/gorm"
-	"github.com/prometheus/common/log"
+	log "github.com/sirupsen/logrus"
 )
+
+type QueryPage struct {
+	CurrentPage uint
+	LastPage    uint
+	TotalItems  uint
+	PageSize    uint
+	IsFirstPage bool
+	IsLastPage  bool
+}
 
 type PromotionModel struct {
 	gorm.Model
@@ -29,7 +38,7 @@ func FindLatestDailyDealPromotion(db *gorm.DB) (*PromotionModel, bool) {
 	model := &PromotionModel{}
 	db.Model(model).
 		Order("id desc").
-		Where("name = ?", "Daily Deals").
+		Where("display_name = ?", "Daily Deals").
 		FirstOrInit(model)
 
 	if model.ID == 0 {
@@ -39,15 +48,34 @@ func FindLatestDailyDealPromotion(db *gorm.DB) (*PromotionModel, bool) {
 	return model, true
 }
 
-func FindLatestPromotions(page, size int, db *gorm.DB) []*PromotionModel {
+func FindLatestPromotions(page, size int, db *gorm.DB) ([]*PromotionModel, QueryPage) {
 	arr := make([]*PromotionModel, 0)
 	db.Model(&PromotionModel{}).
 		Order("id desc").
-		Offset(page).
+		Offset(page * size).
 		Limit(size).
 		Find(&arr)
 
-	return arr
+	count := uint(0)
+
+	db.Model(&PromotionModel{}).Count(&count)
+
+	pages := count/uint(size) + 1
+	isFirst := page == 0
+	isLast := false
+
+	if len(arr) < size {
+		isLast = true
+	}
+
+	return arr, QueryPage{
+		CurrentPage: uint(page),
+		LastPage:    pages,
+		TotalItems:  count,
+		PageSize:    uint(size),
+		IsFirstPage: isFirst,
+		IsLastPage:  isLast,
+	}
 }
 
 func UpsertPromotionModel(model *PromotionModel, db *gorm.DB) (*PromotionModel, error) {
@@ -62,8 +90,7 @@ func UpsertPromotionModel(model *PromotionModel, db *gorm.DB) (*PromotionModel, 
 	if dbModel.ID == 0 {
 		tx.Create(model)
 	} else {
-		// todo verify this isn't a problem
-		tx.Save(model)
+		model = dbModel
 	}
 
 	e := tx.Commit().Error

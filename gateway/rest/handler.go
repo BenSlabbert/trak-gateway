@@ -81,25 +81,28 @@ func (h *Handler) GetAllPromotions(w http.ResponseWriter, req *http.Request) {
 	}
 
 	promotionMessages := make([]*pb.PromotionMessage, 0)
-	promotions := model.FindLatestPromotions(pageReq, 12, h.DB)
+	promotions, queryPage := model.FindLatestPromotions(pageReq, 12, h.DB)
 
 	for _, p := range promotions {
 		promotionMessages = append(promotionMessages, &pb.PromotionMessage{
 			Id:          int64(p.ID),
 			Name:        p.DisplayName,
 			PromotionId: int64(p.PromotionID),
-			Created:     p.CreatedAt.Unix(),
+			// todo use p.start + p.end
+			Created: p.CreatedAt.Unix(),
 		})
 	}
 
 	resp = &pb.GetAllPromotionsResponse{
 		Promotions: promotionMessages,
-		// todo paging...
 		PageResponse: &pb.PageResponse{
-			CurrentPageNumber: 0,
-			LastPageNumber:    0,
-			TotalItems:        0,
-			PageSize:          0,
+			// re-increment for the ui
+			CurrentPageNumber: int64(queryPage.CurrentPage) + 1,
+			LastPageNumber:    int64(queryPage.LastPage),
+			TotalItems:        int64(queryPage.TotalItems),
+			PageSize:          int64(queryPage.PageSize),
+			IsFirstPage:       queryPage.IsFirstPage,
+			IsLastPage:        queryPage.IsLastPage,
 		},
 	}
 
@@ -148,7 +151,7 @@ func (h *Handler) GetPromotion(w http.ResponseWriter, req *http.Request) {
 	}
 
 	productMessages := make([]*pb.ProductMessage, 0)
-	products := model.FindProductsByPromotion(promotionIdReq, pageReq, 12, h.DB)
+	products, queryPage := model.FindProductsByPromotion(promotionIdReq, pageReq, 12, h.DB)
 
 	// todo run in own goroutines
 	for _, pm := range products {
@@ -166,12 +169,14 @@ func (h *Handler) GetPromotion(w http.ResponseWriter, req *http.Request) {
 
 	resp = &pb.PromotionResponse{
 		Products: productMessages,
-		// todo paging...
 		PageResponse: &pb.PageResponse{
-			CurrentPageNumber: 0,
-			LastPageNumber:    0,
-			TotalItems:        0,
-			PageSize:          0,
+			// re-increment for the ui
+			CurrentPageNumber: int64(queryPage.CurrentPage) + 1,
+			LastPageNumber:    int64(queryPage.LastPage),
+			TotalItems:        int64(queryPage.TotalItems),
+			PageSize:          int64(queryPage.PageSize),
+			IsFirstPage:       queryPage.IsFirstPage,
+			IsLastPage:        queryPage.IsLastPage,
 		},
 	}
 
@@ -215,7 +220,7 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 	}
 
 	productMessages := make([]*pb.ProductMessage, 0)
-	products := model.FindProductsByPromotion(promotionModel.ID, pageReq, 12, h.DB)
+	products, queryPage := model.FindProductsByPromotion(promotionModel.ID, pageReq, 12, h.DB)
 
 	// todo run in own goroutines
 	for _, pm := range products {
@@ -233,12 +238,14 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 
 	resp = &pb.PromotionResponse{
 		Products: productMessages,
-		// todo paging...
 		PageResponse: &pb.PageResponse{
-			CurrentPageNumber: 0,
-			LastPageNumber:    0,
-			TotalItems:        0,
-			PageSize:          0,
+			// re-increment for the ui
+			CurrentPageNumber: int64(queryPage.CurrentPage) + 1,
+			LastPageNumber:    int64(queryPage.LastPage),
+			TotalItems:        int64(queryPage.TotalItems),
+			PageSize:          int64(queryPage.PageSize),
+			IsFirstPage:       queryPage.IsFirstPage,
+			IsLastPage:        queryPage.IsLastPage,
 		},
 	}
 
@@ -266,7 +273,7 @@ func (h *Handler) CategorySearch(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var results []*pb.SearchResult
+	results := make([]*pb.SearchResult, 0)
 	for _, r := range resp.Results {
 		id, e := strconv.ParseUint(r.Id, 10, 32)
 		if e != nil {
@@ -316,7 +323,7 @@ func (h *Handler) BrandSearch(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var results []*pb.SearchResult
+	results := make([]*pb.SearchResult, 0)
 	for _, r := range resp.Results {
 		id, e := strconv.ParseUint(r.Id, 10, 32)
 		if e != nil {
@@ -366,7 +373,7 @@ func (h *Handler) ProductSearch(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var results []*pb.SearchResult
+	results := make([]*pb.SearchResult, 0)
 	for _, r := range resp.Results {
 		id, e := strconv.ParseUint(r.Id, 10, 32)
 		if e != nil {
@@ -566,7 +573,7 @@ func (h *Handler) LatestHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	products := model.FindLatestProducts(0, 12, h.DB)
+	products, _ := model.FindLatestProducts(0, 12, h.DB)
 	productMessages := make([]*pb.ProductMessage, 0)
 
 	// todo run in own goroutines

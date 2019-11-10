@@ -36,7 +36,7 @@ func (g GRPCServer) CategorySearch(ctx context.Context, req *pb.SearchRequest) (
 }
 
 func buildResponse(res []string) *pb.SearchResponse {
-	var results []*pb.SearchResult
+	results := make([]*pb.SearchResult, 0)
 	for _, r := range res {
 		results = append(results, &pb.SearchResult{Name: r, Id: r})
 	}

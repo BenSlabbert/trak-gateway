@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/jinzhu/gorm"
-	"github.com/prometheus/common/log"
+	log "github.com/sirupsen/logrus"
 	"time"
 )
 

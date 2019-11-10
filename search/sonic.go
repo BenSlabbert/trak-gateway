@@ -101,7 +101,7 @@ func (ss *SonicSearch) keepAlive() {
 	for {
 		select {
 		case <-ticker.C:
-			var ingestArr []sonic.Ingestable
+			ingestArr := make([]sonic.Ingestable, 0)
 
 			ingestPoolSize := ss.env.SonicIngesterPoolSize
 			// drain pool
@@ -126,7 +126,7 @@ func (ss *SonicSearch) keepAlive() {
 				ss.ingestConnPool <- i
 			}
 
-			var searchArr []sonic.Searchable
+			searchArr := make([]sonic.Searchable, 0)
 
 			searchPoolSize := ss.env.SonicSearchPoolSize
 			// drain pool

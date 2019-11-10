@@ -60,8 +60,8 @@ func main() {
 		go CreateProductChanTaskFactory(opts, takealotEnv)
 	}
 
-	var consumers []*nsq.Consumer
-	var newProductTasks []*queue.NSQNewProductTask
+	consumers := make([]*nsq.Consumer, 0)
+	newProductTasks := make([]*queue.NSQNewProductTask, 0)
 	for i := 0; i < takealotEnv.Nsq.NumberOfNewProductConsumers; i++ {
 		db, e := connection.GetMariaDB(opts)
 		if e != nil {
@@ -81,7 +81,7 @@ func main() {
 		consumers = append(consumers, c)
 	}
 
-	var scheduledTasks []*queue.NSQScheduledTask
+	scheduledTasks := make([]*queue.NSQScheduledTask, 0)
 	for i := 0; i < takealotEnv.Nsq.NumberOfScheduledTaskConsumers; i++ {
 		db, e := connection.GetMariaDB(opts)
 		if e != nil {
@@ -142,7 +142,7 @@ func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts, trakEnv en
 	for {
 		select {
 		case <-ticker.C:
-			log.Info("creating new creatProduct tasks")
+			log.Info("creating new createProduct tasks")
 			err := nsqProducer.Ping()
 			if err != nil {
 				log.Warnf("failed to ping NSQ! No tasks will be produced: %v", err)
@@ -163,7 +163,7 @@ func PublishPromotionScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
 		// create task
 		scheduledTaskModel = &model.ScheduledTaskModel{}
 		now := time.Now().Add(24 * time.Hour)
-		nextRun := time.Date(now.Year(), now.Month(), now.Day(), 10, 0, 0, 0, time.UTC)
+		nextRun := time.Date(now.Year(), now.Month(), now.Day()-2, 10, 0, 0, 0, time.UTC)
 		scheduledTaskModel.NextRun = nextRun
 		scheduledTaskModel.LastRun = time.Unix(0, 0)
 		scheduledTaskModel.Name = model.PromotionsScheduledTask

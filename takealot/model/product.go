@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/jinzhu/gorm"
-	"github.com/prometheus/common/log"
+	log "github.com/sirupsen/logrus"
 	"trak-gateway/takealot/api"
 )
 
@@ -25,7 +25,7 @@ func migrateProductModel(db *gorm.DB) {
 	db.AutoMigrate(&ProductModel{})
 }
 
-func FindLatestProducts(page, size int, db *gorm.DB) []*ProductModel {
+func FindLatestProducts(page, size int, db *gorm.DB) ([]*ProductModel, QueryPage) {
 	arr := make([]*ProductModel, 0)
 	db.Model(&ProductModel{}).
 		Order("id desc").
@@ -33,7 +33,26 @@ func FindLatestProducts(page, size int, db *gorm.DB) []*ProductModel {
 		Limit(size).
 		Find(&arr)
 
-	return arr
+	count := uint(0)
+
+	db.Model(&ProductModel{}).Count(&count)
+
+	pages := count/uint(size) + 1
+	isFirst := page == 0
+	isLast := false
+
+	if len(arr) < size {
+		isLast = true
+	}
+
+	return arr, QueryPage{
+		CurrentPage: uint(page),
+		LastPage:    pages,
+		TotalItems:  count,
+		PageSize:    uint(size),
+		IsFirstPage: isFirst,
+		IsLastPage:  isLast,
+	}
 }
 
 func FindProductsByCategory(categoryID uint, page, size int, db *gorm.DB) []*ProductModel {
@@ -123,6 +142,17 @@ func FindProductModel(id uint, db *gorm.DB) (*ProductModel, bool) {
 	return model, true
 }
 
+func ProductModelExists(plID uint, db *gorm.DB) (uint, bool) {
+	dbModel := &ProductModel{}
+	db.Model(dbModel).Where("pl_id = ?", plID).FirstOrInit(dbModel)
+
+	if dbModel.ID == 0 {
+		return 0, false
+	}
+
+	return dbModel.ID, true
+}
+
 func UpsertProductModel(model *ProductModel, db *gorm.DB) (*ProductModel, error) {
 	sqlOpts := &sql.TxOptions{
 		Isolation: sql.LevelDefault,
@@ -148,19 +178,38 @@ func UpsertProductModel(model *ProductModel, db *gorm.DB) (*ProductModel, error)
 	return model, nil
 }
 
-func FindProductsByPromotion(promotionID uint, page, size int, db *gorm.DB) []*ProductModel {
+func FindProductsByPromotion(promotionID uint, page, size int, db *gorm.DB) ([]*ProductModel, QueryPage) {
 	arr := make([]*ProductModel, 0)
 	plIDs := FindProductPLIDsByPromotion(promotionID, page, size, db)
 	db.Model(&ProductModel{}).
 		Where("pl_id in (?)", plIDs).
 		Find(&arr)
-	return arr
+
+	count := uint(0)
+
+	db.Model(&ProductModel{}).Count(&count)
+
+	pages := count/uint(size) + 1
+	isFirst := page == 0
+	isLast := false
+
+	if len(arr) < size {
+		isLast = true
+	}
+
+	return arr, QueryPage{
+		CurrentPage: uint(page),
+		LastPage:    pages,
+		TotalItems:  count,
+		PageSize:    uint(size),
+		IsFirstPage: isFirst,
+		IsLastPage:  isLast,
+	}
 }
 
 func (p *ProductModel) MapResponseToModel(resp *api.ProductResponse) {
 	p.SKU = resp.DataLayer.Sku
 	p.Title = resp.Core.Title
-	// todo verify
 	p.URL = resp.Sharing.URL
 
 	if resp.Core.Subtitle != nil {
