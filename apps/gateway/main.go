@@ -173,6 +173,11 @@ func setUpRoutes(handler *rest.Handler) *mux.Router {
 		HandlerFunc(handler.GetAllPromotions).
 		Name("GetAllPromotions")
 
+	router.Path("/api/add-product").
+		Queries("url", "{url}").
+		HandlerFunc(handler.AddProduct).
+		Name("GetAllPromotions")
+
 	if Profile == profile.DOCKER {
 		absPath, _ := filepath.Abs(StaticFilesDir)
 		router.PathPrefix("/").

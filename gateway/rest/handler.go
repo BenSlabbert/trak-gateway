@@ -1,20 +1,25 @@
 package rest
 
 import (
+	"errors"
 	"fmt"
 	pb "github.com/BenSlabbert/trak-gRPC/src/go"
 	"github.com/go-redis/redis"
+	"github.com/go-resty/resty/v2"
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
+	"net/url"
 	"strconv"
+	"strings"
 	"time"
 	"trak-gateway/connection"
 	"trak-gateway/gateway/builder"
 	"trak-gateway/gateway/grpc"
 	"trak-gateway/gateway/response"
 	"trak-gateway/takealot/model"
+	"trak-gateway/takealot/queue"
 
 	"net/http"
 )
@@ -51,6 +56,85 @@ func (h *Handler) redisSet(key string, msg proto.Message) {
 		log.Warnf("failed to marshall proto to bytes: %v", err)
 	}
 	h.RedisClient.Set(key, d, 10*time.Minute)
+}
+
+func (h *Handler) AddProduct(w http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	u := vars["url"]
+
+	if u == "" {
+		log.Warn("no url provided")
+		sendError(w, &response.Error{Message: "No URL provided", Type: response.BadRequest})
+		return
+	}
+
+	plID, e := h.plIDFromURL(u)
+	if e != nil {
+		log.Warnf("failed to verify url: %s: %v", u, e)
+		sendError(w, &response.Error{Message: "Server error", Type: response.ServerError})
+		return
+	}
+
+	// push plid to create product work queue
+	producer := queue.CreateNSQProducer()
+	defer producer.Stop()
+
+	e = producer.Publish(queue.NewProductQueue, queue.SendUintMessage(plID))
+	if e != nil {
+		log.Warnf("failed to publish to nsq: %v", e)
+		sendError(w, &response.Error{Message: "Server error", Type: response.ServerError})
+		return
+	}
+
+	sendOK(w, &pb.Empty{})
+}
+
+func (h *Handler) plIDFromURL(u string) (uint, error) {
+	uri, e := url.ParseRequestURI(u)
+	if e != nil {
+		log.Warnf("invalid url provided: %v", e)
+		return 0, e
+	}
+
+	if uri.Host != "www.takealot.com" {
+		log.Warnf("invalid url provided, not a takealot.com host: %s", uri.Host)
+		return 0, errors.New("url host is not www.takealot.com")
+	}
+
+	if !strings.Contains(uri.String(), "PLID") {
+		log.Warnf("invalid url provided, no PLID specified: %s", uri.String())
+		return 0, errors.New("no PLID specified")
+	}
+
+	// check if we can go to that url
+	client := resty.New().
+		SetRedirectPolicy(resty.FlexibleRedirectPolicy(5)).
+		SetTimeout(10 * time.Second)
+	resp, e := client.R().Get(uri.String())
+	if e != nil || !resp.IsSuccess() {
+		log.Warnf("failed to go to url: %s: %v", uri.String(), e)
+		return 0, e
+	}
+
+	pathSegments := strings.Split(uri.Path, "/")
+	if len(pathSegments) <= 2 {
+		log.Warnf("not enough path segments in url: %s", uri.String())
+		return 0, errors.New("invalid URL provided")
+	}
+
+	plIDString := pathSegments[len(pathSegments)-1]
+	if !strings.HasPrefix(plIDString, "PLID") {
+		log.Warnf("invalid URL provided: %v", e)
+		return 0, e
+	}
+
+	parseUint, e := strconv.ParseUint(plIDString[4:], 10, 32)
+	if e != nil {
+		log.Warnf("invalid url provided: %v", e)
+		return 0, e
+	}
+
+	return uint(parseUint), nil
 }
 
 func (h *Handler) GetAllPromotions(w http.ResponseWriter, req *http.Request) {
