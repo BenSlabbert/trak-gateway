@@ -78,12 +78,25 @@ func run() error {
 	}
 
 	productDigest := &search.NSQProductDigest{SonicSearch: createSonicSearch}
+	brandDigest := &search.NSQBrandDigest{SonicSearch: createSonicSearch}
+	categoryDigest := &search.NSQCategoryDigest{SonicSearch: createSonicSearch}
 	defer productDigest.Quit()
 
-	c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-product-digest", uuid.New().String()[:6]), queue.ProductDigestQueue, "sonic")
-	c.AddHandler(nsq.HandlerFunc(productDigest.HandleNSQProductDigest))
+	consumers := make([]*nsq.Consumer, 0)
+	c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-product-digest", uuid.New().String()[:6]), queue.ProductDigestQueue, "sonic-product")
+	c.AddHandler(nsq.HandlerFunc(productDigest.HandleNSQMessage))
 	queue.ConnectConsumer(c)
-	defer c.Stop()
+	consumers = append(consumers, c)
+
+	c = queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-brand-digest", uuid.New().String()[:6]), queue.BrandDigestQueue, "sonic-brand")
+	c.AddHandler(nsq.HandlerFunc(brandDigest.HandleNSQMessage))
+	queue.ConnectConsumer(c)
+	consumers = append(consumers, c)
+
+	c = queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-category-digest", uuid.New().String()[:6]), queue.CategoryDigestQueue, "sonic-category")
+	c.AddHandler(nsq.HandlerFunc(categoryDigest.HandleNSQMessage))
+	queue.ConnectConsumer(c)
+	consumers = append(consumers, c)
 
 	// wait for Ctrl + C to exit
 	ch := make(chan os.Signal, 1)
@@ -98,6 +111,10 @@ func run() error {
 
 	log.Infof("Closing the listener")
 	_ = lis.Close()
+
+	for _, consumer := range consumers {
+		consumer.Stop()
+	}
 
 	return nil
 }

@@ -1,6 +1,7 @@
 package queue
 
 import (
+	"encoding/binary"
 	"github.com/nsqio/go-nsq"
 	"log"
 	"trak-gateway/takealot/env"
@@ -9,8 +10,10 @@ import (
 const NewScheduledTaskQueue string = "new-scheduled-task-queue"
 const NewProductQueue string = "new-product-queue"
 const ProductDigestQueue string = "product-digest-queue"
+const BrandDigestQueue string = "brand-digest-queue"
+const CategoryDigestQueue string = "category-digest-queue"
 
-type ScheduledTask uint32
+type ScheduledTask uint
 
 const PromotionsScheduledTask ScheduledTask = 1
 
@@ -39,4 +42,23 @@ func CreateNSQProducer() *nsq.Producer {
 	config := nsq.NewConfig()
 	producer, _ := nsq.NewProducer(e.Nsq.NsqdURL, config)
 	return producer
+}
+
+func SendUintMessage(message uint) []byte {
+	a := make([]byte, 4)
+	binary.LittleEndian.PutUint32(a, uint32(message))
+	return a
+}
+
+func ReceiveUintMessage(message []byte) uint {
+	u := binary.LittleEndian.Uint32(message)
+	return uint(u)
+}
+
+func MessageIDString(messageID nsq.MessageID) string {
+	messageIDBytes := make([]byte, 0)
+	for _, b := range messageID {
+		messageIDBytes = append(messageIDBytes, b)
+	}
+	return string(messageIDBytes)
 }

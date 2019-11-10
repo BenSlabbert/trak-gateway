@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/binary"
 	"flag"
 	"fmt"
 	"github.com/bsm/redislock"
@@ -176,9 +175,7 @@ func PublishPromotionScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
 
 	if time.Now().After(scheduledTaskModel.NextRun) {
 		log.Infof("running scheduled task: %s", model.PromotionsScheduledTask)
-		a := make([]byte, 4)
-		binary.LittleEndian.PutUint32(a, uint32(queue.PromotionsScheduledTask))
-		err := nsqProducer.Publish(queue.NewScheduledTaskQueue, a)
+		err := nsqProducer.Publish(queue.NewScheduledTaskQueue, queue.SendUintMessage(uint(queue.PromotionsScheduledTask)))
 		if err != nil {
 			log.Warnf("failed to publish to nsq: %v", err)
 		} else {
@@ -202,10 +199,8 @@ func PublishNewProductTasks(db *gorm.DB, nsqProducer *nsq.Producer, crawlerEnv e
 	count := 0
 	for count < crawlerEnv.NumberOfNewProductTasks {
 		crawler.LastPLID++
-		a := make([]byte, 4)
-		binary.LittleEndian.PutUint32(a, uint32(crawler.LastPLID))
 		log.Infof("pushing plID: %d to queue", crawler.LastPLID)
-		err := nsqProducer.Publish(queue.NewProductQueue, a)
+		err := nsqProducer.Publish(queue.NewProductQueue, queue.SendUintMessage(crawler.LastPLID))
 		if err != nil {
 			log.Warnf("failed to publish to nsq: %v", err)
 		}

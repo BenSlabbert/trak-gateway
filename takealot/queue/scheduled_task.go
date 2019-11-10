@@ -1,7 +1,6 @@
 package queue
 
 import (
-	"encoding/binary"
 	"github.com/jinzhu/gorm"
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
@@ -21,17 +20,13 @@ func (task *NSQScheduledTask) Quit() {
 }
 
 func (task *NSQScheduledTask) HandleMessage(message *nsq.Message) error {
-	taskID := binary.LittleEndian.Uint32(message.Body)
-	messageIDBytes := make([]byte, 0)
-	for _, b := range message.ID {
-		messageIDBytes = append(messageIDBytes, b)
-	}
-	messageID := string(messageIDBytes)
+	taskID := ReceiveUintMessage(message.Body)
+	messageID := MessageIDString(message.ID)
 
 	log.Infof("%s: handling scheduled task", messageID)
 
 	switch taskID {
-	case uint32(PromotionsScheduledTask):
+	case uint(PromotionsScheduledTask):
 		promotionsResponse, err := api.FetchPromotions()
 		if err != nil {
 			log.Warnf("%s: failed to fetch promotions: %v", messageID, err)
@@ -75,10 +70,8 @@ func (task *NSQScheduledTask) createPromotionProducts(promotionModel *model.Prom
 		return
 	}
 	for _, plID := range pliDsOnPromotion {
-		a := make([]byte, 4)
-		binary.LittleEndian.PutUint32(a, uint32(plID))
 		log.Infof("pushing plID: %d to queue", plID)
-		err := task.Producer.Publish(NewProductQueue, a)
+		err := task.Producer.Publish(NewProductQueue, SendUintMessage(plID))
 		if err != nil {
 			log.Warnf("failed to publish to nsq: %v", err)
 		}

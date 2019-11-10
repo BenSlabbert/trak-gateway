@@ -1,7 +1,6 @@
 package queue
 
 import (
-	"encoding/binary"
 	"errors"
 	"fmt"
 	pb "github.com/BenSlabbert/trak-gRPC/src/go"
@@ -28,13 +27,10 @@ func (task *NSQNewProductTask) Quit() {
 	task.Producer.Stop()
 }
 
+// refactor to simplify
 func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
-	plID := uint(binary.LittleEndian.Uint32(message.Body))
-	messageIDBytes := make([]byte, 0)
-	for _, b := range message.ID {
-		messageIDBytes = append(messageIDBytes, b)
-	}
-	messageID := string(messageIDBytes)
+	plID := ReceiveUintMessage(message.Body)
+	messageID := MessageIDString(message.ID)
 	log.Infof("%s: handle create product message for plID: %d messageRetries: %d", messageID, plID, message.Attempts)
 
 	productResponse, err := api.FetchProduct(plID)
@@ -154,15 +150,7 @@ func (task *NSQNewProductTask) persistProduct(plID uint, productResponse *api.Pr
 		return 0, errors.New("failed to persist product entity")
 	}
 
-	sr := &pb.SearchResult{Id: fmt.Sprintf("%d", product.ID), Name: product.Title}
-
-	if bytes, err := proto.Marshal(sr); err == nil {
-		err := task.Producer.Publish(ProductDigestQueue, bytes)
-		if err != nil {
-			log.Warnf("failed to publish to nsq: %v", err)
-		}
-	}
-
+	go task.publishSonicDigest(product.ID, product.Title, ProductDigestQueue)
 	return product.ID, nil
 }
 
@@ -179,6 +167,8 @@ func (task *NSQNewProductTask) persistCategory(category string, productID uint) 
 		log.Error("failed to persist product model!")
 		return errors.New("failed to persist product entity")
 	}
+
+	go task.publishSonicDigest(categoryModel.ID, categoryModel.Name, CategoryDigestQueue)
 	return nil
 }
 
@@ -195,5 +185,18 @@ func (task *NSQNewProductTask) persistBrand(productResponse *api.ProductResponse
 		log.Error("failed to persist product model!")
 		return errors.New("failed to persist product entity")
 	}
+
+	go task.publishSonicDigest(brand.ID, brand.Name, BrandDigestQueue)
 	return nil
+}
+
+func (task *NSQNewProductTask) publishSonicDigest(object uint, text, queue string) {
+	sr := &pb.SearchResult{Id: fmt.Sprintf("%d", object), Name: text}
+
+	if bytes, err := proto.Marshal(sr); err == nil {
+		err := task.Producer.Publish(queue, bytes)
+		if err != nil {
+			log.Warnf("failed to publish to nsq: %v", err)
+		}
+	}
 }
