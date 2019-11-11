@@ -2,7 +2,6 @@ package rest
 
 import (
 	"encoding/json"
-	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	log "github.com/sirupsen/logrus"
 	"trak-gateway/gateway/response"
@@ -49,15 +48,10 @@ func writeError(e response.Error, w http.ResponseWriter) {
 	write(w, bytes)
 }
 
-// todo send proto []byte instead of json
 func sendOK(w http.ResponseWriter, message proto.Message) {
-	m := jsonpb.Marshaler{}
-	result, _ := m.MarshalToString(message)
-
-	w.Header().Add("Content-Type", "application/json")
+	w.Header().Add("Content-Type", "application/octet-stream")
 	w.WriteHeader(http.StatusOK)
-
-	bytes := []byte(result)
+	bytes, _ := proto.Marshal(message)
 	write(w, bytes)
 }
 
