@@ -174,7 +174,6 @@ func setUpRoutes(handler *rest.Handler) *mux.Router {
 		Name("GetAllPromotions")
 
 	router.Path("/api/add-product").
-		Queries("url", "{url}").
 		HandlerFunc(handler.AddProduct).
 		Name("GetAllPromotions")
 

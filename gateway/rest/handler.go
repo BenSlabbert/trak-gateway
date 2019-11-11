@@ -11,6 +11,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
+	"io/ioutil"
 	"net/url"
 	"strconv"
 	"strings"
@@ -60,19 +61,20 @@ func (h *Handler) redisSet(key string, msg proto.Message) {
 }
 
 func (h *Handler) AddProduct(w http.ResponseWriter, req *http.Request) {
-	vars := mux.Vars(req)
-	u := vars["url"]
+	bytes, e := ioutil.ReadAll(req.Body)
+	addProductReq := &gatewayPB.AddProductRequest{}
+	e = proto.Unmarshal(bytes, addProductReq)
 
-	if u == "" {
-		log.Warn("no url provided")
+	if e != nil {
+		log.Warnf("failed to get URL from message: %v", e)
 		sendError(w, &response.Error{Message: "No URL provided", Type: response.BadRequest})
 		return
 	}
 
-	plID, e := h.plIDFromURL(u)
+	plID, e := h.plIDFromURL(addProductReq.Url)
 	if e != nil {
-		log.Warnf("failed to verify url: %s: %v", u, e)
-		sendError(w, &response.Error{Message: fmt.Sprintf("Invalid URL provided: %s", u), Type: response.BadRequest})
+		log.Warnf("failed to verify url: %s: %v", addProductReq.Url, e)
+		sendError(w, &response.Error{Message: fmt.Sprintf("Invalid URL provided: %s", addProductReq.Url), Type: response.BadRequest})
 		return
 	}
 
