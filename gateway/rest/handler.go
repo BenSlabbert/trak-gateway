@@ -71,7 +71,7 @@ func (h *Handler) AddProduct(w http.ResponseWriter, req *http.Request) {
 	plID, e := h.plIDFromURL(u)
 	if e != nil {
 		log.Warnf("failed to verify url: %s: %v", u, e)
-		sendError(w, &response.Error{Message: "Server error", Type: response.ServerError})
+		sendError(w, &response.Error{Message: fmt.Sprintf("Invalid URL provided: %s", u), Type: response.BadRequest})
 		return
 	}
 
