@@ -58,7 +58,6 @@ COPY --from=builder /static /static
 ENV API_PORT=5000
 ENV PROFILE=DOCKER
 ENV STATIC_FILES_DIR=/static
-# todo get latest bundle from github
 USER go-user
 
 ENTRYPOINT ["./app"]

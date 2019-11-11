@@ -93,7 +93,6 @@ func (pmb *ProductMessageBuilder) setProductDetails() {
 
 // Build returns a built ProductMessage
 func (pmb *ProductMessageBuilder) Build() (msg *pb.ProductMessage, err error) {
-	// todo check this recover
 	defer func() {
 		if r := recover(); r != nil {
 			log.Warnf("Recovered in ProductMessageBuilder: %v", r)
@@ -216,7 +215,6 @@ func (psb *ProductStatsBuilder) setChartData() {
 }
 
 func (psb *ProductStatsBuilder) Build() (msg *pb.ProductStatsResponse, err error) {
-	// todo check this recover
 	defer func() {
 		if r := recover(); r != nil {
 			log.Warnf("Recovered in ProductStatsBuilder: %v", r)
