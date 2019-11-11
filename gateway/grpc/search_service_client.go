@@ -1,12 +1,12 @@
 package grpc
 
 import (
-	pb "github.com/BenSlabbert/trak-gRPC/src/go"
+	pb "github.com/BenSlabbert/trak-gRPC/gen/go/proto/search"
 	log "github.com/sirupsen/logrus"
 	"trak-gateway/gateway/response"
 )
 
-func BrandSearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error) {
+func BrandSearch(req *pb.BrandSearchRequest) (*pb.BrandSearchResponse, *response.Error) {
 	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
@@ -20,7 +20,7 @@ func BrandSearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error) {
 	return r, nil
 }
 
-func CategorySearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error) {
+func CategorySearch(req *pb.CategorySearchRequest) (*pb.CategorySearchResponse, *response.Error) {
 	ctx, cancel := withDeadline(5000)
 	defer cancel()
 
@@ -34,7 +34,7 @@ func CategorySearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error)
 	return r, nil
 }
 
-func ProductSearch(req *pb.SearchRequest) (*pb.SearchResponse, *response.Error) {
+func ProductSearch(req *pb.ProductSearchRequest) (*pb.ProductSearchResponse, *response.Error) {
 	ctx, cancel := withDeadline(5000)
 	defer cancel()
 

@@ -3,7 +3,7 @@ package queue
 import (
 	"errors"
 	"fmt"
-	pb "github.com/BenSlabbert/trak-gRPC/src/go"
+	pb "github.com/BenSlabbert/trak-gRPC/gen/go/proto/search"
 	"github.com/bsm/redislock"
 
 	"github.com/golang/protobuf/proto"
@@ -191,7 +191,7 @@ func (task *NSQNewProductTask) persistBrand(productResponse *api.ProductResponse
 }
 
 func (task *NSQNewProductTask) publishSonicDigest(object uint, text, queue string) {
-	sr := &pb.SearchResult{Id: fmt.Sprintf("%d", object), Name: text}
+	sr := &pb.SearchResult{Id: fmt.Sprintf("%d", object), Text: text}
 
 	if bytes, err := proto.Marshal(sr); err == nil {
 		err := task.Producer.Publish(queue, bytes)

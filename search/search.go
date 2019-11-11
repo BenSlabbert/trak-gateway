@@ -1,7 +1,7 @@
 package search
 
 import (
-	pb "github.com/BenSlabbert/trak-gRPC/src/go"
+	pb "github.com/BenSlabbert/trak-gRPC/gen/go/proto/search"
 	"github.com/golang/protobuf/proto"
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
@@ -26,11 +26,11 @@ func (d *NSQProductDigest) HandleNSQMessage(message *nsq.Message) error {
 		log.Warnf("%s: failed to unmarshal message to proto", messageID)
 	}
 
-	log.Infof("%s: digesting product: %s", messageID, sr.Name)
-	e = d.SonicSearch.Ingest(ProductCollection, ProductBucket, sr.Id, sr.Name)
+	log.Infof("%s: digesting product: %s", messageID, sr.Text)
+	e = d.SonicSearch.Ingest(ProductCollection, ProductBucket, sr.Id, sr.Text)
 
 	if e != nil {
-		log.Errorf("failed to ingest %s:%s into sonic: %v", sr.Id, sr.Name, e)
+		log.Errorf("failed to ingest %s:%s into sonic: %v", sr.Id, sr.Text, e)
 		return e
 	}
 
@@ -55,11 +55,11 @@ func (d *NSQBrandDigest) HandleNSQMessage(message *nsq.Message) error {
 		log.Warnf("%s: failed to unmarshal message to proto", messageID)
 	}
 
-	log.Infof("%s: digesting brand: %s", messageID, sr.Name)
-	e = d.SonicSearch.Ingest(BrandCollection, BrandBucket, sr.Id, sr.Name)
+	log.Infof("%s: digesting brand: %s", messageID, sr.Text)
+	e = d.SonicSearch.Ingest(BrandCollection, BrandBucket, sr.Id, sr.Text)
 
 	if e != nil {
-		log.Errorf("failed to ingest %s:%s into sonic: %v", sr.Id, sr.Name, e)
+		log.Errorf("failed to ingest %s:%s into sonic: %v", sr.Id, sr.Text, e)
 		return e
 	}
 
@@ -84,11 +84,11 @@ func (d *NSQCategoryDigest) HandleNSQMessage(message *nsq.Message) error {
 		log.Warnf("%s: failed to unmarshal message to proto", messageID)
 	}
 
-	log.Infof("%s: digesting category: %s", messageID, sr.Name)
-	e = d.SonicSearch.Ingest(CategoryCollection, CategoryBucket, sr.Id, sr.Name)
+	log.Infof("%s: digesting category: %s", messageID, sr.Text)
+	e = d.SonicSearch.Ingest(CategoryCollection, CategoryBucket, sr.Id, sr.Text)
 
 	if e != nil {
-		log.Errorf("failed to ingest %s:%s into sonic: %v", sr.Id, sr.Name, e)
+		log.Errorf("failed to ingest %s:%s into sonic: %v", sr.Id, sr.Text, e)
 		return e
 	}
 

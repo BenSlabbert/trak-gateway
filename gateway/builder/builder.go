@@ -3,7 +3,7 @@ package builder
 import (
 	"errors"
 	"fmt"
-	pb "github.com/BenSlabbert/trak-gRPC/src/go"
+	pb "github.com/BenSlabbert/trak-gRPC/gen/go/proto/gateway"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
 	"math"
@@ -23,7 +23,7 @@ func (pmb *ProductMessageBuilder) categories() {
 
 	for _, cm := range categoryModels {
 		categories = append(categories, &pb.CategoryMessage{
-			Id:   int64(cm.ID),
+			Id:   uint32(cm.ID),
 			Name: cm.Name,
 		})
 	}
@@ -37,12 +37,12 @@ func (pmb *ProductMessageBuilder) brand() {
 		brandModel = model.FindDefaultBrand(pmb.DB)
 	}
 	pmb.msg.Brand = &pb.BrandMessage{
-		Id:   int64(brandModel.ID),
+		Id:   uint32(brandModel.ID),
 		Name: brandModel.Name,
 	}
 }
 
-func (pmb *ProductMessageBuilder) id(p int64) {
+func (pmb *ProductMessageBuilder) id(p uint32) {
 	pmb.msg.Id = p
 }
 
@@ -88,7 +88,7 @@ func (pmb *ProductMessageBuilder) setProductDetails() {
 
 	pmb.name(pmb.ProductModel.Title)
 	pmb.productUrl(pmb.ProductModel.URL)
-	pmb.id(int64(pmb.ProductModel.ID))
+	pmb.id(uint32(pmb.ProductModel.ID))
 }
 
 // Build returns a built ProductMessage
@@ -133,7 +133,7 @@ type ProductStatsBuilder struct {
 	ProductID uint
 	msg       *pb.ProductStatsResponse
 	prices    []*model.PriceModel
-	chartData *pb.ChartDataMessage
+	chartData *pb.ChartMessage
 	min       float64
 	max       float64
 	mean      float64
@@ -174,14 +174,14 @@ func (psb *ProductStatsBuilder) setChartData() {
 		labels = append(labels, p.CreatedAt.String())
 	}
 
-	dataSets := make([]*pb.ChartDataSetMessage, 0)
+	dataSets := make([]*pb.ChartContentMessage, 0)
 
-	priceData := make([]int64, 0)
+	priceData := make([]uint32, 0)
 	for _, p := range psb.prices {
-		priceData = append(priceData, int64(p.CurrentPrice))
+		priceData = append(priceData, uint32(p.CurrentPrice))
 	}
 
-	dataSets = append(dataSets, &pb.ChartDataSetMessage{
+	dataSets = append(dataSets, &pb.ChartContentMessage{
 		Label:                "current",
 		FillColor:            "rgba(220,220,220,0.2)",
 		StrokeColor:          "rgba(220,220,220,1)",
@@ -189,15 +189,15 @@ func (psb *ProductStatsBuilder) setChartData() {
 		PointStrokeColor:     "#fff",
 		PointHighlightFill:   "#fff",
 		PointHighlightStroke: "rgba(220,220,220,1)",
-		Data:                 priceData,
+		Content:              priceData,
 	})
 
-	priceData = make([]int64, 0)
+	priceData = make([]uint32, 0)
 	for _, p := range psb.prices {
-		priceData = append(priceData, int64(p.ListPrice))
+		priceData = append(priceData, uint32(p.ListPrice))
 	}
 
-	dataSets = append(dataSets, &pb.ChartDataSetMessage{
+	dataSets = append(dataSets, &pb.ChartContentMessage{
 		Label:                "listed",
 		FillColor:            "rgba(151,187,205,0.2)",
 		StrokeColor:          "rgba(151,187,205,0.2)",
@@ -205,12 +205,12 @@ func (psb *ProductStatsBuilder) setChartData() {
 		PointStrokeColor:     "#fff",
 		PointHighlightFill:   "#fff",
 		PointHighlightStroke: "rgba(151,187,205,1)",
-		Data:                 priceData,
+		Content:              priceData,
 	})
 
-	psb.chartData = &pb.ChartDataMessage{
-		Labels:   labels,
-		DataSets: dataSets,
+	psb.chartData = &pb.ChartMessage{
+		Labels:  labels,
+		Content: dataSets,
 	}
 }
 
@@ -245,9 +245,9 @@ func (psb *ProductStatsBuilder) Build() (msg *pb.ProductStatsResponse, err error
 	psb.setPriceMinMaxMean()
 
 	return &pb.ProductStatsResponse{
-		MinPrice:  int64(psb.min),
-		MaxPrice:  int64(psb.max),
+		MinPrice:  uint32(psb.min),
+		MaxPrice:  uint32(psb.max),
 		MeanPrice: psb.mean,
-		ChartData: psb.chartData,
+		Chart:     psb.chartData,
 	}, nil
 }

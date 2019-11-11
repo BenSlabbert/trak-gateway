@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "github.com/BenSlabbert/trak-gRPC/src/go"
+	pb "github.com/BenSlabbert/trak-gRPC/gen/go/proto/search"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/nsqio/go-nsq"
@@ -60,7 +60,7 @@ func run() error {
 	defer sonicSearch.Quit()
 
 	s := grpc.NewServer()
-	pb.RegisterSearchServiceServer(s, &search.GRPCServer{SonicSearch: sonicSearch})
+	pb.RegisterSearchAPIServer(s, &search.GRPCServer{SonicSearch: sonicSearch})
 
 	// Register reflection service on gRPC server.
 	reflection.Register(s)

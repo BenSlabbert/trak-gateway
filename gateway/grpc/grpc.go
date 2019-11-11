@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"context"
-	pb "github.com/BenSlabbert/trak-gRPC/src/go"
+	pb "github.com/BenSlabbert/trak-gRPC/gen/go/proto/search"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -15,7 +15,7 @@ import (
 
 // todo refactor to not use these
 var searchClient *grpc.ClientConn
-var searchServiceClient pb.SearchServiceClient
+var searchServiceClient pb.SearchAPIClient
 
 func init() {
 	apiGRPCHost := os.Getenv("API_GRPC_HOST")
@@ -37,7 +37,7 @@ func init() {
 		log.Fatalf("Failed to connect: %v", grpcErr)
 	}
 
-	searchServiceClient = pb.NewSearchServiceClient(searchClient)
+	searchServiceClient = pb.NewSearchAPIClient(searchClient)
 }
 
 func parseError(err error) *response.Error {

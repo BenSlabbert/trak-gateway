@@ -3,7 +3,8 @@ package rest
 import (
 	"errors"
 	"fmt"
-	pb "github.com/BenSlabbert/trak-gRPC/src/go"
+	gatewayPB "github.com/BenSlabbert/trak-gRPC/gen/go/proto/gateway"
+	searchPB "github.com/BenSlabbert/trak-gRPC/gen/go/proto/search"
 	"github.com/go-redis/redis"
 	"github.com/go-resty/resty/v2"
 	"github.com/golang/protobuf/proto"
@@ -86,7 +87,7 @@ func (h *Handler) AddProduct(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	sendOK(w, &pb.Empty{})
+	sendOK(w, &gatewayPB.Empty{})
 }
 
 func (h *Handler) plIDFromURL(u string) (uint, error) {
@@ -157,34 +158,34 @@ func (h *Handler) GetAllPromotions(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("GetAllPromotions-%d", pageReq)
-	resp := &pb.GetAllPromotionsResponse{}
+	resp := &gatewayPB.GetAllPromotionsResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
 		return
 	}
 
-	promotionMessages := make([]*pb.PromotionMessage, 0)
+	promotionMessages := make([]*gatewayPB.PromotionMessage, 0)
 	promotions, queryPage := model.FindLatestPromotions(pageReq, 12, h.DB)
 
 	for _, p := range promotions {
-		promotionMessages = append(promotionMessages, &pb.PromotionMessage{
-			Id:          int64(p.ID),
+		promotionMessages = append(promotionMessages, &gatewayPB.PromotionMessage{
+			Id:          uint32(p.ID),
 			Name:        p.DisplayName,
-			PromotionId: int64(p.PromotionID),
+			PromotionId: uint32(p.PromotionID),
 			// todo use p.start + p.end
-			Created: p.CreatedAt.Unix(),
+			Created: uint32(p.CreatedAt.Unix()),
 		})
 	}
 
-	resp = &pb.GetAllPromotionsResponse{
+	resp = &gatewayPB.GetAllPromotionsResponse{
 		Promotions: promotionMessages,
-		PageResponse: &pb.PageResponse{
+		PageResponse: &gatewayPB.PageResponse{
 			// re-increment for the ui
-			CurrentPageNumber: int64(queryPage.CurrentPage) + 1,
-			LastPageNumber:    int64(queryPage.LastPage),
-			TotalItems:        int64(queryPage.TotalItems),
-			PageSize:          int64(queryPage.PageSize),
+			CurrentPageNumber: uint32(queryPage.CurrentPage) + 1,
+			LastPageNumber:    uint32(queryPage.LastPage),
+			TotalItems:        uint32(queryPage.TotalItems),
+			PageSize:          uint32(queryPage.PageSize),
 			IsFirstPage:       queryPage.IsFirstPage,
 			IsLastPage:        queryPage.IsLastPage,
 		},
@@ -227,14 +228,14 @@ func (h *Handler) GetPromotion(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("GetPromotion-%d-%d", pageReq, promotionIdReq)
-	resp := &pb.PromotionResponse{}
+	resp := &gatewayPB.PromotionResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
 		return
 	}
 
-	productMessages := make([]*pb.ProductMessage, 0)
+	productMessages := make([]*gatewayPB.ProductMessage, 0)
 	products, queryPage := model.FindProductsByPromotion(promotionIdReq, pageReq, 12, h.DB)
 
 	// todo run in own goroutines
@@ -251,14 +252,14 @@ func (h *Handler) GetPromotion(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	resp = &pb.PromotionResponse{
+	resp = &gatewayPB.PromotionResponse{
 		Products: productMessages,
-		PageResponse: &pb.PageResponse{
+		PageResponse: &gatewayPB.PageResponse{
 			// re-increment for the ui
-			CurrentPageNumber: int64(queryPage.CurrentPage) + 1,
-			LastPageNumber:    int64(queryPage.LastPage),
-			TotalItems:        int64(queryPage.TotalItems),
-			PageSize:          int64(queryPage.PageSize),
+			CurrentPageNumber: uint32(queryPage.CurrentPage) + 1,
+			LastPageNumber:    uint32(queryPage.LastPage),
+			TotalItems:        uint32(queryPage.TotalItems),
+			PageSize:          uint32(queryPage.PageSize),
 			IsFirstPage:       queryPage.IsFirstPage,
 			IsLastPage:        queryPage.IsLastPage,
 		},
@@ -288,7 +289,7 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("DailyDeals-%d", pageReq)
-	resp := &pb.PromotionResponse{}
+	resp := &gatewayPB.PromotionResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
@@ -303,7 +304,7 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	productMessages := make([]*pb.ProductMessage, 0)
+	productMessages := make([]*gatewayPB.ProductMessage, 0)
 	products, queryPage := model.FindProductsByPromotion(promotionModel.ID, pageReq, 12, h.DB)
 
 	// todo run in own goroutines
@@ -320,14 +321,14 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	resp = &pb.PromotionResponse{
+	resp = &gatewayPB.PromotionResponse{
 		Products: productMessages,
-		PageResponse: &pb.PageResponse{
+		PageResponse: &gatewayPB.PageResponse{
 			// re-increment for the ui
-			CurrentPageNumber: int64(queryPage.CurrentPage) + 1,
-			LastPageNumber:    int64(queryPage.LastPage),
-			TotalItems:        int64(queryPage.TotalItems),
-			PageSize:          int64(queryPage.PageSize),
+			CurrentPageNumber: uint32(queryPage.CurrentPage) + 1,
+			LastPageNumber:    uint32(queryPage.LastPage),
+			TotalItems:        uint32(queryPage.TotalItems),
+			PageSize:          uint32(queryPage.PageSize),
 			IsFirstPage:       queryPage.IsFirstPage,
 			IsLastPage:        queryPage.IsLastPage,
 		},
@@ -343,21 +344,21 @@ func (h *Handler) CategorySearch(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("CategorySearch-%s", s)
-	resp := &pb.SearchResponse{}
+	resp := &searchPB.CategorySearchResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
 		return
 	}
 
-	resp, grpcErr := grpc.CategorySearch(&pb.SearchRequest{Search: s})
+	resp, grpcErr := grpc.CategorySearch(&searchPB.CategorySearchRequest{Search: s})
 
 	if grpcErr != nil {
 		sendError(w, grpcErr)
 		return
 	}
 
-	results := make([]*pb.SearchResult, 0)
+	results := make([]*searchPB.SearchResult, 0)
 	for _, r := range resp.Results {
 		id, e := strconv.ParseUint(r.Id, 10, 32)
 		if e != nil {
@@ -375,14 +376,13 @@ func (h *Handler) CategorySearch(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		results = append(results, &pb.SearchResult{
-			Id:    fmt.Sprintf("%d", categoryModel.ID),
-			Name:  categoryModel.Name,
-			Score: 0,
+		results = append(results, &searchPB.SearchResult{
+			Id:   fmt.Sprintf("%d", categoryModel.ID),
+			Text: categoryModel.Name,
 		})
 	}
 
-	resp = &pb.SearchResponse{Results: results}
+	resp = &searchPB.CategorySearchResponse{Results: results}
 	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
@@ -393,21 +393,21 @@ func (h *Handler) BrandSearch(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("BrandSearch-%s", s)
-	resp := &pb.SearchResponse{}
+	resp := &searchPB.BrandSearchResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
 		return
 	}
 
-	resp, grpcErr := grpc.BrandSearch(&pb.SearchRequest{Search: s})
+	resp, grpcErr := grpc.BrandSearch(&searchPB.BrandSearchRequest{Search: s})
 
 	if grpcErr != nil {
 		sendError(w, grpcErr)
 		return
 	}
 
-	results := make([]*pb.SearchResult, 0)
+	results := make([]*searchPB.SearchResult, 0)
 	for _, r := range resp.Results {
 		id, e := strconv.ParseUint(r.Id, 10, 32)
 		if e != nil {
@@ -425,14 +425,14 @@ func (h *Handler) BrandSearch(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		results = append(results, &pb.SearchResult{
+		results = append(results, &searchPB.SearchResult{
 			Id:    fmt.Sprintf("%d", brandModel.ID),
-			Name:  brandModel.Name,
+			Text:  brandModel.Name,
 			Score: 0,
 		})
 	}
 
-	resp = &pb.SearchResponse{Results: results}
+	resp = &searchPB.BrandSearchResponse{Results: results}
 	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
@@ -443,21 +443,21 @@ func (h *Handler) ProductSearch(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("ProductSearch-%s", s)
-	resp := &pb.SearchResponse{}
+	resp := &searchPB.ProductSearchResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
 		return
 	}
 
-	resp, grpcErr := grpc.ProductSearch(&pb.SearchRequest{Search: s})
+	resp, grpcErr := grpc.ProductSearch(&searchPB.ProductSearchRequest{Search: s})
 
 	if grpcErr != nil {
 		sendError(w, grpcErr)
 		return
 	}
 
-	results := make([]*pb.SearchResult, 0)
+	results := make([]*searchPB.SearchResult, 0)
 	for _, r := range resp.Results {
 		id, e := strconv.ParseUint(r.Id, 10, 32)
 		if e != nil {
@@ -475,14 +475,14 @@ func (h *Handler) ProductSearch(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		results = append(results, &pb.SearchResult{
+		results = append(results, &searchPB.SearchResult{
 			Id:    fmt.Sprintf("%d", productModel.ID),
-			Name:  productModel.Title,
+			Text:  productModel.Title,
 			Score: 0,
 		})
 	}
 
-	resp = &pb.SearchResponse{Results: results}
+	resp = &searchPB.ProductSearchResponse{Results: results}
 	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
 }
@@ -500,7 +500,7 @@ func (h *Handler) GetBrandById(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("GetBrandById-%d", brandId)
-	resp := &pb.BrandResponse{}
+	resp := &gatewayPB.BrandResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
@@ -518,7 +518,7 @@ func (h *Handler) GetBrandById(w http.ResponseWriter, req *http.Request) {
 	}
 
 	productModels := model.FindProductsByBrand(uint(brandId), 0, 12, h.DB)
-	products := make([]*pb.ProductMessage, 0)
+	products := make([]*gatewayPB.ProductMessage, 0)
 
 	// todo do these in their own goroutine
 	for _, pm := range productModels {
@@ -534,8 +534,8 @@ func (h *Handler) GetBrandById(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	resp = &pb.BrandResponse{
-		BrandId:  int64(brandId),
+	resp = &gatewayPB.BrandResponse{
+		BrandId:  uint32(brandId),
 		Name:     brandModel.Name,
 		Products: products,
 	}
@@ -556,7 +556,7 @@ func (h *Handler) GetCategoryById(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("GetCategoryById-%d", categoryId)
-	resp := &pb.CategoryResponse{}
+	resp := &gatewayPB.CategoryResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
@@ -574,7 +574,7 @@ func (h *Handler) GetCategoryById(w http.ResponseWriter, req *http.Request) {
 	}
 
 	productModels := model.FindProductsByCategory(categoryModel.ID, 0, 12, h.DB)
-	products := make([]*pb.ProductMessage, 0)
+	products := make([]*gatewayPB.ProductMessage, 0)
 
 	// todo do these in their own goroutine
 	for _, pm := range productModels {
@@ -589,8 +589,8 @@ func (h *Handler) GetCategoryById(w http.ResponseWriter, req *http.Request) {
 			products = append(products, msg)
 		}
 	}
-	resp = &pb.CategoryResponse{
-		CategoryId: int64(categoryModel.ID),
+	resp = &gatewayPB.CategoryResponse{
+		CategoryId: uint32(categoryModel.ID),
 		Name:       categoryModel.Name,
 		Products:   products,
 	}
@@ -610,7 +610,7 @@ func (h *Handler) GetProductById(w http.ResponseWriter, req *http.Request) {
 
 	// check redis for cache
 	redisKey := fmt.Sprintf("GetProductById-%d", productId)
-	resp := &pb.ProductResponse{}
+	resp := &gatewayPB.ProductResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
@@ -638,7 +638,7 @@ func (h *Handler) GetProductById(w http.ResponseWriter, req *http.Request) {
 
 	statsResponse, _ := statsBuilder.Build()
 
-	resp = &pb.ProductResponse{
+	resp = &gatewayPB.ProductResponse{
 		Product: productMessage,
 		Stats:   statsResponse,
 	}
@@ -650,7 +650,7 @@ func (h *Handler) GetProductById(w http.ResponseWriter, req *http.Request) {
 func (h *Handler) LatestHandler(w http.ResponseWriter, req *http.Request) {
 	// check redis for cache
 	redisKey := "Latest"
-	resp := &pb.LatestResponse{}
+	resp := &gatewayPB.LatestResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
@@ -658,7 +658,7 @@ func (h *Handler) LatestHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	products, _ := model.FindLatestProducts(0, 12, h.DB)
-	productMessages := make([]*pb.ProductMessage, 0)
+	productMessages := make([]*gatewayPB.ProductMessage, 0)
 
 	// todo run in own goroutines
 	for _, p := range products {
@@ -673,7 +673,7 @@ func (h *Handler) LatestHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	resp = &pb.LatestResponse{
+	resp = &gatewayPB.LatestResponse{
 		Products: productMessages,
 		Page:     nil,
 	}
