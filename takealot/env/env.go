@@ -35,6 +35,11 @@ type Crawler struct {
 	TakealotInitialPLID     uint
 }
 
+type UI struct {
+	Path            string
+	ReleaseAssetURL string
+}
+
 type TrakEnv struct {
 	DB         DBEnv
 	Redis      RedisEnv
@@ -42,6 +47,7 @@ type TrakEnv struct {
 	Nsq        NSQEnv
 	PPROFEnv   PPROFEnv
 	Crawler    Crawler
+	UI         UI
 }
 
 func LoadEnv() TrakEnv {
@@ -71,7 +77,29 @@ func LoadEnv() TrakEnv {
 			NumberOfNewProductTasks: getNumberOfNewProductTasks(),
 			TakealotInitialPLID:     getTakealotInitialPLID(),
 		},
+		UI: UI{
+			Path:            getUIPath(),
+			ReleaseAssetURL: getReleaseAssetURL(),
+		},
 	}
+}
+
+func getReleaseAssetURL() string {
+	e := os.Getenv("UI_RELEASE_URL")
+
+	if e == "" {
+		return "https://github.com/BenSlabbert/trak-ui/releases/download/2.0.0/ui.zip"
+	}
+	return e
+}
+
+func getUIPath() string {
+	e := os.Getenv("UI_PATH")
+
+	if e == "" {
+		return "/static"
+	}
+	return e
 }
 
 func getTakealotInitialPLID() uint {

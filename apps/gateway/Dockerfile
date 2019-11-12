@@ -24,14 +24,6 @@ RUN CGO_ENABLED=0 go vet ./...
 WORKDIR $BUILD_PATH
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $APPNAME
 
-WORKDIR /
-RUN mkdir static
-WORKDIR /static
-
-# todo make this runtime/env configurable
-RUN wget -O ui.zip https://github.com/BenSlabbert/trak-ui/releases/download/2.0.0/ui.zip
-RUN unzip ui.zip && rm ui.zip
-
 ########################################################################################################################
 
 FROM alpine:3.10 AS alpine
@@ -52,12 +44,8 @@ COPY --from=alpine /etc/passwd /etc/passwd
 # Copy binary from builder
 COPY --from=builder $BUILD_PATH/$APPNAME app
 
-# Copy ReactJS Bundle from builder
-COPY --from=builder /static /static
-
 ENV API_PORT=5000
 ENV PROFILE=DOCKER
-ENV STATIC_FILES_DIR=/static
 USER go-user
 
 ENTRYPOINT ["./app"]

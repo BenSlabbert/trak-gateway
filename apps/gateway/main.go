@@ -1,10 +1,13 @@
 package main
 
 import (
+	"archive/zip"
 	"fmt"
+	"io"
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"time"
 	"trak-gateway/connection"
 	"trak-gateway/gateway/grpc"
@@ -20,24 +23,12 @@ import (
 	"net/http"
 )
 
-var StaticFilesDir string
 var Profile string
 var Port string
 
 func init() {
-	StaticFilesDir = getStaticFilesDir()
 	Port = getGatewayPort()
 	Profile = getProfile()
-}
-
-func getStaticFilesDir() string {
-	dir := os.Getenv("STATIC_FILES_DIR")
-
-	if dir == "" {
-		dir = "/static"
-	}
-
-	return dir
 }
 
 func getGatewayPort() string {
@@ -103,7 +94,7 @@ func main() {
 		}()
 	}
 
-	router := setUpRoutes(handler)
+	router := setUpRoutes(takealotEnv, handler)
 	http.Handle("/", router)
 
 	go func() {
@@ -124,7 +115,7 @@ func main() {
 	<-ch
 }
 
-func setUpRoutes(handler *rest.Handler) *mux.Router {
+func setUpRoutes(trakEnv env.TrakEnv, handler *rest.Handler) *mux.Router {
 	router := mux.NewRouter()
 
 	router.Path("/api/latest").
@@ -178,10 +169,98 @@ func setUpRoutes(handler *rest.Handler) *mux.Router {
 		Name("GetAllPromotions")
 
 	if Profile == profile.DOCKER {
-		absPath, _ := filepath.Abs(StaticFilesDir)
-		router.PathPrefix("/").
-			Handler(http.FileServer(http.Dir(absPath)))
+		DownloadAndExtractUIAssets(trakEnv.UI)
+		absPath, _ := filepath.Abs(trakEnv.UI.Path + "/ui")
+		router.PathPrefix("/").Handler(http.FileServer(http.Dir(absPath)))
 	}
 
 	return router
+}
+
+func DownloadAndExtractUIAssets(ui env.UI) {
+	err := DownloadFile(ui.Path+"/ui.zip", ui.ReleaseAssetURL)
+	if err != nil {
+		log.Fatalf("failed to download trak ui from url: %s: %v", ui.ReleaseAssetURL, err)
+	}
+	_, err = Unzip(ui.Path+"/ui.zip", ui.Path+"/ui")
+	if err != nil {
+		log.Fatalf("failed to extract ui.zip: %v", err)
+	}
+}
+
+// https://golangcode.com/unzip-files-in-go/
+func Unzip(src string, dest string) ([]string, error) {
+	var filenames []string
+
+	r, err := zip.OpenReader(src)
+	if err != nil {
+		return filenames, err
+	}
+	defer r.Close()
+
+	for _, f := range r.File {
+
+		// Store filename/path for returning and using later on
+		fpath := filepath.Join(dest, f.Name)
+
+		// Check for ZipSlip. More Info: http://bit.ly/2MsjAWE
+		if !strings.HasPrefix(fpath, filepath.Clean(dest)+string(os.PathSeparator)) {
+			return filenames, fmt.Errorf("%s: illegal file path", fpath)
+		}
+
+		filenames = append(filenames, fpath)
+
+		if f.FileInfo().IsDir() {
+			// Make Folder
+			os.MkdirAll(fpath, os.ModePerm)
+			continue
+		}
+
+		// Make File
+		if err = os.MkdirAll(filepath.Dir(fpath), os.ModePerm); err != nil {
+			return filenames, err
+		}
+
+		outFile, err := os.OpenFile(fpath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+		if err != nil {
+			return filenames, err
+		}
+
+		rc, err := f.Open()
+		if err != nil {
+			return filenames, err
+		}
+
+		_, err = io.Copy(outFile, rc)
+
+		// Close the file without defer to close before next iteration of loop
+		outFile.Close()
+		rc.Close()
+
+		if err != nil {
+			return filenames, err
+		}
+	}
+	return filenames, nil
+}
+
+// https://golangcode.com/download-a-file-from-a-url/
+func DownloadFile(filepath string, url string) error {
+	// Get the data
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// Create the file
+	out, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	// Write the body to file
+	_, err = io.Copy(out, resp.Body)
+	return err
 }
