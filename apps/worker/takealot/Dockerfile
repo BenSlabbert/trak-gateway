@@ -18,7 +18,9 @@ COPY . $CODE_PATH
 WORKDIR $CODE_PATH
 RUN go mod download
 
-RUN CGO_ENABLED=0 go test ./...
+# this dir is needed for some tests
+RUN mkdir /tmp/trak
+RUN CGO_ENABLED=0 go test ./... -v
 RUN CGO_ENABLED=0 go vet ./...
 
 WORKDIR $BUILD_PATH
