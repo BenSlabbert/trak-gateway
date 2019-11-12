@@ -8,6 +8,8 @@ services:
       - API_PORT=5000
       - SEARCH_GRPC_HOST=search:50052
       - PROFILE=DOCKER
+      - UI_PATH=/static
+      - UI_RELEASE_URL=https://github.com/BenSlabbert/trak-ui/releases/download/2.0.0/ui.zip
       - PPROF_ENABLED=false
       - DB_HOST=rds
       - DB_PORT=3306
