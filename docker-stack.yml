@@ -2,14 +2,18 @@ version: "3.7"
 
 services:
 
+  ######################
+  #  TRAK Applications #
+  ######################
+
   gateway:
     image: benjaminslabbert/trak_gateway:latest
     environment:
       - API_PORT=5000
       - SEARCH_GRPC_HOST=search:50052
       - PROFILE=DOCKER
-      - UI_PATH=/static
-      - UI_RELEASE_URL=https://github.com/BenSlabbert/trak-ui/releases/download/2.0.0/ui.zip
+      - UI_PATH=/tmp/static
+      - UI_RELEASE_URL=https://github.com/BenSlabbert/trak-ui/releases/download/2.0.1/ui.zip
       - PPROF_ENABLED=false
       - DB_HOST=rds
       - DB_PORT=3306
@@ -19,12 +23,28 @@ services:
       - REDIS_URL=redis:6379
       - REDIS_PASSWORD=password
       - NSQD_URL=nsqd:4150
-    restart: on-failure
     ports:
-      - 5555:5000
+      - 5000:5000
     depends_on:
       - redis
       - rds
+    labels:
+      - "description=Trak gateway, handles UI API requests"
+    networks:
+      - backend
+      - frontend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 1
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   worker-master:
     image: benjaminslabbert/trak_worker:latest
@@ -44,7 +64,6 @@ services:
       - PPROF_ENABLED=false
       - CRAWLER_NUMBER_OF_NEW_PRODUCT_TASKS=50
       - CRAWLER_TAKEALOT_INITIAL_PLID=41469985
-    restart: on-failure
     ports:
       - 8080:8080
     depends_on:
@@ -52,7 +71,22 @@ services:
       - rds
       - nsqd
       - nsqlookupd
-      - nsqadmin
+    labels:
+      - "description=Trak worker-master, creates and processes tasks on NSQ"
+    networks:
+      - backend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 1
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   worker-slave:
     image: benjaminslabbert/trak_worker:latest
@@ -70,13 +104,27 @@ services:
       - NSQD_NUMBER_OF_NEW_PRODUCT_CONSUMERS=10
       - NSQD_NUMBER_OF_SCHEDULED_TASK_CONSUMERS=1
       - PPROF_ENABLED=false
-    restart: on-failure
     depends_on:
       - redis
       - rds
       - nsqd
       - nsqlookupd
-      - nsqadmin
+    labels:
+      - "description=Trak worker-slave, processes tasks on NSQ"
+    networks:
+      - backend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 2
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   search:
     image: benjaminslabbert/trak_search:latest
@@ -86,23 +134,53 @@ services:
       - SONIC_HOST=sonic
       - GRPC_PORT=50052
       - NSQD_URL=nsqd:4150
-    restart: on-failure
-    ports:
-      - 50052:50052
+#    ports:
+#      - 50052:50052
     depends_on:
       - sonic
+    labels:
+      - "description=Trak search, searches on sonic"
+    networks:
+      - backend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 2
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   redis:
     image: redis:5.0.6-alpine
     command: redis-server --requirepass password
-    ports:
-      - 6379:6379
-    restart: on-failure
+#    ports:
+#      - 6379:6379
+    labels:
+      - "description=Redis, caching and distributed locking"
+    networks:
+      - backend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 1
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   rds:
     image: mariadb:10.4.8-bionic
-    ports:
-      - 3306:3306
+#    ports:
+#      - 3306:3306
     volumes:
       - rds-data:/var/lib/mysql
     environment:
@@ -110,57 +188,184 @@ services:
       - MYSQL_DATABASE=trak
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
-    stop_grace_period: 1m30s
     labels:
-      - "description=Maria DB Relational DB"
-    restart: on-failure
+      - "description=MariaDB, persistence"
+    networks:
+      - backend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 1
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   # todo need to connect to nsqlookupd, see: https://stackoverflow.com/questions/48536963/nsq-cannot-consume-message-by-connecting-to-nsqlookupd
   nsqlookupd:
     image: nsqio/nsq:v1.2.0
     command: /nsqlookupd
-    ports:
-      - "4160:4160" # TCP
-      - "4161:4161" # HTTP
-    restart: on-failure
+#    ports:
+#      - "4160:4160" # TCP
+#      - "4161:4161" # HTTP
+    labels:
+      - "description=nsqlookupd, nsqlookup"
+    networks:
+      - backend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 1
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   nsqd:
     image: nsqio/nsq:v1.2.0
     command: /nsqd -lookupd-tcp-address=nsqlookupd:4160 -broadcast-address=nsqd
     depends_on:
       - nsqlookupd
-    ports:
-      - "4150:4150"
-      - "4151:4151"
-    restart: on-failure
+#    ports:
+#      - "4150:4150"
+#      - "4151:4151"
+    labels:
+      - "description=nsqd, nsqd"
+    networks:
+      - backend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 1
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   nsqadmin:
     image: nsqio/nsq:v1.2.0
     command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
     depends_on:
       - nsqlookupd
-    ports:
-      - "4171:4171"
-    restart: on-failure
+#    ports:
+#      - "4171:4171"
+    labels:
+      - "description=nsqadmin, nsqadmin"
+    networks:
+      - backend
+      - frontend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 1
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   sonic:
     image: valeriansaliou/sonic:v1.2.3
-    ports:
-      - 1491:1491
+#    ports:
+#      - 1491:1491
     volumes:
       - sonic-data:/usr/src/sonic
       - ./sonic/sonic.cfg:/etc/sonic.cfg
+    labels:
+      - "description=sonic, natural language search"
+    networks:
+      - backend
+    stop_grace_period: 1m30s
+    deploy:
+      replicas: 1
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  agent:
+    image: portainer/agent:1.5.1
+    environment:
+      # REQUIRED: Should be equal to the service name prefixed by "tasks." when
+      # deployed inside an overlay network
+      AGENT_CLUSTER_ADDR: tasks.agent
+      AGENT_PORT: 9001
+      LOG_LEVEL: debug
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - agent_network
+    deploy:
+      mode: global
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints: [node.platform.os == linux]
 
   portainer:
     image: portainer/portainer:1.22.1
     ports:
       - 9000:9000
-    restart: on-failure
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+    #    volumes:
+    #      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - "admin-password=admin123"
+    networks:
+      - agent_network
+    deploy:
+      replicas: 1
+      mode: replicated
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  frontend:
+    driver: overlay
+  backend:
+    driver: overlay
+  agent_network:
+    driver: overlay
+    attachable: true
 
 volumes:
   rds-data:
   sonic-data:
+  portainer-data:

@@ -29,19 +29,15 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $APPNAME
 ########################################################################################################################
 
 FROM alpine:3.10 AS alpine
+
 RUN apk update && apk upgrade && apk add --no-cache ca-certificates && rm -rf /var/cache/apk/*
 RUN adduser -D -H -u 10001 go-user
-
-########################################################################################################################
-
-FROM scratch
+RUN mkdir /tmp/static --mode=777
+RUN chown -R go-user /tmp/static
 
 ARG BUILD_PATH
 ARG APPNAME
 ARG CERT_PATH
-
-COPY --from=alpine $CERT_PATH /etc/ssl/certs/
-COPY --from=alpine /etc/passwd /etc/passwd
 
 # Copy binary from builder
 COPY --from=builder $BUILD_PATH/$APPNAME app

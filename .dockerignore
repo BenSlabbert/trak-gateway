@@ -1,0 +1,9 @@
+apps/gateway/Dockerfile
+apps/search/sonic/Dockerfile
+apps/worker/takealot/Dockerfile
+
+.git
+*.yml
+*.yaml
+*.md
+.gitignore
