@@ -121,6 +121,6 @@ func run() error {
 
 func main() {
 	if err := run(); err != nil {
-		log.Fatalf("filed to run application: %v", err)
+		log.Fatalf("failed to run application: %v", err)
 	}
 }

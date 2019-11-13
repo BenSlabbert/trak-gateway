@@ -144,7 +144,7 @@ services:
       - backend
     stop_grace_period: 1m30s
     deploy:
-      replicas: 2
+      replicas: 1
       mode: replicated
       update_config:
         parallelism: 2

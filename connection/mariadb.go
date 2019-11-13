@@ -21,10 +21,11 @@ type MariaDBConnectOpts struct {
 
 func GetMariaDB(opts MariaDBConnectOpts) (*gorm.DB, error) {
 	connString := "%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local"
-	db, err := gorm.Open("mysql", fmt.Sprintf(connString, opts.User, opts.Password, opts.Host, opts.Port, opts.Database))
+	connString = fmt.Sprintf(connString, opts.User, opts.Password, opts.Host, opts.Port, opts.Database)
+	db, err := gorm.Open("mysql", connString)
 
 	if err != nil {
-		log.Errorf("unable to connect to mysql instance with '%s' %+v", connString, err)
+		log.Errorf("unable to connect to mysql instance with '%s' %v", connString, err)
 		return nil, err
 	}
 
