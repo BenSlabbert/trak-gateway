@@ -151,12 +151,27 @@ func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts, trakEnv en
 
 			PublishNewProductTasks(db, nsqProducer, trakEnv.Crawler)
 			PublishPromotionScheduledTask(db, nsqProducer)
+			PublishPriceUpdateScheduledTask(db, nsqProducer)
 		}
 	}
 }
 
+func PublishPriceUpdateScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
+	taskName := model.PriceUpdateScheduledTask
+	taskQueue := queue.NewScheduledTaskQueue
+	scheduledTask := queue.PriceUpdateScheduledTask
+	PublishScheduledTask(taskName, taskQueue, scheduledTask, db, nsqProducer)
+}
+
 func PublishPromotionScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
-	scheduledTaskModel, ok := model.FindScheduledTaskModelByName(model.PromotionsScheduledTask, db)
+	taskName := model.PromotionsScheduledTask
+	taskQueue := queue.NewScheduledTaskQueue
+	scheduledTask := queue.PromotionsScheduledTask
+	PublishScheduledTask(taskName, taskQueue, scheduledTask, db, nsqProducer)
+}
+
+func PublishScheduledTask(taskName string, taskQueue string, scheduledTask queue.ScheduledTask, db *gorm.DB, nsqProducer *nsq.Producer) {
+	scheduledTaskModel, ok := model.FindScheduledTaskModelByName(taskName, db)
 
 	if !ok {
 		// create task
@@ -165,7 +180,7 @@ func PublishPromotionScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
 		nextRun := time.Date(now.Year(), now.Month(), now.Day()-2, 10, 0, 0, 0, time.UTC)
 		scheduledTaskModel.NextRun = nextRun
 		scheduledTaskModel.LastRun = time.Unix(0, 0)
-		scheduledTaskModel.Name = model.PromotionsScheduledTask
+		scheduledTaskModel.Name = taskName
 		_, err := model.UpsertScheduledTaskModel(scheduledTaskModel, db)
 		if err != nil {
 			log.Warnf("failed to upsert ScheduledTaskModel: %v", err)
@@ -174,8 +189,8 @@ func PublishPromotionScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
 	}
 
 	if time.Now().After(scheduledTaskModel.NextRun) {
-		log.Infof("running scheduled task: %s", model.PromotionsScheduledTask)
-		err := nsqProducer.Publish(queue.NewScheduledTaskQueue, queue.SendUintMessage(uint(queue.PromotionsScheduledTask)))
+		log.Infof("running scheduled task: %s", taskName)
+		err := nsqProducer.Publish(taskQueue, queue.SendUintMessage(uint(scheduledTask)))
 		if err != nil {
 			log.Warnf("failed to publish to nsq: %v", err)
 		} else {

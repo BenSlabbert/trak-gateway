@@ -16,6 +16,7 @@ const CategoryDigestQueue string = "category-digest-queue"
 type ScheduledTask uint
 
 const PromotionsScheduledTask ScheduledTask = 1
+const PriceUpdateScheduledTask ScheduledTask = 2
 
 func ConnectConsumer(consumer *nsq.Consumer) {
 	e := env.LoadEnv()

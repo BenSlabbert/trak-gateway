@@ -25,6 +25,19 @@ func migrateProductModel(db *gorm.DB) {
 	db.AutoMigrate(&ProductModel{})
 }
 
+// FindProducts returns products with IDs greater than greaterThanID
+// limited by size
+func FindProducts(greaterThanID uint, size int, db *gorm.DB) []*ProductModel {
+	arr := make([]*ProductModel, 0, 0)
+	db.Model(&ProductModel{}).
+		Order("id asc").
+		Where("id > ?", greaterThanID).
+		Limit(size).
+		Find(&arr)
+
+	return arr
+}
+
 func FindLatestProducts(page, size int, db *gorm.DB) ([]*ProductModel, QueryPage) {
 	arr := make([]*ProductModel, 0)
 	db.Model(&ProductModel{}).
