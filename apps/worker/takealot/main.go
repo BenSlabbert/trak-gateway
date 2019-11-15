@@ -138,21 +138,17 @@ func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts, trakEnv en
 	defer nsqProducer.Stop()
 	ticker := time.NewTicker(10 * time.Second)
 
-	for {
-		select {
-		case <-ticker.C:
-			log.Info("creating new createProduct tasks")
-			err := nsqProducer.Ping()
-			if err != nil {
-				log.Warnf("failed to ping NSQ! No tasks will be produced: %v", err)
-				nsqProducer = queue.CreateNSQProducer()
-				break
-			}
-
-			PublishNewProductTasks(db, nsqProducer, trakEnv.Crawler)
-			PublishPromotionScheduledTask(db, nsqProducer)
-			PublishPriceUpdateScheduledTask(db, nsqProducer)
+	for range ticker.C {
+		log.Info("creating new createProduct tasks")
+		err := nsqProducer.Ping()
+		if err != nil {
+			log.Warnf("failed to ping NSQ! No tasks will be produced: %v", err)
+			nsqProducer = queue.CreateNSQProducer()
 		}
+
+		PublishNewProductTasks(db, nsqProducer, trakEnv.Crawler)
+		PublishPromotionScheduledTask(db, nsqProducer)
+		PublishPriceUpdateScheduledTask(db, nsqProducer)
 	}
 }
 

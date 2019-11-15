@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	pb "github.com/BenSlabbert/trak-gRPC/gen/go/proto/search"
 	"github.com/google/uuid"
@@ -15,6 +14,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"trak-gateway/gateway/metrics"
 	"trak-gateway/search"
 	"trak-gateway/takealot/env"
@@ -22,10 +22,6 @@ import (
 )
 
 func run() error {
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
 	takealotEnv := env.LoadEnv()
 	if takealotEnv.PPROFEnv.PPROFEnabled {
 		log.Infof("exposing pprof on port: %d", takealotEnv.PPROFEnv.PPROFPort)
@@ -101,7 +97,7 @@ func run() error {
 	// wait for Ctrl + C to exit
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt)
-	signal.Notify(ch, os.Kill)
+	signal.Notify(ch, syscall.SIGTERM)
 
 	// Block until signal is received
 	sig := <-ch

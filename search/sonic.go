@@ -98,58 +98,55 @@ func (ss *SonicSearch) Quit() {
 func (ss *SonicSearch) keepAlive() {
 	ticker := time.NewTicker(10 * time.Second)
 
-	for {
-		select {
-		case <-ticker.C:
-			ingestArr := make([]sonic.Ingestable, 0)
+	for range ticker.C {
+		ingestArr := make([]sonic.Ingestable, 0)
 
-			ingestPoolSize := ss.env.SonicIngesterPoolSize
-			// drain pool
-			for i := 0; i < ingestPoolSize; i++ {
-				ingest := <-ss.ingestConnPool
-				ingestArr = append(ingestArr, ingest)
-			}
+		ingestPoolSize := ss.env.SonicIngesterPoolSize
+		// drain pool
+		for i := 0; i < ingestPoolSize; i++ {
+			ingest := <-ss.ingestConnPool
+			ingestArr = append(ingestArr, ingest)
+		}
 
-			// check connection
-			for _, i := range ingestArr {
-				err := i.Ping()
+		// check connection
+		for _, i := range ingestArr {
+			err := i.Ping()
+			if err != nil {
+				log.Warnf("failed to ping sonic with ingester: %v", err)
+				i, err = sonic.NewIngester(ss.env.SonicHost, ss.env.SonicPort, ss.env.SonicPassword)
 				if err != nil {
-					log.Warnf("failed to ping sonic with ingester: %v", err)
-					i, err = sonic.NewIngester(ss.env.SonicHost, ss.env.SonicPort, ss.env.SonicPassword)
-					if err != nil {
-						log.Errorf("failed to connect to sonic: %v", err)
-						panic(err)
-					}
+					log.Errorf("failed to connect to sonic: %v", err)
+					panic(err)
 				}
-
-				// return instance to pool
-				ss.ingestConnPool <- i
 			}
 
-			searchArr := make([]sonic.Searchable, 0)
+			// return instance to pool
+			ss.ingestConnPool <- i
+		}
 
-			searchPoolSize := ss.env.SonicSearchPoolSize
-			// drain pool
-			for i := 0; i < searchPoolSize; i++ {
-				search := <-ss.searchConnPool
-				searchArr = append(searchArr, search)
-			}
+		searchArr := make([]sonic.Searchable, 0)
 
-			// check connection
-			for _, s := range searchArr {
-				err := s.Ping()
+		searchPoolSize := ss.env.SonicSearchPoolSize
+		// drain pool
+		for i := 0; i < searchPoolSize; i++ {
+			search := <-ss.searchConnPool
+			searchArr = append(searchArr, search)
+		}
+
+		// check connection
+		for _, s := range searchArr {
+			err := s.Ping()
+			if err != nil {
+				log.Warnf("failed to ping sonic with search: %v", err)
+				s, err = sonic.NewSearch(ss.env.SonicHost, ss.env.SonicPort, ss.env.SonicPassword)
 				if err != nil {
-					log.Warnf("failed to ping sonic with search: %v", err)
-					s, err = sonic.NewSearch(ss.env.SonicHost, ss.env.SonicPort, ss.env.SonicPassword)
-					if err != nil {
-						log.Errorf("failed to connect to sonic: %v", err)
-						panic(err)
-					}
+					log.Errorf("failed to connect to sonic: %v", err)
+					panic(err)
 				}
-
-				// return instance to pool
-				ss.searchConnPool <- s
 			}
+
+			// return instance to pool
+			ss.searchConnPool <- s
 		}
 	}
 }

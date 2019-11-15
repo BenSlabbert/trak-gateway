@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/go-resty/resty/v2"
 	log "github.com/sirupsen/logrus"
@@ -34,7 +33,7 @@ func FetchPLIDsOnPromotion(promotionID uint) ([]uint, error) {
 
 		if !resp.IsSuccess() {
 			log.Warnf("no promotion for promotionID: %d", promotionID)
-			return nil, errors.New(fmt.Sprintf("no promotion for promotionID: %d", promotionID))
+			return nil, fmt.Errorf(fmt.Sprintf("no promotion for promotionID: %d", promotionID))
 		}
 
 		plIDsOnPromotion := &PLIDsOnPromotionResponse{}
@@ -74,7 +73,7 @@ func FetchProduct(plID uint) (*ProductResponse, error) {
 	log.Debugf("FetchProduct PLID: %d  returned with HTTP status code: %d", plID, resp.StatusCode())
 
 	if !resp.IsSuccess() {
-		return nil, errors.New(fmt.Sprintf("no product for PLID: %d", plID))
+		return nil, fmt.Errorf(fmt.Sprintf("no product for PLID: %d", plID))
 	}
 
 	pr := &ProductResponse{}
@@ -102,7 +101,7 @@ func FetchPromotions() (*PromotionsResponse, error) {
 
 	if !resp.IsSuccess() {
 		log.Warnf("no promotions available")
-		return nil, errors.New(fmt.Sprintf("no promotions available"))
+		return nil, fmt.Errorf(fmt.Sprintf("no promotions available"))
 	}
 
 	promotions := &PromotionsResponse{}

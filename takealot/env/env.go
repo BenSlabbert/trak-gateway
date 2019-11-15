@@ -132,10 +132,7 @@ func getNumberOfNewProductTasks() int {
 
 func getPPROFEnabled() bool {
 	e := os.Getenv("PPROF_ENABLED")
-	if e == "true" {
-		return true
-	}
-	return false
+	return e == "true"
 }
 
 func getPPROFPort() int {
@@ -209,11 +206,7 @@ func getRedisURL() string {
 
 func getMasterNodeConfig() bool {
 	e := os.Getenv("MASTER_NODE")
-
-	if e == "true" {
-		return true
-	}
-	return false
+	return e == "true"
 }
 
 func getDBPassword() string {

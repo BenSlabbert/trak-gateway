@@ -62,6 +62,12 @@ func (h *Handler) redisSet(key string, msg proto.Message) {
 
 func (h *Handler) AddProduct(w http.ResponseWriter, req *http.Request) {
 	bytes, e := ioutil.ReadAll(req.Body)
+	if e != nil {
+		log.Warnf("failed to read request body: %v", e)
+		sendError(w, &response.Error{Message: "Invalid request", Type: response.BadRequest})
+		return
+	}
+
 	addProductReq := &gatewayPB.AddProductRequest{}
 	e = proto.Unmarshal(bytes, addProductReq)
 

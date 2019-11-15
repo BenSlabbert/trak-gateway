@@ -52,7 +52,7 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 		price.CurrentPrice = productResponse.EventData.Documents.Product.PurchasePrice
 		price.ListPrice = productResponse.EventData.Documents.Product.OriginalPrice
 		price.ProductID = id
-		price, err = model.CreatePrice(price, task.DB)
+		_, err = model.CreatePrice(price, task.DB)
 		if err != nil {
 			log.Errorf("%s: failed to persist product model!", messageID)
 			return err
@@ -77,7 +77,7 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 		imageModel := &model.ProductImageModel{}
 		imageModel.ProductID = productID
 		imageModel.URLFormat = img
-		imageModel, err := model.CreateProductImageModel(imageModel, task.DB)
+		_, err := model.CreateProductImageModel(imageModel, task.DB)
 
 		if err != nil {
 			log.Warn(err.Error())
@@ -89,7 +89,7 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 	price.CurrentPrice = productResponse.EventData.Documents.Product.PurchasePrice
 	price.ListPrice = productResponse.EventData.Documents.Product.OriginalPrice
 	price.ProductID = productID
-	price, err = model.CreatePrice(price, task.DB)
+	_, err = model.CreatePrice(price, task.DB)
 	if err != nil {
 		log.Errorf("%s: failed to persist product model!", messageID)
 		return err

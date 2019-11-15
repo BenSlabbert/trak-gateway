@@ -131,7 +131,6 @@ func (pmb *ProductMessageBuilder) Build() (msg *pb.ProductMessage, err error) {
 type ProductStatsBuilder struct {
 	DB        *gorm.DB
 	ProductID uint
-	msg       *pb.ProductStatsResponse
 	prices    []*model.PriceModel
 	chartData *pb.ChartMessage
 	min       float64

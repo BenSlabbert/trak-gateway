@@ -14,5 +14,6 @@ require (
 	github.com/jinzhu/gorm v1.9.11
 	github.com/nsqio/go-nsq v1.0.7
 	github.com/sirupsen/logrus v1.4.2
+	golang.org/x/crypto v0.0.0-20190510104115-cbcb75029529 // indirect
 	google.golang.org/grpc v1.22.1
 )
