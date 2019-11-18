@@ -4,8 +4,10 @@ import (
 	"archive/zip"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/signal"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -169,12 +171,33 @@ func setUpRoutes(trakEnv env.TrakEnv, handler *rest.Handler) *mux.Router {
 		Name("GetAllPromotions")
 
 	if Profile == profile.DOCKER {
+		e := CleanDir(trakEnv.UI.Path)
+		if e != nil {
+			log.Fatalf("failed to clean dir: %s with err: %v", trakEnv.UI.Path, e)
+		}
 		DownloadAndExtractUIAssets(trakEnv.UI)
 		absPath, _ := filepath.Abs(trakEnv.UI.Path + "/ui")
 		router.PathPrefix("/").Handler(http.FileServer(http.Dir(absPath)))
 	}
 
 	return router
+}
+
+func CleanDir(uiPath string) error {
+	dir, err := ioutil.ReadDir(uiPath)
+
+	if err != nil {
+		return err
+	}
+
+	for _, d := range dir {
+		err := os.RemoveAll(path.Join([]string{uiPath, d.Name()}...))
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func DownloadAndExtractUIAssets(ui env.UI) {

@@ -12,3 +12,11 @@ func TestDownloadAndExtractUIAssets(t *testing.T) {
 	}
 	DownloadAndExtractUIAssets(ui)
 }
+
+func TestCleanDir(t *testing.T) {
+	e := CleanDir("/tmp/trak")
+
+	if e != nil {
+		t.Errorf("should not give an error: %v", e)
+	}
+}
