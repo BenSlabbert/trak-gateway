@@ -3,3 +3,9 @@ repos:
     rev: v0.3.5
     hooks:
       - id: go-fmt
+  - repo: local
+    hooks:
+      - id: staticcheck
+        language: 'script'
+        name: 'staticcheck'
+        entry: staticcheck.sh
