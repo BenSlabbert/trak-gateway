@@ -177,8 +177,11 @@ func setUpRoutes(trakEnv env.TrakEnv, handler *rest.Handler) *mux.Router {
 			log.Fatalf("failed to clean dir: %s with err: %v", trakEnv.UI.Path, e)
 		}
 		DownloadAndExtractUIAssets(trakEnv.UI)
+
+		log.Info("set up file server")
 		absPath, _ := filepath.Abs(trakEnv.UI.Path + "/ui")
 		router.PathPrefix("/").Handler(http.FileServer(http.Dir(absPath)))
+		log.Info("Trak UI setup done")
 	}
 
 	return router
@@ -274,6 +277,7 @@ func Unzip(src string, dest string) ([]string, error) {
 
 // https://golangcode.com/download-a-file-from-a-url/
 func DownloadFile(filepath string, url string) error {
+	log.Infof("downloading from: %s to: %s", url, filepath)
 	// Get the data
 	resp, err := http.Get(url)
 	if err != nil {
