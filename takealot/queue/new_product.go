@@ -27,52 +27,24 @@ func (task *NSQNewProductTask) Quit() {
 	task.Producer.Stop()
 }
 
-// refactor to simplify
-func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
-	plID := ReceiveUintMessage(message.Body)
-	messageID := MessageIDString(message.ID)
-	log.Infof("%s: handle create product message for plID: %d messageRetries: %d", messageID, plID, message.Attempts)
+func (task *NSQNewProductTask) persistPrice(productID uint, productResponse *api.ProductResponse) error {
+	price := &model.PriceModel{}
+	price.CurrentPrice = productResponse.EventData.Documents.Product.PurchasePrice
+	price.ListPrice = productResponse.EventData.Documents.Product.OriginalPrice
+	price.ProductID = productID
+	_, err := model.CreatePrice(price, task.DB)
 
-	productResponse, err := api.FetchProduct(plID)
+	return err
+}
 
-	if err != nil {
-		log.Warnf(err.Error())
-		return nil
-	}
-
-	lock, err := connection.ObtainRedisLock(task.LockClient, fmt.Sprintf("plID-%d", plID))
-	if err != nil {
-		log.Warn(err.Error())
-		return err
-	}
-
-	// if the product exists, only do the price
-	if id, exists := model.ProductModelExists(plID, task.DB); exists {
-		price := &model.PriceModel{}
-		price.CurrentPrice = productResponse.EventData.Documents.Product.PurchasePrice
-		price.ListPrice = productResponse.EventData.Documents.Product.OriginalPrice
-		price.ProductID = id
-		_, err = model.CreatePrice(price, task.DB)
-		if err != nil {
-			log.Errorf("%s: failed to persist product model!", messageID)
-			return err
-		}
-		if e := connection.ReleaseRedisLock(lock); e != nil {
-			log.Warnf("%s: %s", messageID, e.Error())
-		}
-		return nil
-	}
-
-	productID, err := task.persistProduct(plID, productResponse)
+func (task *NSQNewProductTask) releaseLock(lock *redislock.Lock) {
 	if e := connection.ReleaseRedisLock(lock); e != nil {
-		log.Warnf("%s: %s", messageID, e.Error())
+		log.Warn(e.Error())
 	}
+}
 
-	if err != nil {
-		log.Warn(err.Error())
-		return err
-	}
-
+func (task *NSQNewProductTask) persistImages(productID uint, productResponse *api.ProductResponse) error {
+	// run in goroutines
 	for _, img := range productResponse.Gallery.Images {
 		imageModel := &model.ProductImageModel{}
 		imageModel.ProductID = productID
@@ -85,56 +57,89 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 		}
 	}
 
-	price := &model.PriceModel{}
-	price.CurrentPrice = productResponse.EventData.Documents.Product.PurchasePrice
-	price.ListPrice = productResponse.EventData.Documents.Product.OriginalPrice
-	price.ProductID = productID
-	_, err = model.CreatePrice(price, task.DB)
+	return nil
+}
+
+func (task *NSQNewProductTask) createBrand(productID uint, messageID string, productResponse *api.ProductResponse) error {
+	if productResponse.Core.Brand == nil {
+		return nil
+	}
+
+	lock, err := connection.ObtainRedisLock(task.LockClient, fmt.Sprintf("brand-%s", *productResponse.Core.Brand))
 	if err != nil {
-		log.Errorf("%s: failed to persist product model!", messageID)
+		log.Warn(err.Error())
 		return err
 	}
 
-	if productResponse.Core.Brand != nil {
-		lock, err = connection.ObtainRedisLock(task.LockClient, fmt.Sprintf("brand-%s", *productResponse.Core.Brand))
-		if err != nil {
-			log.Warn(err.Error())
-			return err
-		}
-
-		err := task.persistBrand(productResponse, productID)
-		if e := connection.ReleaseRedisLock(lock); e != nil {
-			log.Warnf("%s: %s", messageID, e.Error())
-		}
-		if err != nil {
-			log.Warn(err.Error())
-			return err
-		}
+	err = task.persistBrand(productResponse, productID)
+	task.releaseLock(lock)
+	if err != nil {
+		log.Warn(err.Error())
+		return err
 	}
 
-	categories := make(map[string]string)
-	for _, v := range productResponse.ProductInformation.Categories.Value {
-		for _, i := range v {
-			upper := strings.ToUpper(i.Name)
-			categories[upper] = upper
-		}
+	return nil
+}
+
+// refactor to simplify
+func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
+	plID := ReceiveUintMessage(message.Body)
+	messageID := MessageIDString(message.ID)
+	log.Infof("%s: handle create product message for plID: %d messageRetries: %d", messageID, plID, message.Attempts)
+
+	productResponse, err := api.FetchProduct(plID)
+
+	if err != nil {
+		log.Warnf("%s: %s", messageID, err.Error())
+		return nil
 	}
 
-	for _, c := range categories {
-		lock, err = connection.ObtainRedisLock(task.LockClient, fmt.Sprintf("category-%s", c))
+	lock, err := connection.ObtainRedisLock(task.LockClient, fmt.Sprintf("plID-%d", plID))
+	if err != nil {
+		log.Warnf("%s: %s", messageID, err.Error())
+		return err
+	}
+
+	// if the product exists, only update the price
+	if productID, exists := model.ProductModelExists(plID, task.DB); exists {
+		// no longer need the lock
+		task.releaseLock(lock)
+		err := task.persistPrice(productID, productResponse)
+
 		if err != nil {
-			log.Warn(err.Error())
+			log.Errorf("%s: failed to persist product model: %s", messageID, err.Error())
 			return err
 		}
 
-		err := task.persistCategory(c, productID)
-		if e := connection.ReleaseRedisLock(lock); e != nil {
-			log.Warnf("%s: %s", messageID, e.Error())
-		}
-		if err != nil {
-			log.Warn(err.Error())
-			return err
-		}
+		return nil
+	}
+
+	productID, err := task.persistProduct(plID, productResponse)
+	task.releaseLock(lock)
+
+	if err != nil {
+		log.Warnf("%s: %s", messageID, err.Error())
+		return err
+	}
+
+	if e := task.persistImages(productID, productResponse); e != nil {
+		log.Warnf("%s: %s", messageID, e.Error())
+		return e
+	}
+
+	if e := task.persistPrice(productID, productResponse); e != nil {
+		log.Errorf("%s: failed to persist prices: %s", messageID, e.Error())
+		return e
+	}
+
+	if e := task.createBrand(productID, messageID, productResponse); e != nil {
+		log.Warnf("%s: %s", messageID, e.Error())
+		return e
+	}
+
+	if e := task.createCategories(productID, messageID, productResponse); e != nil {
+		log.Warnf("%s: %s", messageID, e.Error())
+		return e
 	}
 
 	return nil
@@ -199,4 +204,32 @@ func (task *NSQNewProductTask) publishSonicDigest(object uint, text, queue strin
 			log.Warnf("failed to publish to nsq: %v", err)
 		}
 	}
+}
+
+func (task *NSQNewProductTask) createCategories(productID uint, messageID string, productResponse *api.ProductResponse) error {
+	categories := make(map[string]string)
+	for _, v := range productResponse.ProductInformation.Categories.Value {
+		for _, i := range v {
+			upper := strings.ToUpper(i.Name)
+			categories[upper] = upper
+		}
+	}
+
+	// run in goroutines
+	for _, c := range categories {
+		lock, err := connection.ObtainRedisLock(task.LockClient, fmt.Sprintf("category-%s", c))
+		if err != nil {
+			log.Warn(err.Error())
+			return err
+		}
+
+		err = task.persistCategory(c, productID)
+		task.releaseLock(lock)
+		if err != nil {
+			log.Warn(err.Error())
+			return err
+		}
+	}
+
+	return nil
 }

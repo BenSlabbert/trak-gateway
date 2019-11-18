@@ -24,7 +24,6 @@ func CreateRedisClient() *redis.Client {
 
 func ReleaseRedisLock(lock *redislock.Lock) error {
 	if e := lock.Release(); e != nil {
-		log.Warnf("failed to release redis lock: %s %v", lock.Key(), e)
 		return errors.New("failed to release redis lock")
 	}
 	return nil
@@ -38,17 +37,14 @@ func ObtainRedisLock(client *redislock.Client, key string) (*redislock.Lock, err
 	}
 	lock, err := client.Obtain(key, 5*time.Second, options)
 	if err == redislock.ErrNotObtained {
-		log.Warnf("could not obtain lock: %s", key)
 		return nil, errors.New("failed to obtain lock")
 	} else if err != nil {
 		log.Fatalln(err)
 	}
-	duration, err := lock.TTL()
+	_, err = lock.TTL()
 	if err != nil {
-		log.Warnf("failed to get lock ttl: %v", err)
 		return nil, errors.New("failed to obtain lock")
 	}
-	log.Debugf("obtained lock with duration: %s key: %s", duration.String(), key)
 	return lock, nil
 }
 

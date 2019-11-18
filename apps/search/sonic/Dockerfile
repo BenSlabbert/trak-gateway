@@ -18,11 +18,6 @@ COPY . $CODE_PATH
 WORKDIR $CODE_PATH
 RUN go mod download
 
-# this dir is needed for some tests
-RUN mkdir /tmp/trak
-RUN CGO_ENABLED=0 go test ./... -v
-RUN CGO_ENABLED=0 go vet ./...
-
 WORKDIR $BUILD_PATH
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $APPNAME
 

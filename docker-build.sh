@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# this dir is needed for some tests
+mkdir /tmp/trak
+go mod download
+go test ./... -v
+go vet ./... -v
+
 VERSION=2.0.0-${TRAVIS_BUILD_NUMBER}
 
 echo "Building Images with version: ${VERSION} travis build number: ${TRAVIS_BUILD_NUMBER}"
