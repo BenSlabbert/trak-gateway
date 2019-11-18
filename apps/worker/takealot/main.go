@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 	"trak-gateway/connection"
 	"trak-gateway/gateway/metrics"
@@ -98,6 +99,7 @@ func main() {
 	// wait for Ctrl + C to exit
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt)
+	signal.Notify(ch, syscall.SIGTERM)
 
 	// Block until signal is received
 	<-ch

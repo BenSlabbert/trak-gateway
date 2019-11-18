@@ -10,6 +10,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 	"trak-gateway/connection"
 	"trak-gateway/gateway/grpc"
@@ -112,6 +113,7 @@ func main() {
 	// wait for Ctrl + C to exit
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt)
+	signal.Notify(ch, syscall.SIGTERM)
 
 	// Block until signal is received
 	<-ch
