@@ -171,6 +171,7 @@ func setUpRoutes(trakEnv env.TrakEnv, handler *rest.Handler) *mux.Router {
 		Name("GetAllPromotions")
 
 	if Profile == profile.DOCKER {
+		log.Info("downloading Trak UI")
 		e := CleanDir(trakEnv.UI.Path)
 		if e != nil {
 			log.Fatalf("failed to clean dir: %s with err: %v", trakEnv.UI.Path, e)
@@ -184,6 +185,7 @@ func setUpRoutes(trakEnv env.TrakEnv, handler *rest.Handler) *mux.Router {
 }
 
 func CleanDir(uiPath string) error {
+	log.Infof("cleaning dir: %s", uiPath)
 	dir, err := ioutil.ReadDir(uiPath)
 
 	if err != nil {
@@ -201,10 +203,12 @@ func CleanDir(uiPath string) error {
 }
 
 func DownloadAndExtractUIAssets(ui env.UI) {
+	log.Infof("downloading Trak UI from: %s to dir: %s", ui.ReleaseAssetURL, ui.Path)
 	err := DownloadFile(ui.Path+"/ui.zip", ui.ReleaseAssetURL)
 	if err != nil {
 		log.Fatalf("failed to download trak ui from url: %s: %v", ui.ReleaseAssetURL, err)
 	}
+
 	_, err = Unzip(ui.Path+"/ui.zip", ui.Path+"/ui")
 	if err != nil {
 		log.Fatalf("failed to extract ui.zip: %v", err)
@@ -213,6 +217,7 @@ func DownloadAndExtractUIAssets(ui env.UI) {
 
 // https://golangcode.com/unzip-files-in-go/
 func Unzip(src string, dest string) ([]string, error) {
+	log.Infof("extracting from: %s to: %s", src, dest)
 	var filenames []string
 
 	r, err := zip.OpenReader(src)
