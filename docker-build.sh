@@ -4,7 +4,7 @@
 mkdir /tmp/trak
 go mod download
 go test ./... -v
-go vet ./... -v
+go vet ./...
 
 VERSION=2.0.0-${TRAVIS_BUILD_NUMBER}
 
