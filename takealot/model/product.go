@@ -21,6 +21,16 @@ func (*ProductModel) TableName() string {
 	return "product"
 }
 
+func (p *ProductModel) MapResponseToModel(resp *api.ProductResponse) {
+	p.SKU = resp.DataLayer.Sku
+	p.Title = resp.Core.Title
+	p.URL = resp.Sharing.URL
+
+	if resp.Core.Subtitle != nil {
+		p.Subtitle = *resp.Core.Subtitle
+	}
+}
+
 func migrateProductModel(db *gorm.DB) {
 	db.AutoMigrate(&ProductModel{})
 }
@@ -155,15 +165,15 @@ func FindProductModel(id uint, db *gorm.DB) (*ProductModel, bool) {
 	return model, true
 }
 
-func ProductModelExists(plID uint, db *gorm.DB) (uint, bool) {
+func ProductModelExistsByPLID(plID uint, db *gorm.DB) (*ProductModel, bool) {
 	dbModel := &ProductModel{}
 	db.Model(dbModel).Where("pl_id = ?", plID).FirstOrInit(dbModel)
 
 	if dbModel.ID == 0 {
-		return 0, false
+		return nil, false
 	}
 
-	return dbModel.ID, true
+	return dbModel, true
 }
 
 func UpsertProductModel(model *ProductModel, db *gorm.DB) (*ProductModel, error) {
@@ -199,14 +209,4 @@ func FindProductsByPromotion(promotionID uint, page, size int, db *gorm.DB) ([]*
 		Find(&arr)
 
 	return arr, queryPage
-}
-
-func (p *ProductModel) MapResponseToModel(resp *api.ProductResponse) {
-	p.SKU = resp.DataLayer.Sku
-	p.Title = resp.Core.Title
-	p.URL = resp.Sharing.URL
-
-	if resp.Core.Subtitle != nil {
-		p.Subtitle = *resp.Core.Subtitle
-	}
 }

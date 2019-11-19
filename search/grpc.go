@@ -12,7 +12,7 @@ type GRPCServer struct {
 }
 
 func (g GRPCServer) BrandSearch(ctx context.Context, req *pb.BrandSearchRequest) (*pb.BrandSearchResponse, error) {
-	res, e := g.SonicSearch.Query(BrandCollection, BrandBucket, req.Search, 10, 0)
+	res, e := g.SonicSearch.Query(BrandCollection, BrandBucket, req.Search, 20, 0)
 	if e != nil {
 		return nil, status.Errorf(codes.Internal, "error while querying sonic: %s", e.Error())
 	}
@@ -23,7 +23,7 @@ func (g GRPCServer) BrandSearch(ctx context.Context, req *pb.BrandSearchRequest)
 }
 
 func (g GRPCServer) ProductSearch(ctx context.Context, req *pb.ProductSearchRequest) (*pb.ProductSearchResponse, error) {
-	res, e := g.SonicSearch.Query(ProductCollection, ProductBucket, req.Search, 10, 0)
+	res, e := g.SonicSearch.Query(ProductCollection, ProductBucket, req.Search, 20, 0)
 	if e != nil {
 		return nil, status.Errorf(codes.Internal, "error while querying sonic: %s", e.Error())
 	}
@@ -34,7 +34,7 @@ func (g GRPCServer) ProductSearch(ctx context.Context, req *pb.ProductSearchRequ
 }
 
 func (g GRPCServer) CategorySearch(ctx context.Context, req *pb.CategorySearchRequest) (*pb.CategorySearchResponse, error) {
-	res, e := g.SonicSearch.Query(CategoryCollection, CategoryBucket, req.Search, 10, 0)
+	res, e := g.SonicSearch.Query(CategoryCollection, CategoryBucket, req.Search, 20, 0)
 	if e != nil {
 		return nil, status.Errorf(codes.Internal, "error while querying sonic: %s", e.Error())
 	}

@@ -5,6 +5,12 @@ repos:
       - id: go-fmt
   - repo: local
     hooks:
+      - id: go-vet
+        language: 'script'
+        name: 'go-vet'
+        entry: go-vet.sh
+  - repo: local
+    hooks:
       - id: staticcheck
         language: 'script'
         name: 'staticcheck'

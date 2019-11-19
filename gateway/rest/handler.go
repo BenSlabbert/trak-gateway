@@ -243,22 +243,8 @@ func (h *Handler) GetPromotion(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	productMessages := make([]*gatewayPB.ProductMessage, 0)
-	products, queryPage := model.FindProductsByPromotion(promotionIdReq, pageReq, 12, h.DB)
-
-	// todo run in own goroutines
-	for _, pm := range products {
-		pmb := builder.ProductMessageBuilder{
-			DB:           h.DB,
-			ID:           pm.ID,
-			ProductModel: pm,
-		}
-
-		msg, _ := pmb.Build()
-		if msg != nil {
-			productMessages = append(productMessages, msg)
-		}
-	}
+	productModels, queryPage := model.FindProductsByPromotion(promotionIdReq, pageReq, 12, h.DB)
+	productMessages := h.getProductMessages(productModels)
 
 	resp = &gatewayPB.PromotionResponse{
 		Products: productMessages,
@@ -312,22 +298,8 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	productMessages := make([]*gatewayPB.ProductMessage, 0)
-	products, queryPage := model.FindProductsByPromotion(promotionModel.ID, pageReq, 12, h.DB)
-
-	// todo run in own goroutines
-	for _, pm := range products {
-		pmb := builder.ProductMessageBuilder{
-			DB:           h.DB,
-			ID:           pm.ID,
-			ProductModel: pm,
-		}
-
-		msg, _ := pmb.Build()
-		if msg != nil {
-			productMessages = append(productMessages, msg)
-		}
-	}
+	productModels, queryPage := model.FindProductsByPromotion(promotionModel.ID, pageReq, 12, h.DB)
+	productMessages := h.getProductMessages(productModels)
 
 	resp = &gatewayPB.PromotionResponse{
 		Products: productMessages,
@@ -356,6 +328,12 @@ func (h *Handler) CategorySearch(w http.ResponseWriter, req *http.Request) {
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
 		sendOK(w, resp)
+		return
+	}
+
+	// only for ProductSearch
+	if strings.HasPrefix(s, "PLID") {
+		sendOK(w, &searchPB.CategorySearchRequest{})
 		return
 	}
 
@@ -408,6 +386,12 @@ func (h *Handler) BrandSearch(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	// only for ProductSearch
+	if strings.HasPrefix(s, "PLID") {
+		sendOK(w, &searchPB.BrandSearchResponse{})
+		return
+	}
+
 	resp, grpcErr := grpc.BrandSearch(&searchPB.BrandSearchRequest{Search: s})
 
 	if grpcErr != nil {
@@ -454,6 +438,47 @@ func (h *Handler) ProductSearch(w http.ResponseWriter, req *http.Request) {
 	resp := &searchPB.ProductSearchResponse{}
 	err := h.redisGet(redisKey, resp)
 	if err == nil {
+		sendOK(w, resp)
+		return
+	}
+
+	if strings.HasPrefix(s, "PLID") {
+		// search for product with this plID
+		plID, err := strconv.ParseUint(strings.TrimPrefix(s, "PLID"), 10, 32)
+		if err != nil {
+			log.Warnf("client query: %s does not contain valid plID", s)
+			sendError(w, &response.Error{Message: "Invalid PLID provided", Type: response.BadRequest})
+			return
+		}
+
+		productModelExists, ok := model.ProductModelExistsByPLID(uint(plID), h.DB)
+		if !ok {
+			log.Warnf("no product found for plID: %d", plID)
+			// push plid to create product work queue
+			producer := queue.CreateNSQProducer()
+			defer producer.Stop()
+
+			e := producer.Publish(queue.NewProductQueue, queue.SendUintMessage(uint(plID)))
+			if e != nil {
+				log.Warnf("failed to publish to nsq: %v", e)
+				sendError(w, &response.Error{Message: "Server error", Type: response.ServerError})
+				return
+			}
+
+			sendError(w, &response.Error{Message: fmt.Sprintf("No product found for PLID: %s we have added this product now, check back later", s), Type: response.BadRequest})
+			return
+		}
+
+		productModel, _ := model.FindProductModel(productModelExists.ID, h.DB)
+		results := make([]*searchPB.SearchResult, 0)
+		results = append(results, &searchPB.SearchResult{
+			Id:    fmt.Sprintf("%d", productModel.ID),
+			Text:  productModel.Title,
+			Score: 0,
+		})
+
+		resp = &searchPB.ProductSearchResponse{Results: results}
+		h.redisSet(redisKey, resp)
 		sendOK(w, resp)
 		return
 	}
@@ -526,26 +551,12 @@ func (h *Handler) GetBrandById(w http.ResponseWriter, req *http.Request) {
 	}
 
 	productModels := model.FindProductsByBrand(uint(brandId), 0, 12, h.DB)
-	products := make([]*gatewayPB.ProductMessage, 0)
-
-	// todo do these in their own goroutine
-	for _, pm := range productModels {
-		pmb := builder.ProductMessageBuilder{
-			DB:           h.DB,
-			ID:           pm.ID,
-			ProductModel: pm,
-		}
-
-		msg, _ := pmb.Build()
-		if msg != nil {
-			products = append(products, msg)
-		}
-	}
+	productMessages := h.getProductMessages(productModels)
 
 	resp = &gatewayPB.BrandResponse{
 		BrandId:  uint32(brandId),
 		Name:     brandModel.Name,
-		Products: products,
+		Products: productMessages,
 	}
 	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
@@ -582,25 +593,12 @@ func (h *Handler) GetCategoryById(w http.ResponseWriter, req *http.Request) {
 	}
 
 	productModels := model.FindProductsByCategory(categoryModel.ID, 0, 12, h.DB)
-	products := make([]*gatewayPB.ProductMessage, 0)
+	productMessages := h.getProductMessages(productModels)
 
-	// todo do these in their own goroutine
-	for _, pm := range productModels {
-		pmb := builder.ProductMessageBuilder{
-			DB:           h.DB,
-			ID:           pm.ID,
-			ProductModel: pm,
-		}
-
-		msg, _ := pmb.Build()
-		if msg != nil {
-			products = append(products, msg)
-		}
-	}
 	resp = &gatewayPB.CategoryResponse{
 		CategoryId: uint32(categoryModel.ID),
 		Name:       categoryModel.Name,
-		Products:   products,
+		Products:   productMessages,
 	}
 	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
@@ -665,21 +663,8 @@ func (h *Handler) LatestHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	products, _ := model.FindLatestProducts(0, 12, h.DB)
-	productMessages := make([]*gatewayPB.ProductMessage, 0)
-
-	// todo run in own goroutines
-	for _, p := range products {
-		pmb := builder.ProductMessageBuilder{
-			DB:           h.DB,
-			ID:           p.ID,
-			ProductModel: p,
-		}
-		msg, _ := pmb.Build()
-		if msg != nil {
-			productMessages = append(productMessages, msg)
-		}
-	}
+	productModels, _ := model.FindLatestProducts(0, 12, h.DB)
+	productMessages := h.getProductMessages(productModels)
 
 	resp = &gatewayPB.LatestResponse{
 		Products: productMessages,
@@ -687,4 +672,33 @@ func (h *Handler) LatestHandler(w http.ResponseWriter, req *http.Request) {
 	}
 	h.redisSet(redisKey, resp)
 	sendOK(w, resp)
+}
+
+func (h *Handler) getProductMessages(productModels []*model.ProductModel) []*gatewayPB.ProductMessage {
+	productMessages := make([]*gatewayPB.ProductMessage, 0)
+	productMessageChan := make(chan *gatewayPB.ProductMessage)
+	defer close(productMessageChan)
+
+	for _, pm := range productModels {
+		pm := pm
+		go func(pm *model.ProductModel) {
+			pmb := builder.ProductMessageBuilder{
+				DB:           h.DB,
+				ID:           pm.ID,
+				ProductModel: pm,
+			}
+
+			msg, _ := pmb.Build()
+			productMessageChan <- msg
+		}(pm)
+	}
+
+	for range productModels {
+		message := <-productMessageChan
+		if message != nil {
+			productMessages = append(productMessages, message)
+		}
+	}
+
+	return productMessages
 }

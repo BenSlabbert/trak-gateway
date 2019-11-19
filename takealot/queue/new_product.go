@@ -44,7 +44,7 @@ func (task *NSQNewProductTask) releaseLock(lock *redislock.Lock) {
 }
 
 func (task *NSQNewProductTask) persistImages(productID uint, productResponse *api.ProductResponse) error {
-	// run in goroutines
+	// todo run in goroutines
 	for _, img := range productResponse.Gallery.Images {
 		imageModel := &model.ProductImageModel{}
 		imageModel.ProductID = productID
@@ -101,10 +101,10 @@ func (task *NSQNewProductTask) HandleMessage(message *nsq.Message) error {
 	}
 
 	// if the product exists, only update the price
-	if productID, exists := model.ProductModelExists(plID, task.DB); exists {
+	if productModelExists, exists := model.ProductModelExistsByPLID(plID, task.DB); exists {
 		// no longer need the lock
 		task.releaseLock(lock)
-		err := task.persistPrice(productID, productResponse)
+		err := task.persistPrice(productModelExists.ID, productResponse)
 
 		if err != nil {
 			log.Errorf("%s: failed to persist product model: %s", messageID, err.Error())
@@ -215,7 +215,7 @@ func (task *NSQNewProductTask) createCategories(productID uint, messageID string
 		}
 	}
 
-	// run in goroutines
+	// todo run in goroutines
 	for _, c := range categories {
 		lock, err := connection.ObtainRedisLock(task.LockClient, fmt.Sprintf("category-%s", c))
 		if err != nil {
