@@ -6,6 +6,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+const UnknownBrand = "UNKNOWN"
+
 type BrandModel struct {
 	gorm.Model
 	Name string `gorm:"unique_index"`
@@ -19,18 +21,31 @@ func migrateBrandModel(db *gorm.DB) {
 	model := &BrandModel{}
 	db.AutoMigrate(model)
 
-	db.Model(model).Where("name = ?", "UNKNOWN").FirstOrInit(model)
+	db.Model(model).Where("name = ?", UnknownBrand).FirstOrInit(model)
 
 	if model.ID == 0 {
-		model.Name = "UNKNOWN"
+		model.Name = UnknownBrand
 		db.Create(model)
 	}
+}
+
+// FindProducts returns products with IDs greater than greaterThanID
+// limited by size
+func FindBrands(greaterThanID uint, size int, db *gorm.DB) []*BrandModel {
+	arr := make([]*BrandModel, 0)
+	db.Model(&BrandModel{}).
+		Order("id asc").
+		Where("id > ?", greaterThanID).
+		Limit(size).
+		Find(&arr)
+
+	return arr
 }
 
 func FindDefaultBrand(db *gorm.DB) *BrandModel {
 	model := &BrandModel{}
 
-	db.Model(model).Where("name = ?", "UNKNOWN").FirstOrInit(model)
+	db.Model(model).Where("name = ?", UnknownBrand).FirstOrInit(model)
 
 	if model.ID == 0 {
 		return nil

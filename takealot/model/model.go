@@ -13,6 +13,9 @@ type Format string
 const ProductImageSizeDefault Format = "pdpxl"
 const ProductImageSizePreview Format = "xlpreview"
 const ProductImageSizeThumbnail Format = "xlthumbnail"
+const ProductImageSizeListGrid Format = "listgrid"
+const ProductImageSizeFB Format = "fb"
+const ProductImageSizeFull Format = "full"
 
 type ProductImageModel struct {
 	ID        uint `gorm:"primary_key"`

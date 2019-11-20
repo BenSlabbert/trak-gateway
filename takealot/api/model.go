@@ -457,3 +457,111 @@ type PLIDsOnPromotionResponse struct {
 	} `json:"params"`
 	Backend string `json:"backend"`
 }
+
+type BrandProductResponse struct {
+	UUID    string `json:"uuid"`
+	Results struct {
+		Start            int    `json:"start"`
+		NextIsAfter      string `json:"next_is_after"`
+		PreviousIsBefore string `json:"previous_is_before"`
+		NumFound         int    `json:"num_found"`
+		Facets           []struct {
+			Name        string `json:"name"`
+			DisplayName string `json:"display_name"`
+			Type        string `json:"type"`
+			Entries     []struct {
+				Filter      string `json:"filter"`
+				Name        string `json:"name"`
+				DisplayName string `json:"display_name"`
+				NumDocs     int    `json:"num_docs"`
+			} `json:"entries"`
+		} `json:"facets"`
+		Filters []struct {
+			Filter       string `json:"filter"`
+			Title        string `json:"title"`
+			NumDocs      int    `json:"num_docs"`
+			DisplayName  string `json:"display_name"`
+			DisplayValue string `json:"display_value"`
+			Type         string `json:"type"`
+			Name         string `json:"name"`
+		} `json:"filters"`
+		Breadcrumbs  []interface{} `json:"breadcrumbs"`
+		ProductLines []struct {
+			ID                   string      `json:"id"`
+			Title                string      `json:"title"`
+			Subtitle             interface{} `json:"subtitle"`
+			URI                  string      `json:"uri"`
+			NonPromoSellingPrice int         `json:"non_promo_selling_price"`
+			SellingPrice         int         `json:"selling_price"`
+			WebSellingPrice      int         `json:"web_selling_price"`
+			OldSellingPrice      int         `json:"old_selling_price"`
+			StockCpt             int         `json:"stock_cpt"`
+			StockJhb             int         `json:"stock_jhb"`
+			StockSupplier        bool        `json:"stock_supplier"`
+			StockOnHand          int         `json:"stock_on_hand"`
+			IsAvailable          bool        `json:"is_available"`
+			IsPrepaid            bool        `json:"is_prepaid"`
+			IsVoucher            bool        `json:"is_voucher"`
+			IsPreorder           bool        `json:"is_preorder"`
+			IsLiquor             bool        `json:"is_liquor"`
+			DateReleased         string      `json:"date_released"`
+			HasSkus              bool        `json:"has_skus"`
+			Image                struct {
+				Small    string `json:"small"`
+				Large    string `json:"large"`
+				Listgrid string `json:"listgrid"`
+				Fb       string `json:"fb"`
+				Full     string `json:"full"`
+			} `json:"image"`
+			IsActive   bool `json:"is_active"`
+			PriceRange struct {
+			} `json:"price_range"`
+			WebPriceRange struct {
+			} `json:"web_price_range"`
+			StarRating          float64       `json:"star_rating"`
+			Saving              interface{}   `json:"saving"`
+			WebSaving           interface{}   `json:"web_saving"`
+			Exclusive           bool          `json:"exclusive"`
+			DailyDeal           bool          `json:"dailydeal"`
+			Promotions          interface{}   `json:"promotions"`
+			Promos              []interface{} `json:"promos"`
+			ShippingInformation struct {
+				String          string   `json:"string"`
+				InStock         bool     `json:"in_stock"`
+				StockWarehouses []string `json:"stock_warehouses"`
+			} `json:"shipping_information"`
+			SkuID           int         `json:"sku_id"`
+			Sellerlistingid interface{} `json:"sellerlistingid"`
+			SellerID        interface{} `json:"seller_id"`
+			SellerName      interface{} `json:"seller_name"`
+			IsEbook         bool        `json:"is_ebook"`
+			PromotionsQty   struct {
+			} `json:"promotions_qty"`
+			Authors     []interface{} `json:"authors"`
+			Formats     []interface{} `json:"formats"`
+			HasVariants bool          `json:"has_variants"`
+			Variants    []interface{} `json:"variants"`
+			Buybox      struct {
+				MinPrice     float64 `json:"min_price"`
+				TotalResults int     `json:"total_results"`
+				IsTakealot   bool    `json:"is_takealot"`
+				SkuID        int     `json:"sku_id"`
+			} `json:"buybox"`
+			Views struct {
+				Badges struct {
+					Entries     []interface{} `json:"entries"`
+					AppEntries  []interface{} `json:"app_entries"`
+					PromotionID interface{}   `json:"promotion_id"`
+				} `json:"badges"`
+			} `json:"views"`
+		} `json:"productlines"`
+	} `json:"results"`
+	Params struct {
+		Version []string `json:"version"`
+		Rows    []string `json:"rows"`
+		Start   []string `json:"start"`
+		Detail  []string `json:"detail"`
+		Filter  []string `json:"filter"`
+	} `json:"params"`
+	Backend string `json:"backend"`
+}

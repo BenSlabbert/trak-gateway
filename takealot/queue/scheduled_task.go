@@ -30,6 +30,8 @@ func (task *NSQScheduledTask) HandleMessage(message *nsq.Message) error {
 		go task.handlePromotionsScheduledTask(messageID)
 	case uint(PriceUpdateScheduledTask):
 		go task.handlePriceUpdateScheduledTask(messageID)
+	case uint(BrandUpdateScheduledTask):
+		go task.handleBrandUpdateScheduledTask(messageID)
 	default:
 		log.Warnf("unknown taskID: %d", taskID)
 	}
@@ -103,7 +105,7 @@ func (task *NSQScheduledTask) createPromotionProducts(promotionModel *model.Prom
 		return
 	}
 	for _, plID := range pliDsOnPromotion {
-		log.Infof("pushing plID: %d to queue", plID)
+		log.Infof("Promotion: %s promotionID: %d pushing plID: %d to queue", promotionModel.DisplayName, promotionModel.PromotionID, plID)
 		err := task.Producer.Publish(NewProductQueue, SendUintMessage(plID))
 		if err != nil {
 			log.Warnf("failed to publish to nsq: %v", err)
@@ -113,5 +115,44 @@ func (task *NSQScheduledTask) createPromotionProducts(promotionModel *model.Prom
 			log.Warn(err.Error())
 			return
 		}
+	}
+}
+
+func (task *NSQScheduledTask) handleBrandUpdateScheduledTask(messageID string) {
+	greaterThanID := uint(0)
+	size := 1000
+
+	for {
+		log.Infof("%s: getting %d products greater than ID %d from the db", messageID, size, greaterThanID)
+		brandModels := model.FindBrands(greaterThanID, size, task.DB)
+
+		if len(brandModels) == 0 {
+			log.Infof("%s: no more brands to update", messageID)
+			return
+		}
+
+		// todo run in goroutines
+		// get all products associated with the brand
+		for _, bm := range brandModels {
+			if bm.Name == model.UnknownBrand {
+				continue
+			}
+
+			pliDs, err := api.FetchBrandPLIDs(bm.Name)
+			if err != nil {
+				log.Warn(err.Error())
+				return
+			}
+
+			for _, plID := range pliDs {
+				log.Infof("%s: Brand: %s updating plID: %d to queue", messageID, bm.Name, plID)
+				err := task.Producer.Publish(NewProductQueue, SendUintMessage(plID))
+				if err != nil {
+					log.Warnf("%s: failed to publish to nsq: %v", messageID, err)
+				}
+			}
+		}
+
+		greaterThanID = brandModels[len(brandModels)-1].ID
 	}
 }

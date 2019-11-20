@@ -18,6 +18,7 @@ type ScheduledTask uint
 
 const PromotionsScheduledTask ScheduledTask = 1
 const PriceUpdateScheduledTask ScheduledTask = 2
+const BrandUpdateScheduledTask ScheduledTask = 3
 
 func ConnectConsumer(consumer *nsq.Consumer) {
 	e := env.LoadEnv()

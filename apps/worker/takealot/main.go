@@ -57,7 +57,7 @@ func main() {
 	}
 
 	if takealotEnv.MasterNode {
-		go CreateProductChanTaskFactory(opts, takealotEnv)
+		go WorkerTaskFactory(opts, takealotEnv)
 	}
 
 	consumers := make([]*nsq.Consumer, 0)
@@ -129,8 +129,7 @@ func MigrateDB(e env.TrakEnv, opts connection.MariaDBConnectOpts) error {
 	return nil
 }
 
-// todo need better name
-func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts, trakEnv env.TrakEnv) {
+func WorkerTaskFactory(opts connection.MariaDBConnectOpts, trakEnv env.TrakEnv) {
 	db, e := connection.GetMariaDB(opts)
 	if e != nil {
 		log.Fatalf("failed to get db connection: %v", e)
@@ -141,7 +140,6 @@ func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts, trakEnv en
 	ticker := time.NewTicker(10 * time.Second)
 
 	for range ticker.C {
-		log.Info("creating new createProduct tasks")
 		err := nsqProducer.Ping()
 		if err != nil {
 			log.Warnf("failed to ping NSQ! No tasks will be produced: %v", err)
@@ -151,7 +149,15 @@ func CreateProductChanTaskFactory(opts connection.MariaDBConnectOpts, trakEnv en
 		PublishNewProductTasks(db, nsqProducer, trakEnv.Crawler)
 		PublishPromotionScheduledTask(db, nsqProducer)
 		PublishPriceUpdateScheduledTask(db, nsqProducer)
+		PublishBrandUpdateScheduledTask(db, nsqProducer)
 	}
+}
+
+func PublishBrandUpdateScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
+	taskName := model.BrandUpdateScheduledTask
+	taskQueue := queue.NewScheduledTaskQueue
+	scheduledTask := queue.BrandUpdateScheduledTask
+	PublishScheduledTask(taskName, taskQueue, scheduledTask, db, nsqProducer)
 }
 
 func PublishPriceUpdateScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
@@ -218,7 +224,7 @@ func PublishNewProductTasks(db *gorm.DB, nsqProducer *nsq.Producer, crawlerEnv e
 	count := 0
 	for count < crawlerEnv.NumberOfNewProductTasks {
 		crawler.LastPLID++
-		log.Infof("pushing plID: %d to queue", crawler.LastPLID)
+		log.Infof("NewProductTasks: pushing plID: %d to queue", crawler.LastPLID)
 		err := nsqProducer.Publish(queue.NewProductQueue, queue.SendUintMessage(crawler.LastPLID))
 		if err != nil {
 			log.Warnf("failed to publish to nsq: %v", err)

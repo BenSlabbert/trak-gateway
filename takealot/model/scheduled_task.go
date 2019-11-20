@@ -10,6 +10,7 @@ import (
 
 const PromotionsScheduledTask = "PromotionsScheduledTask"
 const PriceUpdateScheduledTask = "PriceUpdateScheduledTask"
+const BrandUpdateScheduledTask = "BrandUpdateScheduledTask"
 
 type ScheduledTaskModel struct {
 	gorm.Model

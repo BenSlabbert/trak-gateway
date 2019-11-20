@@ -35,8 +35,7 @@ services:
       - frontend
     stop_grace_period: 1m30s
     deploy:
-      replicas: 1
-      mode: replicated
+      mode: global
       update_config:
         parallelism: 1
         delay: 10s
@@ -176,6 +175,8 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
+      placement:
+        constraints: [node.role == manager]
 
   rds:
     image: mariadb:10.4.8-bionic
@@ -204,6 +205,8 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
+      placement:
+        constraints: [node.role == manager]
 
 #  # todo need to connect to nsqlookupd, see: https://stackoverflow.com/questions/48536963/nsq-cannot-consume-message-by-connecting-to-nsqlookupd
 #  nsqlookupd:
@@ -253,6 +256,8 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
+      placement:
+        constraints: [node.role == manager]
 
 #  nsqadmin:
 #    image: nsqio/nsq:v1.2.0
@@ -302,6 +307,8 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
+      placement:
+        constraints: [node.role == manager]
 
 #  agent:
 #    image: portainer/agent:1.5.1

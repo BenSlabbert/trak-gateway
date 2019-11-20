@@ -31,11 +31,11 @@ func ReleaseRedisLock(lock *redislock.Lock) error {
 
 func ObtainRedisLock(client *redislock.Client, key string) (*redislock.Lock, error) {
 	options := &redislock.Options{
-		RetryStrategy: redislock.LimitRetry(redislock.LinearBackoff(1*time.Second), 5),
+		RetryStrategy: redislock.LimitRetry(redislock.LinearBackoff(2*time.Second), 5),
 		Metadata:      "",
 		Context:       context.Background(),
 	}
-	lock, err := client.Obtain(key, 5*time.Second, options)
+	lock, err := client.Obtain(key, 1*time.Minute, options)
 	if err == redislock.ErrNotObtained {
 		return nil, errors.New("failed to obtain lock")
 	} else if err != nil {
