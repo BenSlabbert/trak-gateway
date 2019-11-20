@@ -35,51 +35,54 @@ func TestLoadEnv_default(t *testing.T) {
 
 	// redis
 	if env.Redis.URL != "127.0.0.1:6379" {
-		t.Errorf("%s Should be 127.0.0.1:6379", env.DB.Host)
+		t.Errorf("%s Should be 127.0.0.1:6379", env.Redis.URL)
 	}
 
 	if env.Redis.Password != "password" {
-		t.Errorf("%s Should be password", env.DB.Host)
+		t.Errorf("%s Should be password", env.Redis.Password)
 	}
 
 	// nsq
 	if env.Nsq.NsqdURL != "127.0.0.1:4150" {
-		t.Errorf("%s Should be 127.0.0.1:4150", env.DB.Host)
+		t.Errorf("%s Should be 127.0.0.1:4150", env.Nsq.NsqdURL)
 	}
 
 	if env.Nsq.NumberOfNewProductConsumers != 3 {
-		t.Errorf("%s Should be 3", env.DB.Host)
+		t.Errorf("%d Should be 3", env.Nsq.NumberOfNewProductConsumers)
 	}
 
 	if env.Nsq.NumberOfScheduledTaskConsumers != 1 {
-		t.Errorf("%s Should be 1", env.DB.Host)
+		t.Errorf("%d Should be 1", env.Nsq.NumberOfScheduledTaskConsumers)
 	}
 
 	// pprof
 	if env.PPROFEnv.PPROFPort != 8080 {
-		t.Errorf("%s Should be 8080", env.DB.Host)
+		t.Errorf("%d Should be 8080", env.PPROFEnv.PPROFPort)
 	}
 
 	if env.PPROFEnv.PPROFEnabled {
-		t.Errorf("%s Should be false", env.DB.Host)
+		t.Error("Should be false")
 	}
 
 	// crawler
 	if env.Crawler.TakealotInitialPLID != 41469985 {
-		t.Errorf("%s Should be 41469985", env.DB.Host)
+		t.Errorf("%d Should be 41469985", env.Crawler.TakealotInitialPLID)
 	}
 
 	if env.Crawler.NumberOfNewProductTasks != 10 {
-		t.Errorf("%s Should be 10", env.DB.Host)
+		t.Errorf("%d Should be 10", env.Crawler.NumberOfNewProductTasks)
+	}
+
+	if env.Crawler.Enabled {
+		t.Error("Should be false")
 	}
 
 	// ui
 	if env.UI.Path != "/static" {
-		t.Errorf("%s Should be /static", env.DB.Host)
+		t.Errorf("%s Should be /static", env.UI.Path)
 	}
 
 	if env.UI.ReleaseAssetURL != "https://github.com/BenSlabbert/trak-ui/releases/download/2.0.0/ui.zip" {
-		t.Errorf("%s Should be https://github.com/BenSlabbert/trak-ui/releases/download/2.0.0/ui.zip", env.DB.Host)
+		t.Errorf("%s Should be https://github.com/BenSlabbert/trak-ui/releases/download/2.0.0/ui.zip", env.UI.ReleaseAssetURL)
 	}
-
 }

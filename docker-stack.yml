@@ -38,7 +38,7 @@ services:
       replicas: 1
       mode: replicated
       update_config:
-        parallelism: 2
+        parallelism: 1
         delay: 10s
       restart_policy:
         condition: on-failure
@@ -64,6 +64,7 @@ services:
       - PPROF_ENABLED=false
       - CRAWLER_NUMBER_OF_NEW_PRODUCT_TASKS=200
       - CRAWLER_TAKEALOT_INITIAL_PLID=41469985
+      - CRAWLER_ENABLED=false
     ports:
       - 8080:8080
     depends_on:
@@ -80,7 +81,7 @@ services:
       replicas: 1
       mode: replicated
       update_config:
-        parallelism: 2
+        parallelism: 1
         delay: 10s
       restart_policy:
         condition: on-failure
@@ -115,10 +116,9 @@ services:
       - backend
     stop_grace_period: 1m30s
     deploy:
-      replicas: 2
-      mode: replicated
+      mode: global
       update_config:
-        parallelism: 2
+        parallelism: 1
         delay: 10s
       restart_policy:
         condition: on-failure
@@ -147,7 +147,7 @@ services:
       replicas: 1
       mode: replicated
       update_config:
-        parallelism: 2
+        parallelism: 1
         delay: 10s
       restart_policy:
         condition: on-failure
@@ -169,7 +169,7 @@ services:
       replicas: 1
       mode: replicated
       update_config:
-        parallelism: 2
+        parallelism: 1
         delay: 10s
       restart_policy:
         condition: on-failure
@@ -197,7 +197,7 @@ services:
       replicas: 1
       mode: replicated
       update_config:
-        parallelism: 2
+        parallelism: 1
         delay: 10s
       restart_policy:
         condition: on-failure
@@ -205,29 +205,29 @@ services:
         max_attempts: 3
         window: 120s
 
-  # todo need to connect to nsqlookupd, see: https://stackoverflow.com/questions/48536963/nsq-cannot-consume-message-by-connecting-to-nsqlookupd
-  nsqlookupd:
-    image: nsqio/nsq:v1.2.0
-    command: /nsqlookupd
-#    ports:
-#      - "4160:4160" # TCP
-#      - "4161:4161" # HTTP
-    labels:
-      - "description=nsqlookupd, nsqlookup"
-    networks:
-      - backend
-    stop_grace_period: 1m30s
-    deploy:
-      replicas: 1
-      mode: replicated
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
+#  # todo need to connect to nsqlookupd, see: https://stackoverflow.com/questions/48536963/nsq-cannot-consume-message-by-connecting-to-nsqlookupd
+#  nsqlookupd:
+#    image: nsqio/nsq:v1.2.0
+#    command: /nsqlookupd
+##    ports:
+##      - "4160:4160" # TCP
+##      - "4161:4161" # HTTP
+#    labels:
+#      - "description=nsqlookupd, nsqlookup"
+#    networks:
+#      - backend
+#    stop_grace_period: 1m30s
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      update_config:
+#        parallelism: 1
+#        delay: 10s
+#      restart_policy:
+#        condition: on-failure
+#        delay: 5s
+#        max_attempts: 3
+#        window: 120s
 
   nsqd:
     image: nsqio/nsq:v1.2.0
@@ -246,7 +246,7 @@ services:
       replicas: 1
       mode: replicated
       update_config:
-        parallelism: 2
+        parallelism: 1
         delay: 10s
       restart_policy:
         condition: on-failure
@@ -254,30 +254,30 @@ services:
         max_attempts: 3
         window: 120s
 
-  nsqadmin:
-    image: nsqio/nsq:v1.2.0
-    command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
-    depends_on:
-      - nsqlookupd
-#    ports:
-#      - "4171:4171"
-    labels:
-      - "description=nsqadmin, nsqadmin"
-    networks:
-      - backend
-      - frontend
-    stop_grace_period: 1m30s
-    deploy:
-      replicas: 1
-      mode: replicated
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
+#  nsqadmin:
+#    image: nsqio/nsq:v1.2.0
+#    command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
+#    depends_on:
+#      - nsqlookupd
+##    ports:
+##      - "4171:4171"
+#    labels:
+#      - "description=nsqadmin, nsqadmin"
+#    networks:
+#      - backend
+#      - frontend
+#    stop_grace_period: 1m30s
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      update_config:
+#        parallelism: 1
+#        delay: 10s
+#      restart_policy:
+#        condition: on-failure
+#        delay: 5s
+#        max_attempts: 3
+#        window: 120s
 
   sonic:
     image: valeriansaliou/sonic:v1.2.3
@@ -295,30 +295,6 @@ services:
       replicas: 1
       mode: replicated
       update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-
-  agent:
-    image: portainer/agent:1.5.1
-    environment:
-      # REQUIRED: Should be equal to the service name prefixed by "tasks." when
-      # deployed inside an overlay network
-      AGENT_CLUSTER_ADDR: tasks.agent
-      AGENT_PORT: 9001
-      LOG_LEVEL: debug
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/docker/volumes:/var/lib/docker/volumes
-    networks:
-      - agent_network
-    deploy:
-      mode: global
-      update_config:
         parallelism: 1
         delay: 10s
       restart_policy:
@@ -326,35 +302,59 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
-      placement:
-        constraints: [node.platform.os == linux]
 
-  portainer:
-    image: portainer/portainer:1.22.1
-    ports:
-      - 9000:9000
-    command: -H tcp://tasks.agent:9001 --tlsskipverify
-    volumes:
-      - portainer-data:/data
-    #    volumes:
-    #      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - "admin-password=admin123"
-    networks:
-      - agent_network
-    deploy:
-      replicas: 1
-      mode: replicated
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      placement:
-        constraints: [node.role == manager]
+#  agent:
+#    image: portainer/agent:1.5.1
+#    environment:
+#      # REQUIRED: Should be equal to the service name prefixed by "tasks." when
+#      # deployed inside an overlay network
+#      AGENT_CLUSTER_ADDR: tasks.agent
+#      AGENT_PORT: 9001
+#      LOG_LEVEL: debug
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - /var/lib/docker/volumes:/var/lib/docker/volumes
+#    networks:
+#      - agent_network
+#    deploy:
+#      mode: global
+#      update_config:
+#        parallelism: 1
+#        delay: 10s
+#      restart_policy:
+#        condition: on-failure
+#        delay: 5s
+#        max_attempts: 3
+#        window: 120s
+#      placement:
+#        constraints: [node.platform.os == linux]
+#
+#  portainer:
+#    image: portainer/portainer:1.22.1
+#    ports:
+#      - 9000:9000
+#    command: -H tcp://tasks.agent:9001 --tlsskipverify
+#    volumes:
+#      - portainer-data:/data
+#    #    volumes:
+#    #      - /var/run/docker.sock:/var/run/docker.sock
+#    environment:
+#      - "admin-password=admin123"
+#    networks:
+#      - agent_network
+#    deploy:
+#      replicas: 1
+#      mode: replicated
+#      update_config:
+#        parallelism: 1
+#        delay: 10s
+#      restart_policy:
+#        condition: on-failure
+#        delay: 5s
+#        max_attempts: 3
+#        window: 120s
+#      placement:
+#        constraints: [node.role == manager]
 
 networks:
   frontend:

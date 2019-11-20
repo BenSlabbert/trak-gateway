@@ -205,10 +205,16 @@ func PublishScheduledTask(taskName string, taskQueue string, scheduledTask queue
 }
 
 func PublishNewProductTasks(db *gorm.DB, nsqProducer *nsq.Producer, crawlerEnv env.Crawler) {
+	if !crawlerEnv.Enabled {
+		log.Info("crawler not enabled")
+		return
+	}
+
 	crawler, ok := model.FindCrawlerModelByName("Takealot", db)
 	if !ok {
 		crawler = &model.CrawlerModel{Name: "Takealot", LastPLID: crawlerEnv.TakealotInitialPLID}
 	}
+
 	count := 0
 	for count < crawlerEnv.NumberOfNewProductTasks {
 		crawler.LastPLID++
@@ -219,6 +225,7 @@ func PublishNewProductTasks(db *gorm.DB, nsqProducer *nsq.Producer, crawlerEnv e
 		}
 		count++
 	}
+
 	_, err := model.UpserCrawlerModel(crawler, db)
 	if err != nil {
 		log.Warnf("failed to upsert takealot crawler: %v", err)

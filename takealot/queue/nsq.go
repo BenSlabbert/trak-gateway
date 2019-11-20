@@ -3,7 +3,8 @@ package queue
 import (
 	"encoding/binary"
 	"github.com/nsqio/go-nsq"
-	"log"
+	log "github.com/sirupsen/logrus"
+	"strings"
 	"trak-gateway/takealot/env"
 )
 
@@ -27,6 +28,20 @@ func ConnectConsumer(consumer *nsq.Consumer) {
 	log.Println("connected to NSQ")
 }
 
+type NsqLogger struct {
+}
+
+func (l *NsqLogger) Output(calldepth int, s string) error {
+	if strings.HasPrefix(s, "INF") {
+		index := strings.Index(s, "[")
+		log.Info(s[index:])
+	} else if strings.HasPrefix(s, "WRN") {
+		index := strings.Index(s, "[")
+		log.Info(s[index:])
+	}
+	return nil
+}
+
 func CreateNSQConsumer(clientID, topic, channel string) *nsq.Consumer {
 	validChannelName := nsq.IsValidChannelName(channel)
 	if !validChannelName {
@@ -35,6 +50,7 @@ func CreateNSQConsumer(clientID, topic, channel string) *nsq.Consumer {
 	config := nsq.NewConfig()
 	config.ClientID = clientID
 	consumer, _ := nsq.NewConsumer(topic, channel, config)
+	consumer.SetLogger(&NsqLogger{}, nsq.LogLevelInfo)
 	return consumer
 }
 

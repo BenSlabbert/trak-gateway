@@ -31,6 +31,7 @@ type PPROFEnv struct {
 }
 
 type Crawler struct {
+	Enabled                 bool
 	NumberOfNewProductTasks int
 	TakealotInitialPLID     uint
 }
@@ -74,6 +75,7 @@ func LoadEnv() TrakEnv {
 			PPROFEnabled: getPPROFEnabled(),
 		},
 		Crawler: Crawler{
+			Enabled:                 getCrawlerEnabled(),
 			NumberOfNewProductTasks: getNumberOfNewProductTasks(),
 			TakealotInitialPLID:     getTakealotInitialPLID(),
 		},
@@ -82,6 +84,11 @@ func LoadEnv() TrakEnv {
 			ReleaseAssetURL: getReleaseAssetURL(),
 		},
 	}
+}
+
+func getCrawlerEnabled() bool {
+	e := os.Getenv("CRAWLER_ENABLED")
+	return e == "true"
 }
 
 func getReleaseAssetURL() string {

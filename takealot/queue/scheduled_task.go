@@ -39,7 +39,7 @@ func (task *NSQScheduledTask) HandleMessage(message *nsq.Message) error {
 
 func (task *NSQScheduledTask) handlePriceUpdateScheduledTask(messageID string) {
 	greaterThanID := uint(0)
-	size := 100
+	size := 1000
 
 	for {
 		log.Infof("%s: getting %d products greater than ID %d from the db", messageID, size, greaterThanID)
