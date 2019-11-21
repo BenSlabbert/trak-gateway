@@ -43,7 +43,6 @@ func FindProductLatestPrices(productID uint, page, size int, db *gorm.DB) []*Pri
 	db.Model(&PriceModel{}).
 		Offset(page*size).
 		Limit(size).
-		Order("id desc").
 		Where("product_id = ?", productID).
 		Find(&prices)
 	return prices
