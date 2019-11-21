@@ -101,7 +101,9 @@ func main() {
 	signal.Notify(ch, syscall.SIGTERM)
 
 	// Block until signal is received
-	<-ch
+	sig := <-ch
+
+	log.Infof("Stopping the server. OS Signal: %v", sig)
 
 	for _, c := range consumers {
 		c.Stop()
