@@ -100,11 +100,11 @@ func TestFetchProduct(t *testing.T) {
 
 	productResponse, e := FetchProduct(48894338)
 
-	if e != nil {
-		t.Errorf("Should not have errors: %v", e)
+	if e == nil {
+		t.Errorf("Should have error: %v", e)
 	}
 
-	if productResponse == nil {
-		t.Error("Response should not be nil")
+	if productResponse != nil {
+		t.Error("Response should be nil")
 	}
 }
