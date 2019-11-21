@@ -5,20 +5,72 @@ import (
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
 	"strings"
+	"time"
 	"trak-gateway/takealot/env"
 )
 
 const NewScheduledTaskQueue string = "new-scheduled-task-queue"
-const NewProductQueue string = "new-product-queue"
+const CategoryDigestQueue string = "category-digest-queue"
 const ProductDigestQueue string = "product-digest-queue"
 const BrandDigestQueue string = "brand-digest-queue"
-const CategoryDigestQueue string = "category-digest-queue"
+const NewProductQueue string = "new-product-queue"
 
-type ScheduledTask uint
+type ScheduledTask struct {
+	ID uint
+}
 
-const PromotionsScheduledTask ScheduledTask = 1
-const PriceUpdateScheduledTask ScheduledTask = 2
-const BrandUpdateScheduledTask ScheduledTask = 3
+func (st *ScheduledTask) FirstRun() time.Time {
+	switch st.ID {
+	case PromotionsScheduledTaskID:
+		now := time.Now().Add(24 * time.Hour)
+		return time.Date(now.Year(), now.Month(), now.Day()-2, 7, 0, 0, 0, time.UTC)
+	case PriceUpdateScheduledTaskTaskID:
+		now := time.Now().Add(24 * time.Hour)
+		return time.Date(now.Year(), now.Month(), now.Day()-2, 7, 0, 0, 0, time.UTC)
+	case BrandUpdateScheduledTaskTaskID:
+		now := time.Now().Add(2 * time.Hour)
+		return time.Date(now.Year(), now.Month(), now.Day()-2, now.Hour(), 0, 0, 0, time.UTC)
+	case DailyDealPriceUpdateScheduledTaskTaskID:
+		now := time.Now().Add(1 * time.Hour)
+		return time.Date(now.Year(), now.Month(), now.Day()-2, now.Hour(), 0, 0, 0, time.UTC)
+	}
+	return time.Now()
+}
+
+func (st *ScheduledTask) NextRun() time.Time {
+	switch st.ID {
+	case PromotionsScheduledTaskID:
+		now := time.Now().Add(24 * time.Hour)
+		return time.Date(now.Year(), now.Month(), now.Day(), 7, 0, 0, 0, time.UTC)
+	case PriceUpdateScheduledTaskTaskID:
+		now := time.Now().Add(24 * time.Hour)
+		return time.Date(now.Year(), now.Month(), now.Day(), 7, 0, 0, 0, time.UTC)
+	case BrandUpdateScheduledTaskTaskID:
+		now := time.Now().Add(2 * time.Hour)
+		return time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 0, 0, time.UTC)
+	case DailyDealPriceUpdateScheduledTaskTaskID:
+		now := time.Now().Add(1 * time.Hour)
+		return time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 0, 0, time.UTC)
+	}
+	return time.Now()
+}
+
+const PromotionsScheduledTaskID uint = 1
+const PriceUpdateScheduledTaskTaskID uint = 2
+const BrandUpdateScheduledTaskTaskID uint = 3
+const DailyDealPriceUpdateScheduledTaskTaskID uint = 4
+
+// PromotionsScheduledTask const, do not modify
+var PromotionsScheduledTask = &ScheduledTask{ID: PromotionsScheduledTaskID}
+
+// PriceUpdateScheduledTask const, do not modify
+var PriceUpdateScheduledTask = &ScheduledTask{ID: PriceUpdateScheduledTaskTaskID}
+
+// BrandUpdateScheduledTask const, do not modify
+var BrandUpdateScheduledTask = &ScheduledTask{ID: BrandUpdateScheduledTaskTaskID}
+
+// DailyDealPriceUpdateScheduledTask const, do not modify
+var DailyDealPriceUpdateScheduledTask = &ScheduledTask{ID: DailyDealPriceUpdateScheduledTaskTaskID}
 
 func ConnectConsumer(consumer *nsq.Consumer) {
 	nsqEnv := env.LoadEnv().Nsq

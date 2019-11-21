@@ -8,9 +8,10 @@ import (
 	"time"
 )
 
-const PromotionsScheduledTask = "PromotionsScheduledTask"
-const PriceUpdateScheduledTask = "PriceUpdateScheduledTask"
-const BrandUpdateScheduledTask = "BrandUpdateScheduledTask"
+const DailyDealPriceUpdateScheduledTaskName = "DailyDealPriceUpdateScheduledTask"
+const PriceUpdateScheduledTaskName = "PriceUpdateScheduledTask"
+const BrandUpdateScheduledTaskName = "BrandUpdateScheduledTask"
+const PromotionsScheduledTaskName = "PromotionsScheduledTask"
 
 type ScheduledTaskModel struct {
 	gorm.Model

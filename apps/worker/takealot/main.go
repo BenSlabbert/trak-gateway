@@ -6,7 +6,6 @@ import (
 	"github.com/bsm/redislock"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
@@ -81,17 +80,17 @@ func main() {
 		consumers = append(consumers, c)
 	}
 
-	scheduledTasks := make([]*queue.NSQScheduledTask, 0)
+	scheduledTaskHandlers := make([]*queue.NSQScheduledTaskHandler, 0)
 	for i := 0; i < takealotEnv.Nsq.NumberOfScheduledTaskConsumers; i++ {
 		db, e := connection.GetMariaDB(opts)
 		if e != nil {
 			log.Fatalf("failed to get db connection: %v", e)
 		}
-		scheduledTask := &queue.NSQScheduledTask{DB: db, Producer: queue.CreateNSQProducer()}
-		scheduledTasks = append(scheduledTasks, scheduledTask)
+		scheduledTaskHandler := &queue.NSQScheduledTaskHandler{DB: db, Producer: queue.CreateNSQProducer()}
+		scheduledTaskHandlers = append(scheduledTaskHandlers, scheduledTaskHandler)
 		s := uuid.New().String()[:6]
 		c := queue.CreateNSQConsumer(fmt.Sprintf("%s-nsq-scheduled-task-worker-%d", s, i), queue.NewScheduledTaskQueue, "worker")
-		c.AddHandler(nsq.HandlerFunc(scheduledTask.HandleMessage))
+		c.AddHandler(nsq.HandlerFunc(scheduledTaskHandler.HandleMessage))
 		queue.ConnectConsumer(c)
 		consumers = append(consumers, c)
 	}
@@ -112,7 +111,7 @@ func main() {
 		t.Quit()
 	}
 
-	for _, t := range scheduledTasks {
+	for _, t := range scheduledTaskHandlers {
 		t.Quit()
 	}
 }
@@ -139,114 +138,12 @@ func WorkerTaskFactory(opts connection.MariaDBConnectOpts, trakEnv env.TrakEnv) 
 	defer nsqProducer.Stop()
 	ticker := time.NewTicker(10 * time.Second)
 
-	for range ticker.C {
-		err := nsqProducer.Ping()
-		if err != nil {
-			log.Warnf("failed to ping NSQ! No tasks will be produced: %v", err)
-			nsqProducer = queue.CreateNSQProducer()
-		}
-
-		PublishNewProductTasks(db, nsqProducer, trakEnv.Crawler)
-		PublishPromotionScheduledTask(db, nsqProducer)
-		PublishPriceUpdateScheduledTask(db, nsqProducer)
-		PublishBrandUpdateScheduledTask(db, nsqProducer)
-	}
-}
-
-func PublishBrandUpdateScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
-	taskName := model.BrandUpdateScheduledTask
-	taskQueue := queue.NewScheduledTaskQueue
-	scheduledTask := queue.BrandUpdateScheduledTask
-	PublishScheduledTask(taskName, taskQueue, scheduledTask, db, nsqProducer)
-}
-
-func PublishPriceUpdateScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
-	taskName := model.PriceUpdateScheduledTask
-	taskQueue := queue.NewScheduledTaskQueue
-	scheduledTask := queue.PriceUpdateScheduledTask
-	PublishScheduledTask(taskName, taskQueue, scheduledTask, db, nsqProducer)
-}
-
-func PublishPromotionScheduledTask(db *gorm.DB, nsqProducer *nsq.Producer) {
-	taskName := model.PromotionsScheduledTask
-	taskQueue := queue.NewScheduledTaskQueue
-	scheduledTask := queue.PromotionsScheduledTask
-	PublishScheduledTask(taskName, taskQueue, scheduledTask, db, nsqProducer)
-}
-
-func PublishScheduledTask(taskName string, taskQueue string, scheduledTask queue.ScheduledTask, db *gorm.DB, nsqProducer *nsq.Producer) {
-	scheduledTaskModel, ok := model.FindScheduledTaskModelByName(taskName, db)
-
-	if !ok {
-		// create task
-		scheduledTaskModel = &model.ScheduledTaskModel{}
-		now := time.Now().Add(24 * time.Hour)
-		nextRun := time.Date(now.Year(), now.Month(), now.Day()-2, 10, 0, 0, 0, time.UTC)
-
-		if taskName == model.PromotionsScheduledTask {
-			now = time.Now().Add(2 * time.Hour)
-			nextRun = time.Date(now.Year(), now.Month(), now.Day()-2, now.Hour(), 0, 0, 0, time.UTC)
-		}
-
-		scheduledTaskModel.NextRun = nextRun
-		scheduledTaskModel.LastRun = time.Unix(0, 0)
-		scheduledTaskModel.Name = taskName
-		_, err := model.UpsertScheduledTaskModel(scheduledTaskModel, db)
-		if err != nil {
-			log.Warnf("failed to upsert ScheduledTaskModel: %v", err)
-			return
-		}
+	taskProducer := queue.NSQScheduledTaskProducer{
+		DB:       db,
+		Producer: nsqProducer,
+		Ticker:   ticker,
+		TrakEnv:  trakEnv,
 	}
 
-	if time.Now().After(scheduledTaskModel.NextRun) {
-		log.Infof("running scheduled task: %s", taskName)
-		err := nsqProducer.Publish(taskQueue, queue.SendUintMessage(uint(scheduledTask)))
-		if err != nil {
-			log.Warnf("failed to publish to nsq: %v", err)
-			return
-		}
-
-		scheduledTaskModel.LastRun = time.Now()
-		now := time.Now().Add(24 * time.Hour)
-		nextRun := time.Date(now.Year(), now.Month(), now.Day(), 10, 0, 0, 0, time.UTC)
-
-		if taskName == model.PromotionsScheduledTask {
-			now = time.Now().Add(2 * time.Hour)
-			nextRun = time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 0, 0, time.UTC)
-		}
-
-		scheduledTaskModel.NextRun = nextRun
-		_, err = model.UpsertScheduledTaskModel(scheduledTaskModel, db)
-		if err != nil {
-			log.Warnf("failed to upsert ScheduledTaskModel: %v", err)
-		}
-	}
-}
-
-func PublishNewProductTasks(db *gorm.DB, nsqProducer *nsq.Producer, crawlerEnv env.Crawler) {
-	if !crawlerEnv.Enabled {
-		log.Info("crawler not enabled")
-		return
-	}
-
-	crawler, ok := model.FindCrawlerModelByName("Takealot", db)
-	if !ok {
-		crawler = &model.CrawlerModel{Name: "Takealot", LastPLID: crawlerEnv.TakealotInitialPLID}
-	}
-
-	count := 0
-	for count < crawlerEnv.NumberOfNewProductTasks {
-		crawler.LastPLID++
-		log.Infof("NewProductTasks: pushing plID: %d to queue", crawler.LastPLID)
-		err := nsqProducer.Publish(queue.NewProductQueue, queue.SendUintMessage(crawler.LastPLID))
-		if err != nil {
-			log.Warnf("failed to publish to nsq: %v", err)
-		}
-		count++
-	}
-
-	_, err := model.UpserCrawlerModel(crawler, db)
-	if err != nil {
-		log.Warnf("failed to upsert takealot crawler: %v", err)
-	}
+	taskProducer.Run()
 }

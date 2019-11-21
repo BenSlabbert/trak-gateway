@@ -9,29 +9,41 @@ import (
 	"trak-gateway/takealot/model"
 )
 
-type NSQScheduledTask struct {
+type NSQScheduledTaskHandler struct {
 	DB       *gorm.DB
 	Producer *nsq.Producer
 }
 
-func (task *NSQScheduledTask) Quit() {
+func (task *NSQScheduledTaskHandler) Quit() {
 	connection.CloseMariaDB(task.DB)
 	task.Producer.Stop()
 }
 
-func (task *NSQScheduledTask) HandleMessage(message *nsq.Message) error {
+func (task *NSQScheduledTaskHandler) HandleMessage(message *nsq.Message) error {
 	taskID := ReceiveUintMessage(message.Body)
 	messageID := MessageIDString(message.ID)
 
 	log.Infof("%s: handling scheduled task", messageID)
 
+	// we dont want to flood the queue with these
+	if message.Attempts > 2 {
+		log.Warnf("%s: too many scheduled task attempts: %d, will not try again", messageID, message.Attempts)
+		return nil
+	}
+
+	if message.Attempts > 1 {
+		log.Warnf("%s: scheduled task multiple attempts: %d", messageID, message.Attempts)
+	}
+
 	switch taskID {
-	case uint(PromotionsScheduledTask):
+	case PromotionsScheduledTask.ID:
 		go task.handlePromotionsScheduledTask(messageID)
-	case uint(PriceUpdateScheduledTask):
+	case PriceUpdateScheduledTask.ID:
 		go task.handlePriceUpdateScheduledTask(messageID)
-	case uint(BrandUpdateScheduledTask):
+	case BrandUpdateScheduledTask.ID:
 		go task.handleBrandUpdateScheduledTask(messageID)
+	case DailyDealPriceUpdateScheduledTask.ID:
+		go task.handleDailyDealPriceUpdateScheduledTask(messageID)
 	default:
 		log.Warnf("unknown taskID: %d", taskID)
 	}
@@ -39,7 +51,7 @@ func (task *NSQScheduledTask) HandleMessage(message *nsq.Message) error {
 	return nil
 }
 
-func (task *NSQScheduledTask) handlePriceUpdateScheduledTask(messageID string) {
+func (task *NSQScheduledTaskHandler) handlePriceUpdateScheduledTask(messageID string) {
 	greaterThanID := uint(0)
 	size := 1000
 
@@ -64,7 +76,7 @@ func (task *NSQScheduledTask) handlePriceUpdateScheduledTask(messageID string) {
 	}
 }
 
-func (task *NSQScheduledTask) handlePromotionsScheduledTask(messageID string) {
+func (task *NSQScheduledTaskHandler) handlePromotionsScheduledTask(messageID string) {
 	promotionsResponse, err := api.FetchPromotions()
 
 	if err != nil {
@@ -96,7 +108,7 @@ func (task *NSQScheduledTask) handlePromotionsScheduledTask(messageID string) {
 	}
 }
 
-func (task *NSQScheduledTask) createPromotionProducts(promotionModel *model.PromotionModel) {
+func (task *NSQScheduledTaskHandler) createPromotionProducts(promotionModel *model.PromotionModel) {
 	log.Infof("createPromotionProducts promotionID: %d", promotionModel.PromotionID)
 
 	pliDsOnPromotion, err := api.FetchPLIDsOnPromotion(promotionModel.PromotionID)
@@ -118,7 +130,7 @@ func (task *NSQScheduledTask) createPromotionProducts(promotionModel *model.Prom
 	}
 }
 
-func (task *NSQScheduledTask) handleBrandUpdateScheduledTask(messageID string) {
+func (task *NSQScheduledTaskHandler) handleBrandUpdateScheduledTask(messageID string) {
 	greaterThanID := uint(0)
 	size := 1000
 
@@ -154,5 +166,41 @@ func (task *NSQScheduledTask) handleBrandUpdateScheduledTask(messageID string) {
 		}
 
 		greaterThanID = brandModels[len(brandModels)-1].ID
+	}
+}
+
+func (task *NSQScheduledTaskHandler) handleDailyDealPriceUpdateScheduledTask(messageID string) {
+	dailyDealPromotion, ok := model.FindLatestDailyDealPromotion(task.DB)
+
+	if !ok {
+		log.Warnf("%s: no Daily Deal promotion available", messageID)
+		return
+	}
+
+	page := 0
+	size := 100
+	models, queryPage := model.FindProductsByPromotion(dailyDealPromotion.ID, page, size, task.DB)
+
+	for !queryPage.IsLastPage {
+		// todo run in goroutines
+		for _, m := range models {
+			err := task.Producer.Publish(NewProductQueue, SendUintMessage(m.PLID))
+			if err != nil {
+				log.Errorf("%s: failed to publish plID: %d to nsq: %v", messageID, m.PLID, err)
+				return
+			}
+		}
+
+		page++
+		models, queryPage = model.FindProductsByPromotion(dailyDealPromotion.ID, page, size, task.DB)
+	}
+
+	// run last page
+	for _, m := range models {
+		err := task.Producer.Publish(NewProductQueue, SendUintMessage(m.PLID))
+		if err != nil {
+			log.Errorf("%s: failed to publish plID: %d to nsq: %v", messageID, m.PLID, err)
+			return
+		}
 	}
 }
