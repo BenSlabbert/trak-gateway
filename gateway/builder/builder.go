@@ -170,7 +170,7 @@ func (psb *ProductStatsBuilder) setChartData() {
 
 	labels := make([]string, 0)
 	for _, p := range psb.prices {
-		labels = append(labels, p.CreatedAt.String())
+		labels = append(labels, p.CreatedAt.Format("2006-01-02 15:04"))
 	}
 
 	dataSets := make([]*pb.ChartContentMessage, 0)
