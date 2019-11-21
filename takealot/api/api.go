@@ -134,6 +134,11 @@ func FetchProduct(plID uint) (*ProductResponse, error) {
 		return nil, err
 	}
 
+	// ignore books
+	if len(pr.Core.Authors) > 0 {
+		return nil, fmt.Errorf("plID: %d is a book, ignoring", plID)
+	}
+
 	return pr, nil
 }
 

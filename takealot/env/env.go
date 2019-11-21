@@ -188,6 +188,8 @@ func getNsqdURL() string {
 	e := os.Getenv("NSQD_URL")
 
 	if e == "" {
+		// for lookupd
+		// 		return "127.0.0.1:4160"
 		return "127.0.0.1:4150"
 	}
 	return e

@@ -182,6 +182,12 @@ func PublishScheduledTask(taskName string, taskQueue string, scheduledTask queue
 		scheduledTaskModel = &model.ScheduledTaskModel{}
 		now := time.Now().Add(24 * time.Hour)
 		nextRun := time.Date(now.Year(), now.Month(), now.Day()-2, 10, 0, 0, 0, time.UTC)
+
+		if taskName == model.PromotionsScheduledTask {
+			now = time.Now().Add(2 * time.Hour)
+			nextRun = time.Date(now.Year(), now.Month(), now.Day()-2, now.Hour(), 0, 0, 0, time.UTC)
+		}
+
 		scheduledTaskModel.NextRun = nextRun
 		scheduledTaskModel.LastRun = time.Unix(0, 0)
 		scheduledTaskModel.Name = taskName
@@ -197,15 +203,22 @@ func PublishScheduledTask(taskName string, taskQueue string, scheduledTask queue
 		err := nsqProducer.Publish(taskQueue, queue.SendUintMessage(uint(scheduledTask)))
 		if err != nil {
 			log.Warnf("failed to publish to nsq: %v", err)
-		} else {
-			scheduledTaskModel.LastRun = time.Now()
-			now := time.Now().Add(24 * time.Hour)
-			nextRun := time.Date(now.Year(), now.Month(), now.Day(), 10, 0, 0, 0, time.UTC)
-			scheduledTaskModel.NextRun = nextRun
-			_, err := model.UpsertScheduledTaskModel(scheduledTaskModel, db)
-			if err != nil {
-				log.Warnf("failed to upsert ScheduledTaskModel: %v", err)
-			}
+			return
+		}
+
+		scheduledTaskModel.LastRun = time.Now()
+		now := time.Now().Add(24 * time.Hour)
+		nextRun := time.Date(now.Year(), now.Month(), now.Day(), 10, 0, 0, 0, time.UTC)
+
+		if taskName == model.PromotionsScheduledTask {
+			now = time.Now().Add(2 * time.Hour)
+			nextRun = time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 0, 0, time.UTC)
+		}
+
+		scheduledTaskModel.NextRun = nextRun
+		_, err = model.UpsertScheduledTaskModel(scheduledTaskModel, db)
+		if err != nil {
+			log.Warnf("failed to upsert ScheduledTaskModel: %v", err)
 		}
 	}
 }

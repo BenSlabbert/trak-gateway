@@ -30,19 +30,20 @@ services:
       - ./sonic/sonic.cfg:/etc/sonic.cfg
       - sonic-data:/usr/src/sonic
 
-  # todo need to connect to nsqlookupd, see: https://stackoverflow.com/questions/48536963/nsq-cannot-consume-message-by-connecting-to-nsqlookupd
   nsqlookupd:
-    network_mode: host
-    image: nsqio/nsq:v1.1.0
-    command: /nsqlookupd
+#    network_mode: host
+    image: nsqio/nsq:v1.2.0
+    command: /nsqlookupd -broadcast-address nsqlookupd -http-address nsqlookupd:4161 -tcp-address nsqlookupd:4160
     ports:
       - "4160:4160" # TCP
       - "4161:4161" # HTTP
 
   nsqd:
-    network_mode: host
-    image: nsqio/nsq:v1.1.0
-    command: /nsqd -lookupd-tcp-address=127.0.0.1:4160 -broadcast-address=127.0.0.1
+#    network_mode: host
+    image: nsqio/nsq:v1.2.0
+    command: /nsqd -mem-queue-size 10000 -lookupd-tcp-address=nsqlookupd:4160 -broadcast-address=nsqd -data-path=/data
+    volumes:
+      - nsq-data:/data
     depends_on:
       - nsqlookupd
     ports:
@@ -50,9 +51,9 @@ services:
       - "4151:4151"
 
   nsqadmin:
-    network_mode: host
-    image: nsqio/nsq:v1.1.0
-    command: /nsqadmin --lookupd-http-address=127.0.0.1:4161
+#    network_mode: host
+    image: nsqio/nsq:v1.2.0
+    command: /nsqadmin -lookupd-http-address=nsqlookupd:4161
     depends_on:
       - nsqlookupd
     ports:
@@ -61,3 +62,4 @@ services:
 volumes:
   rds-data:
   sonic-data:
+  nsq-data:

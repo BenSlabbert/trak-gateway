@@ -21,10 +21,13 @@ const PriceUpdateScheduledTask ScheduledTask = 2
 const BrandUpdateScheduledTask ScheduledTask = 3
 
 func ConnectConsumer(consumer *nsq.Consumer) {
-	e := env.LoadEnv()
-	err := consumer.ConnectToNSQD(e.Nsq.NsqdURL)
+	nsqEnv := env.LoadEnv().Nsq
+
+	// use this when connecting to nsqlookupd, does not work for producers
+	//err := consumer.ConnectToNSQLookupd(nsqEnv.NsqdURL)
+	err := consumer.ConnectToNSQD(nsqEnv.NsqdURL)
 	if err != nil {
-		log.Panic("could not connect")
+		log.Panicf("could not connect: %v", err)
 	}
 	log.Println("connected to NSQ")
 }
