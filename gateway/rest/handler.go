@@ -177,18 +177,12 @@ func (h *Handler) GetAllPromotions(w http.ResponseWriter, req *http.Request) {
 	promotions, queryPage := model.FindLatestPromotions(pageReq, 12, h.DB)
 
 	for _, p := range promotions {
-		start, err := time.Parse("2006-01-02 15:04:05", p.Start)
-		if err != nil {
-			log.Warnf("failed to parse date: %s err: %v", p.Start, err)
-			start = p.CreatedAt
-		}
-
 		promotionMessages = append(promotionMessages, &gatewayPB.PromotionMessage{
 			Id:          uint32(p.ID),
 			Name:        p.DisplayName,
 			PromotionId: uint32(p.PromotionID),
-			// todo use p.start + p.end
-			Created: uint32(start.Unix()),
+			Start:       uint32(p.StartDate.Unix()),
+			End:         uint32(p.EndDate.Unix()),
 		})
 	}
 

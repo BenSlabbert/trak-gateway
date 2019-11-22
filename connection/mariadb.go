@@ -20,7 +20,7 @@ type MariaDBConnectOpts struct {
 }
 
 func GetMariaDB(opts MariaDBConnectOpts) (*gorm.DB, error) {
-	connString := "%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local"
+	connString := "%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=UTC"
 	connString = fmt.Sprintf(connString, opts.User, opts.Password, opts.Host, opts.Port, opts.Database)
 	db, err := gorm.Open("mysql", connString)
 

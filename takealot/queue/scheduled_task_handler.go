@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
+	"time"
 	"trak-gateway/connection"
 	"trak-gateway/takealot/api"
 	"trak-gateway/takealot/model"
@@ -91,7 +92,7 @@ func (task *NSQScheduledTaskHandler) handlePromotionsScheduledTask(messageID str
 		return
 	}
 
-	promotions := make([]*model.PromotionModel, 0)
+	promotions := make([]*model.PromotionModel, 0, len(promotionsResponse.Response))
 
 	for _, r := range promotionsResponse.Response {
 		pm := &model.PromotionModel{}
@@ -99,6 +100,14 @@ func (task *NSQScheduledTaskHandler) handlePromotionsScheduledTask(messageID str
 		pm.End = r.End
 		pm.Start = r.Start
 		pm.DisplayName = r.ShortDisplayName
+
+		if start, err := time.Parse("2006-01-02 15:04:05", r.Start); err == nil {
+			pm.StartDate = start
+		}
+
+		if end, err := time.Parse("2006-01-02 15:04:05", r.End); err == nil {
+			pm.EndDate = end
+		}
 
 		pm, err = model.UpsertPromotionModel(pm, task.DB)
 

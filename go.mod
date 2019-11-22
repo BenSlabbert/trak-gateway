@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/BenSlabbert/go-sonic v0.0.0-20191106070808-c1097a6b606b
-	github.com/BenSlabbert/trak-gRPC v0.0.0-20191111143918-a426e326e3ee
+	github.com/BenSlabbert/trak-gRPC v0.0.0-20191122190436-b42e68c30092
 	github.com/Microsoft/hcsshim v0.8.6 // indirect
 	github.com/bsm/redislock v0.4.0
 	github.com/gammazero/workerpool v0.0.0-20191005194639-971bc780f6d7

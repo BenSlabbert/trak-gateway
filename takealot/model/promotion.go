@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 type QueryPage struct {
@@ -23,6 +24,8 @@ type PromotionModel struct {
 	DisplayName string
 	Start       string
 	End         string
+	StartDate   time.Time
+	EndDate     time.Time
 }
 
 func (*PromotionModel) TableName() string {
