@@ -12,7 +12,7 @@ func TestPromotionsScheduledTask(t *testing.T) {
 
 	nextRun := PromotionsScheduledTask.NextRun()
 
-	now := time.Now().Add(24 * time.Hour)
+	now := time.Now().UTC().Add(24 * time.Hour)
 	if nextRun.Hour() != 7 {
 		t.Errorf("%d should equal: %d", nextRun.Hour(), 7)
 	}
@@ -27,7 +27,7 @@ func TestPromotionsScheduledTask(t *testing.T) {
 	}
 
 	firstRun := PromotionsScheduledTask.FirstRun()
-	now = time.Now().Add(24 * time.Hour)
+	now = time.Now().UTC().Add(24 * time.Hour)
 
 	if firstRun.Hour() != 7 {
 		t.Errorf("%d should equal: %d", firstRun.Hour(), 7)
@@ -50,7 +50,7 @@ func TestPriceUpdateScheduledTask(t *testing.T) {
 
 	nextRun := PriceUpdateScheduledTask.NextRun()
 
-	now := time.Now().Add(24 * time.Hour)
+	now := time.Now().UTC().Add(24 * time.Hour)
 	if nextRun.Hour() != 7 {
 		t.Errorf("%d should equal: %d", nextRun.Hour(), 7)
 	}
@@ -65,7 +65,7 @@ func TestPriceUpdateScheduledTask(t *testing.T) {
 	}
 
 	firstRun := PriceUpdateScheduledTask.FirstRun()
-	now = time.Now().Add(24 * time.Hour)
+	now = time.Now().UTC().Add(24 * time.Hour)
 
 	if firstRun.Hour() != 7 {
 		t.Errorf("%d should equal: %d", firstRun.Hour(), 7)
@@ -88,10 +88,9 @@ func TestBrandUpdateScheduledTask(t *testing.T) {
 
 	nextRun := BrandUpdateScheduledTask.NextRun()
 
-	now := time.Now()
-	hour := now.Hour() + 2
-	if nextRun.Hour() != hour {
-		t.Errorf("%d should equal: %d", nextRun.Hour(), hour)
+	now := time.Now().UTC().Add(2 * time.Hour)
+	if nextRun.Hour() != now.Hour() {
+		t.Errorf("%d should equal: %d", nextRun.Hour(), now.Hour())
 	}
 	if nextRun.Day() != now.Day() {
 		t.Errorf("%d should equal: %d", nextRun.Hour(), now.Day())
@@ -104,7 +103,7 @@ func TestBrandUpdateScheduledTask(t *testing.T) {
 	}
 
 	firstRun := BrandUpdateScheduledTask.FirstRun()
-	now = time.Now().Add(2 * time.Hour)
+	now = time.Now().UTC().Add(2 * time.Hour)
 
 	if firstRun.Hour() != now.Hour() {
 		t.Errorf("%d should equal: %d", firstRun.Hour(), 7)
@@ -127,10 +126,9 @@ func TestDailyDealPriceUpdateScheduledTask(t *testing.T) {
 
 	nextRun := DailyDealPriceUpdateScheduledTask.NextRun()
 
-	now := time.Now()
-	hour := now.Hour() + 1
-	if nextRun.Hour() != hour {
-		t.Errorf("%d should equal: %d", nextRun.Hour(), hour)
+	now := time.Now().UTC().Add(1 * time.Hour)
+	if nextRun.Hour() != now.Hour() {
+		t.Errorf("%d should equal: %d", nextRun.Hour(), now.Hour())
 	}
 	if nextRun.Day() != now.Day() {
 		t.Errorf("%d should equal: %d", nextRun.Hour(), now.Day())
@@ -143,7 +141,7 @@ func TestDailyDealPriceUpdateScheduledTask(t *testing.T) {
 	}
 
 	firstRun := DailyDealPriceUpdateScheduledTask.FirstRun()
-	now = time.Now().Add(1 * time.Hour)
+	now = time.Now().UTC().Add(1 * time.Hour)
 
 	if firstRun.Hour() != now.Hour() {
 		t.Errorf("%d should equal: %d", firstRun.Hour(), 7)

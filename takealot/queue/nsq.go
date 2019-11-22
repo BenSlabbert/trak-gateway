@@ -22,43 +22,50 @@ type ScheduledTask struct {
 func (st *ScheduledTask) FirstRun() time.Time {
 	switch st.ID {
 	case PromotionsScheduledTaskID:
-		now := time.Now().Add(24 * time.Hour)
+		now := time.Now().UTC().Add(24 * time.Hour)
 		return time.Date(now.Year(), now.Month(), now.Day()-2, 7, 0, 0, 0, time.UTC)
 	case PriceUpdateScheduledTaskTaskID:
-		now := time.Now().Add(24 * time.Hour)
+		now := time.Now().UTC().Add(24 * time.Hour)
 		return time.Date(now.Year(), now.Month(), now.Day()-2, 7, 0, 0, 0, time.UTC)
 	case BrandUpdateScheduledTaskTaskID:
-		now := time.Now().Add(2 * time.Hour)
+		now := time.Now().UTC().Add(2 * time.Hour)
 		return time.Date(now.Year(), now.Month(), now.Day()-2, now.Hour(), 0, 0, 0, time.UTC)
 	case DailyDealPriceUpdateScheduledTaskTaskID:
-		now := time.Now().Add(1 * time.Hour)
+		now := time.Now().UTC().Add(1 * time.Hour)
 		return time.Date(now.Year(), now.Month(), now.Day()-2, now.Hour(), 0, 0, 0, time.UTC)
+	case PriceCleanUpScheduledTaskTaskID:
+		now := time.Now().UTC()
+		return time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
 	}
-	return time.Now()
+	return time.Now().UTC()
 }
 
 func (st *ScheduledTask) NextRun() time.Time {
 	switch st.ID {
 	case PromotionsScheduledTaskID:
-		now := time.Now().Add(24 * time.Hour)
+		now := time.Now().UTC().Add(24 * time.Hour)
 		return time.Date(now.Year(), now.Month(), now.Day(), 7, 0, 0, 0, time.UTC)
 	case PriceUpdateScheduledTaskTaskID:
-		now := time.Now().Add(24 * time.Hour)
+		now := time.Now().UTC().Add(24 * time.Hour)
 		return time.Date(now.Year(), now.Month(), now.Day(), 7, 0, 0, 0, time.UTC)
 	case BrandUpdateScheduledTaskTaskID:
-		now := time.Now().Add(2 * time.Hour)
+		now := time.Now().UTC().Add(2 * time.Hour)
 		return time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 0, 0, time.UTC)
 	case DailyDealPriceUpdateScheduledTaskTaskID:
-		now := time.Now().Add(1 * time.Hour)
+		now := time.Now().UTC().Add(1 * time.Hour)
 		return time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 0, 0, time.UTC)
+	case PriceCleanUpScheduledTaskTaskID:
+		now := time.Now().UTC().Add(24 * time.Hour)
+		return time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
 	}
-	return time.Now()
+	return time.Now().UTC().Add(24 * time.Hour)
 }
 
 const PromotionsScheduledTaskID uint = 1
 const PriceUpdateScheduledTaskTaskID uint = 2
 const BrandUpdateScheduledTaskTaskID uint = 3
 const DailyDealPriceUpdateScheduledTaskTaskID uint = 4
+const PriceCleanUpScheduledTaskTaskID uint = 5
 
 // PromotionsScheduledTask const, do not modify
 var PromotionsScheduledTask = &ScheduledTask{ID: PromotionsScheduledTaskID}
@@ -71,6 +78,9 @@ var BrandUpdateScheduledTask = &ScheduledTask{ID: BrandUpdateScheduledTaskTaskID
 
 // DailyDealPriceUpdateScheduledTask const, do not modify
 var DailyDealPriceUpdateScheduledTask = &ScheduledTask{ID: DailyDealPriceUpdateScheduledTaskTaskID}
+
+// PriceCleanUpScheduledTask const, do not modify
+var PriceCleanUpScheduledTask = &ScheduledTask{ID: PriceCleanUpScheduledTaskTaskID}
 
 func ConnectConsumer(consumer *nsq.Consumer) {
 	nsqEnv := env.LoadEnv().Nsq
@@ -90,10 +100,18 @@ type NsqLogger struct {
 func (l *NsqLogger) Output(calldepth int, s string) error {
 	if strings.HasPrefix(s, "INF") {
 		index := strings.Index(s, "[")
-		log.Info(s[index:])
+		if index >= 0 {
+			log.Info(s[index:])
+		} else {
+			log.Info(s)
+		}
 	} else if strings.HasPrefix(s, "WRN") {
 		index := strings.Index(s, "[")
-		log.Info(s[index:])
+		if index >= 0 {
+			log.Info(s[index:])
+		} else {
+			log.Info(s)
+		}
 	}
 	return nil
 }
@@ -114,6 +132,7 @@ func CreateNSQProducer() *nsq.Producer {
 	e := env.LoadEnv()
 	config := nsq.NewConfig()
 	producer, _ := nsq.NewProducer(e.Nsq.NsqdURL, config)
+	producer.SetLogger(&NsqLogger{}, nsq.LogLevelInfo)
 	return producer
 }
 

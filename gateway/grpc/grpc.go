@@ -86,7 +86,7 @@ func permissionDenied(e *status.Status) *response.Error {
 }
 
 func withDeadline(millis int) (context.Context, context.CancelFunc) {
-	clientDeadline := time.Now().Add(time.Duration(millis) * time.Millisecond)
+	clientDeadline := time.Now().UTC().Add(time.Duration(millis) * time.Millisecond)
 	return context.WithDeadline(context.Background(), clientDeadline)
 }
 

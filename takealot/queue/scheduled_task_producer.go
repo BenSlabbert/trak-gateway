@@ -29,6 +29,7 @@ func (p *NSQScheduledTaskProducer) Run() {
 		p.publishScheduledTask(model.PriceUpdateScheduledTaskName, NewScheduledTaskQueue, PriceUpdateScheduledTask)
 		p.publishScheduledTask(model.PromotionsScheduledTaskName, NewScheduledTaskQueue, PromotionsScheduledTask)
 		p.publishScheduledTask(model.DailyDealPriceUpdateScheduledTaskName, NewScheduledTaskQueue, DailyDealPriceUpdateScheduledTask)
+		p.publishScheduledTask(model.PriceCleanUpScheduledTaskName, NewScheduledTaskQueue, PriceCleanUpScheduledTask)
 	}
 }
 
@@ -67,7 +68,7 @@ func (p *NSQScheduledTaskProducer) publishScheduledTask(taskName string, taskQue
 		// create task
 		stm = &model.ScheduledTaskModel{}
 		stm.NextRun = task.FirstRun()
-		stm.LastRun = time.Unix(0, 0)
+		stm.LastRun = time.Now().UTC()
 		stm.Name = taskName
 		_, err := model.UpsertScheduledTaskModel(stm, p.DB)
 		if err != nil {
@@ -76,7 +77,7 @@ func (p *NSQScheduledTaskProducer) publishScheduledTask(taskName string, taskQue
 		}
 	}
 
-	if time.Now().After(stm.NextRun) {
+	if time.Now().UTC().After(stm.NextRun) {
 		// run task
 		log.Infof("running scheduled task: %s", taskName)
 		err := p.Producer.Publish(taskQueue, SendUintMessage(task.ID))
@@ -85,7 +86,7 @@ func (p *NSQScheduledTaskProducer) publishScheduledTask(taskName string, taskQue
 			return
 		}
 
-		stm.LastRun = time.Now()
+		stm.LastRun = time.Now().UTC()
 		stm.NextRun = task.NextRun()
 		_, err = model.UpsertScheduledTaskModel(stm, p.DB)
 		if err != nil {

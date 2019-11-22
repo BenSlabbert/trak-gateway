@@ -7,6 +7,7 @@ require (
 	github.com/BenSlabbert/trak-gRPC v0.0.0-20191111143918-a426e326e3ee
 	github.com/Microsoft/hcsshim v0.8.6 // indirect
 	github.com/bsm/redislock v0.4.0
+	github.com/gammazero/workerpool v0.0.0-20191005194639-971bc780f6d7
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-resty/resty/v2 v2.1.0
 	github.com/golang/protobuf v1.3.1

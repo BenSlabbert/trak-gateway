@@ -2,12 +2,21 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
+	"os"
 	"testing"
 	"trak-gateway/connection"
+	tu "trak-gateway/test_utils"
 )
 
+// set up test infrastructure for all tests in this package
+func TestMain(m *testing.M) {
+	ctx, mariadbC := tu.SetUpMariaDB("../../test_utils/trak.sql")
+	defer tu.Terminate(ctx, mariadbC)
+	os.Exit(m.Run())
+}
+
 func TestFindManyProductModel(t *testing.T) {
-	db := getDB(t)
+	db := tu.GetDB(t)
 	defer connection.CloseMariaDB(db)
 
 	productModels := FindProducts(0, 10, db)
@@ -29,7 +38,7 @@ func TestFindManyProductModel(t *testing.T) {
 }
 
 func TestFindLatestProducts(t *testing.T) {
-	db := getDB(t)
+	db := tu.GetDB(t)
 	defer connection.CloseMariaDB(db)
 
 	productModels, page := FindLatestProducts(0, 10, db)
@@ -48,7 +57,7 @@ func TestFindLatestProducts(t *testing.T) {
 }
 
 func TestFindProductCategories(t *testing.T) {
-	db := getDB(t)
+	db := tu.GetDB(t)
 	defer connection.CloseMariaDB(db)
 
 	productModels := FindProducts(0, 1, db)
@@ -87,7 +96,7 @@ func TestFindProductCategories(t *testing.T) {
 }
 
 func TestFindProductBrand(t *testing.T) {
-	db := getDB(t)
+	db := tu.GetDB(t)
 	defer connection.CloseMariaDB(db)
 
 	productModels := FindProducts(0, 1, db)
@@ -114,7 +123,7 @@ func TestFindProductBrand(t *testing.T) {
 }
 
 func TestFindProductsByBrand(t *testing.T) {
-	db := getDB(t)
+	db := tu.GetDB(t)
 	defer connection.CloseMariaDB(db)
 
 	productModels := FindProducts(0, 1, db)
@@ -143,7 +152,7 @@ func TestFindProductsByBrand(t *testing.T) {
 }
 
 func TestFindProductModel(t *testing.T) {
-	db := getDB(t)
+	db := tu.GetDB(t)
 	defer connection.CloseMariaDB(db)
 
 	model, ok := FindProductModel(1, db)
@@ -158,7 +167,7 @@ func TestFindProductModel(t *testing.T) {
 }
 
 func TestProductModelExists(t *testing.T) {
-	db := getDB(t)
+	db := tu.GetDB(t)
 	defer connection.CloseMariaDB(db)
 
 	_, ok := ProductModelExistsByPLID(41469993, db)
@@ -169,7 +178,7 @@ func TestProductModelExists(t *testing.T) {
 }
 
 func TestUpsertProductModel(t *testing.T) {
-	db := getDB(t)
+	db := tu.GetDB(t)
 	defer connection.CloseMariaDB(db)
 
 	model := &ProductModel{
@@ -217,13 +226,13 @@ func TestUpsertProductModel(t *testing.T) {
 }
 
 func TestFindProductsByPromotion(t *testing.T) {
-	db := getDB(t)
+	db := tu.GetDB(t)
 	defer connection.CloseMariaDB(db)
 
-	models, page := FindProductsByPromotion(52, 0, 10, db)
+	models, page := FindProductsByPromotion(30, 0, 10, db)
 
-	if len(models) != 1 {
-		t.Error("should have 1 model")
+	if len(models) != 4 {
+		t.Error("should have 4 model")
 	}
 
 	if !page.IsLastPage {

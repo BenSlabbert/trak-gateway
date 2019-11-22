@@ -22,6 +22,42 @@ func migratePriceModel(db *gorm.DB) {
 		AddForeignKey("product_id", "product(id)", "RESTRICT", "RESTRICT")
 }
 
+func RemoveProductDuplicatePrices(productID uint, db *gorm.DB) error {
+	sqlOpts := &sql.TxOptions{
+		Isolation: sql.LevelDefault,
+		ReadOnly:  false,
+	}
+
+	uniqueCurrentPrices := make([]*PriceModel, 0)
+
+	tx := db.BeginTx(context.Background(), sqlOpts)
+	tx.Table("price").
+		Where("product_id = ?", productID).
+		Order("created_at").
+		Group("current_price").
+		Find(&uniqueCurrentPrices)
+
+	if len(uniqueCurrentPrices) > 15 {
+		ids := make([]uint, 0, len(uniqueCurrentPrices))
+		for _, a := range uniqueCurrentPrices {
+			ids = append(ids, a.ID)
+		}
+
+		// permanent delete
+		tx.Unscoped().
+			Delete(&PriceModel{}, "product_id = ? and id not in (?)", productID, ids)
+	}
+
+	err := tx.Commit().Error
+
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return nil
+}
+
 func CreatePrice(model *PriceModel, db *gorm.DB) (*PriceModel, error) {
 	sqlOpts := &sql.TxOptions{
 		Isolation: sql.LevelDefault,
@@ -44,6 +80,7 @@ func FindProductLatestPrices(productID uint, page, size int, db *gorm.DB) []*Pri
 		Offset(page*size).
 		Limit(size).
 		Where("product_id = ?", productID).
+		Order("id desc").
 		Find(&prices)
 	return prices
 }

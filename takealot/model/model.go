@@ -33,7 +33,10 @@ func (img *ProductImageModel) FormatURL(size Format) string {
 func FindProductImageModel(productID uint, db *gorm.DB) (*ProductImageModel, bool) {
 	m := &ProductImageModel{}
 
-	db.Model(m).Limit(1).Order("id desc").Where("product_id = ?", productID).FirstOrInit(m)
+	db.Model(m).
+		Where("product_id = ?", productID).
+		Limit(1).
+		FirstOrInit(m)
 
 	if m.ID == 0 {
 		return nil, false

@@ -387,7 +387,39 @@ INSERT INTO trak.crawler (created_at, updated_at, deleted_at, name, last_pl_id)
 VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 'Takealot', 41469995);
 
 INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
-VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 194);
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 16);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 15);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 14);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 13);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 12);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 11);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 10);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 9);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 8);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 7);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 6);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 5);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 4);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 3);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 1);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 1);
+INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 1, 194, 2);
 INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
 VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 2, 0, 49);
 INSERT INTO trak.price (created_at, updated_at, deleted_at, product_id, list_price, current_price)
@@ -548,7 +580,7 @@ VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 41469993, 44239712,
         'Krusell Boden Cover for the HTC One M9 - Transparent Black', '90057',
         'https://www.takealot.com/krusell-boden-cover-for-the-htc-one-m9-transparent-black/PLID41469993');
 INSERT INTO trak.product (created_at, updated_at, deleted_at, pl_id, sku, title, subtitle, url)
-VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 41469991, 44239710,
+VALUES ('2019-11-18 22:17:45', '2019-11-18 22:17:45', NULL, 32846180, 44239710,
         'Krusell Tierp - Screen Protector for the Sony Xperia Z3/Z3 Dual - Clear', '20204',
         'https://www.takealot.com/krusell-tierp-screen-protector-for-the-sony-xperia-z3-z3-dual-clear/PLID41469991');
 INSERT INTO trak.product (created_at, updated_at, deleted_at, pl_id, sku, title, subtitle, url)
@@ -1095,7 +1127,7 @@ VALUES (17, 27);
 INSERT INTO trak.product_category_link (product_id, category_id)
 VALUES (17, 28);
 INSERT INTO trak.product_category_link (product_id, category_id)
-VALUES (17, 30);
+VALUES (17, 22);
 INSERT INTO trak.product_category_link (product_id, category_id)
 VALUES (18, 1);
 INSERT INTO trak.product_category_link (product_id, category_id)
@@ -1119,7 +1151,7 @@ VALUES (20, 27);
 INSERT INTO trak.product_category_link (product_id, category_id)
 VALUES (20, 28);
 INSERT INTO trak.product_category_link (product_id, category_id)
-VALUES (20, 30);
+VALUES (20, 22);
 INSERT INTO trak.product_category_link (product_id, category_id)
 VALUES (20, 29);
 INSERT INTO trak.product_category_link (product_id, category_id)
@@ -1165,7 +1197,7 @@ VALUES (23, 37);
 INSERT INTO trak.product_category_link (product_id, category_id)
 VALUES (24, 38);
 INSERT INTO trak.product_category_link (product_id, category_id)
-VALUES (24, 30);
+VALUES (24, 22);
 INSERT INTO trak.product_category_link (product_id, category_id)
 VALUES (25, 39);
 INSERT INTO trak.product_category_link (product_id, category_id)
@@ -1899,11 +1931,11 @@ VALUES (76, 'https://media.takealot.com/covers_tsins/54788020/54788020-1-{size}.
 
 
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (28026441, 52);
+VALUES (53598059, 30);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55063197, 3);
+VALUES (54542371, 30);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54711273, 25);
+VALUES (51858001, 30);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54496776, 7);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3553,7 +3585,7 @@ VALUES (55961466, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (29393853, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52580643, 30);
+VALUES (52580643, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55961465, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3561,17 +3593,17 @@ VALUES (53639092, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55961065, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56058162, 30);
+VALUES (56058162, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56057681, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55961064, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56058159, 30);
+VALUES (56058159, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (44948410, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (39155268, 30);
+VALUES (39155268, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56059297, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3579,29 +3611,29 @@ VALUES (52854479, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56059289, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55395160, 30);
+VALUES (55395160, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55957179, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56059282, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56058160, 30);
+VALUES (56058160, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48590497, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55696509, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56058161, 30);
+VALUES (56058161, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53595784, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (38159979, 30);
+VALUES (38159979, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55687775, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48299411, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (44310014, 30);
+VALUES (44310014, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55687772, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3609,23 +3641,23 @@ VALUES (53331013, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543780, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (38160027, 30);
+VALUES (38160027, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51728049, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543771, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54545540, 30);
+VALUES (54545540, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48590498, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32791655, 30);
+VALUES (32791655, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543768, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53429801, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (47173159, 30);
+VALUES (47173159, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543767, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3633,17 +3665,17 @@ VALUES (51728050, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543766, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (47173158, 30);
+VALUES (47173158, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53431117, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (37995496, 30);
+VALUES (37995496, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543761, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (43501751, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (44969991, 30);
+VALUES (44969991, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543760, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3651,29 +3683,29 @@ VALUES (52616042, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543734, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (38160043, 30);
+VALUES (38160043, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54496776, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55538062, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53187320, 30);
+VALUES (53187320, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56131814, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54547200, 30);
+VALUES (54547200, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55537828, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54496777, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52143361, 30);
+VALUES (52143361, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55537740, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48590496, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54515629, 30);
+VALUES (54515629, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55537738, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3681,23 +3713,23 @@ VALUES (55067354, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55537467, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41407553, 30);
+VALUES (41407553, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41626904, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55537431, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32846173, 30);
+VALUES (32846173, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53022504, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54753576, 30);
+VALUES (54753576, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53811571, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52034508, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55537297, 30);
+VALUES (55537297, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51856145, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3705,35 +3737,35 @@ VALUES (48946091, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55395903, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (20571667, 30);
+VALUES (20571667, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (43827343, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55395901, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52347194, 30);
+VALUES (52347194, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54841966, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55068712, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (50099386, 30);
+VALUES (50099386, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54862997, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52806203, 30);
+VALUES (52806203, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55068707, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56051917, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53116314, 30);
+VALUES (53116314, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55060415, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53506376, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (46645003, 30);
+VALUES (46645003, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55060406, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3741,35 +3773,35 @@ VALUES (53821930, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55060394, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (29429991, 30);
+VALUES (29429991, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54487859, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54752621, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (50002398, 30);
+VALUES (50002398, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54711833, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54752617, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (46861426, 30);
+VALUES (46861426, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54514560, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54752616, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54490961, 30);
+VALUES (54490961, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53331861, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54752613, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (17259525, 30);
+VALUES (17259525, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52947252, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55027515, 30);
+VALUES (55027515, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54752610, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3777,29 +3809,29 @@ VALUES (53333187, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54752606, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52859904, 30);
+VALUES (52859904, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41353274, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54752605, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55073782, 30);
+VALUES (55073782, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54965834, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54752472, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (49162074, 30);
+VALUES (49162074, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46623597, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706490, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54854751, 30);
+VALUES (54854751, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56048754, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32727781, 30);
+VALUES (32727781, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706489, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3807,23 +3839,23 @@ VALUES (53506841, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706487, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32584893, 30);
+VALUES (32584893, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52227400, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706486, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (34148006, 30);
+VALUES (34148006, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48942397, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706485, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54537967, 30);
+VALUES (54537967, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55244171, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54535568, 30);
+VALUES (54535568, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706484, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3831,35 +3863,35 @@ VALUES (55067913, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706482, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56264257, 30);
+VALUES (56264257, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55083209, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706477, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53505374, 30);
+VALUES (53505374, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53022505, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706470, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (51973068, 30);
+VALUES (51973068, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42979232, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706469, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (42522906, 30);
+VALUES (42522906, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54643954, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706467, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55243858, 30);
+VALUES (55243858, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54505550, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53862854, 30);
+VALUES (53862854, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706466, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3867,7 +3899,7 @@ VALUES (52619128, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706465, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (51973070, 30);
+VALUES (51973070, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52426441, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3875,11 +3907,11 @@ VALUES (54706464, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51980708, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (40367832, 30);
+VALUES (40367832, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706463, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54547126, 30);
+VALUES (54547126, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56051790, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3887,17 +3919,17 @@ VALUES (54706462, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54553925, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (34159471, 30);
+VALUES (34159471, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706461, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54531982, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55069752, 30);
+VALUES (55069752, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706460, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56475672, 30);
+VALUES (56475672, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53430145, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3905,11 +3937,11 @@ VALUES (54706459, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52752050, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (38257466, 30);
+VALUES (38257466, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706458, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54859073, 30);
+VALUES (54859073, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53763278, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3917,17 +3949,17 @@ VALUES (54706457, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47486830, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55073769, 30);
+VALUES (55073769, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706456, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (42456843, 30);
+VALUES (42456843, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55064857, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706454, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (40775678, 30);
+VALUES (40775678, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55053595, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3935,17 +3967,17 @@ VALUES (54706453, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58752311, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55073794, 30);
+VALUES (55073794, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706452, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55954845, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (40900419, 30);
+VALUES (40900419, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706451, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (36963099, 30);
+VALUES (36963099, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54541626, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3953,35 +3985,35 @@ VALUES (54706450, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54529854, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (28053655, 30);
+VALUES (28053655, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706449, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54517927, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54543795, 30);
+VALUES (54543795, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706448, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54384701, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54543688, 30);
+VALUES (54543688, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706447, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52947255, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54526245, 30);
+VALUES (54526245, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706446, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53865718, 30);
+VALUES (53865718, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52752046, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706442, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53821920, 30);
+VALUES (53821920, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47486835, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -3989,49 +4021,49 @@ VALUES (54706440, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53535088, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (51935189, 30);
+VALUES (51935189, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706439, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42041387, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (44833878, 30);
+VALUES (44833878, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706437, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56051839, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54711834, 30);
+VALUES (54711834, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706436, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56006026, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54532114, 30);
+VALUES (54532114, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706435, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58857191, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (47798282, 30);
+VALUES (47798282, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706434, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52855515, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41430991, 30);
+VALUES (41430991, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706433, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52587334, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (38659855, 30);
+VALUES (38659855, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706432, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52093114, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (34178605, 30);
+VALUES (34178605, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706429, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4039,47 +4071,47 @@ VALUES (49520701, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706428, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56057080, 30);
+VALUES (56057080, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49127132, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706427, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53536107, 30);
+VALUES (53536107, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48108018, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706426, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52948433, 30);
+VALUES (52948433, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46993477, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706424, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (26711841, 30);
+VALUES (26711841, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56137589, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55244016, 30);
+VALUES (55244016, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706423, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (57792853, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52421895, 30);
+VALUES (52421895, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706422, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53022506, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41663395, 30);
+VALUES (41663395, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706419, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52856546, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (36957721, 30);
+VALUES (36957721, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706417, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4087,29 +4119,29 @@ VALUES (50002963, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706416, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55237998, 30);
+VALUES (55237998, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (30765977, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706413, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047113, 30);
+VALUES (57047113, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55954844, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54495030, 30);
+VALUES (54495030, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54752619, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56489928, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (51729139, 30);
+VALUES (51729139, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54639188, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55063071, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (50118391, 30);
+VALUES (50118391, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54639185, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4117,11 +4149,11 @@ VALUES (44766852, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54633073, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (47173942, 30);
+VALUES (47173942, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (44391639, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (45283923, 30);
+VALUES (45283923, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54633072, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4131,7 +4163,7 @@ VALUES (56048764, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54633071, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58751399, 30);
+VALUES (58751399, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55063970, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4139,7 +4171,7 @@ VALUES (54968929, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54633070, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55074985, 30);
+VALUES (55074985, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (57465009, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4153,13 +4185,13 @@ VALUES (54632401, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53505401, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54533128, 30);
+VALUES (54533128, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55398453, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54632400, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54514559, 30);
+VALUES (54514559, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48608841, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4169,7 +4201,7 @@ VALUES (54632399, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47486827, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (46854662, 30);
+VALUES (46854662, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55394981, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4177,7 +4209,7 @@ VALUES (54706488, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55942600, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41544707, 30);
+VALUES (41544707, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55052278, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4185,13 +4217,13 @@ VALUES (54706478, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55393785, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (40775658, 30);
+VALUES (40775658, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706438, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55242222, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (40661505, 30);
+VALUES (40661505, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53980019, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4201,7 +4233,7 @@ VALUES (54706431, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53705092, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56475699, 30);
+VALUES (56475699, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (57906690, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4209,19 +4241,19 @@ VALUES (52947257, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706425, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54495029, 30);
+VALUES (54495029, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58851690, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54706411, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53984014, 30);
+VALUES (53984014, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52587332, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56936607, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53536387, 30);
+VALUES (53536387, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54494940, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4229,7 +4261,7 @@ VALUES (51968723, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55242022, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (51973071, 30);
+VALUES (51973071, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (30765981, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4239,7 +4271,7 @@ VALUES (55048556, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55083467, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (51856002, 30);
+VALUES (51856002, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53713469, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4247,13 +4279,13 @@ VALUES (55242016, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53713455, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (47440048, 30);
+VALUES (47440048, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54965835, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55063968, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32848921, 30);
+VALUES (32848921, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55963004, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4265,11 +4297,11 @@ VALUES (53469048, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54541635, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56056030, 30);
+VALUES (56056030, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55058840, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54854752, 30);
+VALUES (54854752, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53469042, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4279,7 +4311,7 @@ VALUES (54994267, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54516874, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54756976, 30);
+VALUES (54756976, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53469011, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4289,7 +4321,7 @@ VALUES (54498565, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53469010, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54756749, 30);
+VALUES (54756749, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54964896, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4297,7 +4329,7 @@ VALUES (53117317, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52951597, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55548326, 30);
+VALUES (55548326, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54857873, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4305,11 +4337,11 @@ VALUES (52752053, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52951596, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55548085, 30);
+VALUES (55548085, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55053388, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54513137, 30);
+VALUES (54513137, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (44935270, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4317,7 +4349,7 @@ VALUES (52926678, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55076285, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53862859, 30);
+VALUES (53862859, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (34158161, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4325,7 +4357,7 @@ VALUES (54858029, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52926664, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53862856, 30);
+VALUES (53862856, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (27300781, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4335,13 +4367,13 @@ VALUES (52803899, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (5088643, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53536388, 30);
+VALUES (53536388, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56137314, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52421369, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52492345, 30);
+VALUES (52492345, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58971128, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4349,7 +4381,7 @@ VALUES (52421366, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55056659, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (49127930, 30);
+VALUES (49127930, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58971127, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4359,13 +4391,13 @@ VALUES (52421364, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58971004, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41405121, 30);
+VALUES (41405121, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52347126, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55056660, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (38258621, 30);
+VALUES (38258621, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54551053, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4375,7 +4407,7 @@ VALUES (52345674, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54508495, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55399199, 30);
+VALUES (55399199, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56058316, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4383,7 +4415,7 @@ VALUES (52345666, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54503341, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58970737, 30);
+VALUES (58970737, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345660, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4391,13 +4423,13 @@ VALUES (55073302, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54495581, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53863474, 30);
+VALUES (53863474, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345652, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55396388, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53597949, 30);
+VALUES (53597949, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54490416, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4407,13 +4439,13 @@ VALUES (52345649, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53702932, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52585000, 30);
+VALUES (52585000, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345648, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42976093, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52492343, 30);
+VALUES (52492343, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53255166, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4423,13 +4455,13 @@ VALUES (55242218, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52430201, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52492342, 30);
+VALUES (52492342, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55048553, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345633, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (42184269, 30);
+VALUES (42184269, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49030968, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4439,13 +4471,13 @@ VALUES (52345622, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47266974, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41241668, 30);
+VALUES (41241668, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345564, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55076201, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (40723582, 30);
+VALUES (40723582, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58969735, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4455,13 +4487,13 @@ VALUES (55052275, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58944235, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (20568225, 30);
+VALUES (20568225, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (40687740, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51983273, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58853961, 30);
+VALUES (58853961, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58857482, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4469,7 +4501,7 @@ VALUES (55066618, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51983272, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55068713, 30);
+VALUES (55068713, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58852930, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4477,7 +4509,7 @@ VALUES (51983269, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53703150, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58852512, 30);
+VALUES (58852512, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58851788, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4487,7 +4519,7 @@ VALUES (51983268, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58851780, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58851429, 30);
+VALUES (58851429, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51983267, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4499,7 +4531,7 @@ VALUES (55056669, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51983265, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58850212, 30);
+VALUES (58850212, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58850806, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4507,7 +4539,7 @@ VALUES (40724403, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51983263, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58570225, 30);
+VALUES (58570225, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58850803, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4515,13 +4547,13 @@ VALUES (35338132, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51983262, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58243013, 30);
+VALUES (58243013, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58850801, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51983261, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58849842, 30);
+VALUES (58849842, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55048552, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4531,7 +4563,7 @@ VALUES (54859211, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51983260, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (58071803, 30);
+VALUES (58071803, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58850477, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4539,11 +4571,11 @@ VALUES (51971204, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55052286, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55051389, 30);
+VALUES (55051389, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49835727, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57793372, 30);
+VALUES (57793372, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58850074, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4553,7 +4585,7 @@ VALUES (49606208, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58850073, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57465294, 30);
+VALUES (57465294, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55056657, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4565,7 +4597,7 @@ VALUES (48591670, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41710584, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57464785, 30);
+VALUES (57464785, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58849866, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4573,7 +4605,7 @@ VALUES (48591669, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58857195, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047578, 30);
+VALUES (57047578, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54640355, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4583,13 +4615,13 @@ VALUES (58857193, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47799442, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047572, 30);
+VALUES (57047572, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49398428, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58243039, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047452, 30);
+VALUES (57047452, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47799428, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4599,7 +4631,7 @@ VALUES (44833243, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47151455, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047128, 30);
+VALUES (57047128, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (57907222, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4607,13 +4639,13 @@ VALUES (55398465, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47151424, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047108, 30);
+VALUES (57047108, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (57907217, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54546268, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047107, 30);
+VALUES (57047107, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47151403, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4621,13 +4653,13 @@ VALUES (52806374, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58243479, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047101, 30);
+VALUES (57047101, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47151401, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41710830, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56719276, 30);
+VALUES (56719276, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54965836, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4639,7 +4671,7 @@ VALUES (46644619, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543174, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57793123, 30);
+VALUES (57793123, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56937300, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4649,7 +4681,7 @@ VALUES (54855391, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56937296, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54536414, 30);
+VALUES (54536414, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (45065975, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4657,7 +4689,7 @@ VALUES (56937284, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55398462, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54514088, 30);
+VALUES (54514088, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (44312437, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4667,11 +4699,11 @@ VALUES (55066907, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53022665, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53979711, 30);
+VALUES (53979711, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (57907368, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53862860, 30);
+VALUES (53862860, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345681, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4679,7 +4711,7 @@ VALUES (42521208, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53116376, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53767845, 30);
+VALUES (53767845, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52691266, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4687,7 +4719,7 @@ VALUES (52950123, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (50091679, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52952111, 30);
+VALUES (52952111, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (34223976, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4695,7 +4727,7 @@ VALUES (52426454, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46906683, 10);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52492351, 30);
+VALUES (52492351, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55396934, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4707,55 +4739,55 @@ VALUES (48299144, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (57465013, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52492347, 30);
+VALUES (52492347, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47268697, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52492344, 30);
+VALUES (52492344, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54969037, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (51855999, 30);
+VALUES (51855999, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41713147, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54537568, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (47083446, 30);
+VALUES (47083446, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54859305, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55066620, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (42119562, 30);
+VALUES (42119562, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56489942, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55066616, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41544709, 30);
+VALUES (41544709, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56489941, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55073335, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41543868, 30);
+VALUES (41543868, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56265867, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56144116, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41430985, 30);
+VALUES (41430985, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52292907, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56489927, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32832337, 30);
+VALUES (32832337, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55056334, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (28059487, 30);
+VALUES (28059487, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56489926, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4763,17 +4795,17 @@ VALUES (56139133, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55053647, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54859304, 30);
+VALUES (54859304, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56139095, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56138087, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56494143, 30);
+VALUES (56494143, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55049123, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047129, 30);
+VALUES (57047129, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52222313, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4781,7 +4813,7 @@ VALUES (56138086, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543779, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (57047102, 30);
+VALUES (57047102, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55049124, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4789,7 +4821,7 @@ VALUES (44751826, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56133919, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56264258, 30);
+VALUES (56264258, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56133918, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4797,7 +4829,7 @@ VALUES (42255812, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46645340, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56256643, 30);
+VALUES (56256643, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56261067, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4805,7 +4837,7 @@ VALUES (56139096, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56133895, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56138038, 30);
+VALUES (56138038, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55056653, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4813,7 +4845,7 @@ VALUES (56133894, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52094165, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56137619, 30);
+VALUES (56137619, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56133893, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4821,13 +4853,13 @@ VALUES (55393411, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58072195, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56131862, 30);
+VALUES (56131862, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56133891, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53120744, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54709866, 30);
+VALUES (54709866, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53861741, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4837,7 +4869,7 @@ VALUES (55242229, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345711, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56133342, 30);
+VALUES (56133342, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58851697, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4845,11 +4877,11 @@ VALUES (56133889, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543777, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56049009, 30);
+VALUES (56049009, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54994243, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55547092, 30);
+VALUES (55547092, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56133734, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4861,7 +4893,7 @@ VALUES (54713564, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345636, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (56051588, 30);
+VALUES (56051588, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55398485, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4869,7 +4901,7 @@ VALUES (55963045, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55069491, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55548095, 30);
+VALUES (55548095, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55052281, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4879,19 +4911,19 @@ VALUES (52345710, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54968888, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54540644, 30);
+VALUES (54540644, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55961528, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345709, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54534456, 30);
+VALUES (54534456, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53332315, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54595629, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53905767, 30);
+VALUES (53905767, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54539250, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4899,7 +4931,7 @@ VALUES (52345663, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42521200, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53862853, 30);
+VALUES (53862853, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (35136235, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4907,7 +4939,7 @@ VALUES (54490897, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48293847, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53598078, 30);
+VALUES (53598078, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48293846, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4915,7 +4947,7 @@ VALUES (53597182, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55056674, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53256505, 30);
+VALUES (53256505, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543763, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4923,7 +4955,7 @@ VALUES (55056661, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53189951, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53025619, 30);
+VALUES (53025619, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53429945, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4933,7 +4965,7 @@ VALUES (53022507, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345707, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52802620, 30);
+VALUES (52802620, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56133922, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4941,7 +4973,7 @@ VALUES (44670503, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52752039, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52582969, 30);
+VALUES (52582969, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56142335, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4951,19 +4983,19 @@ VALUES (52488746, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54640343, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52492353, 30);
+VALUES (52492353, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58072196, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (51927454, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52492352, 30);
+VALUES (52492352, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42976008, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58072194, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (51978032, 30);
+VALUES (51978032, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48471868, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4971,13 +5003,13 @@ VALUES (58072193, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41405300, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (49649064, 30);
+VALUES (49649064, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47486824, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (35471065, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (49524143, 30);
+VALUES (49524143, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58072192, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -4989,11 +5021,11 @@ VALUES (58072191, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55056648, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (49330265, 30);
+VALUES (49330265, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (45214080, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (49162398, 30);
+VALUES (49162398, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55049120, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5001,7 +5033,7 @@ VALUES (54969028, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (38149487, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (46847079, 30);
+VALUES (46847079, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54968893, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5009,11 +5041,11 @@ VALUES (52345718, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55064407, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (45133461, 30);
+VALUES (45133461, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54968892, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (43998581, 30);
+VALUES (43998581, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54859306, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5021,7 +5053,7 @@ VALUES (52345684, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54751610, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41437908, 30);
+VALUES (41437908, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55242134, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5029,11 +5061,11 @@ VALUES (54754333, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52094163, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41406639, 30);
+VALUES (41406639, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53565807, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41399384, 30);
+VALUES (41399384, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52094161, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5045,7 +5077,7 @@ VALUES (54755061, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52093013, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (40724423, 30);
+VALUES (40724423, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48581860, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5055,11 +5087,11 @@ VALUES (45212693, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52035035, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (38530812, 30);
+VALUES (38530812, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54532867, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32718017, 30);
+VALUES (32718017, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52035030, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5073,7 +5105,7 @@ VALUES (41710902, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54512958, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (28059747, 30);
+VALUES (28059747, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49653538, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5081,7 +5113,7 @@ VALUES (41710574, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52752044, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55394198, 30);
+VALUES (55394198, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (40647193, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5089,7 +5121,7 @@ VALUES (45238446, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52750714, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55392516, 30);
+VALUES (55392516, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41392627, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5097,7 +5129,7 @@ VALUES (34707422, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52750348, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55392515, 30);
+VALUES (55392515, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55960820, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5109,7 +5141,7 @@ VALUES (55073305, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41392589, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55392510, 30);
+VALUES (55392510, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49379278, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5117,7 +5149,7 @@ VALUES (55076288, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56261072, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55051599, 30);
+VALUES (55051599, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49115330, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5125,7 +5157,7 @@ VALUES (55083427, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56261071, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55051598, 30);
+VALUES (55051598, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54968886, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5139,7 +5171,7 @@ VALUES (56261064, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54502129, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55048773, 30);
+VALUES (55048773, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47308804, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5147,7 +5179,7 @@ VALUES (41688870, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56261066, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (55051478, 30);
+VALUES (55051478, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47308539, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5155,11 +5187,11 @@ VALUES (54706480, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41394422, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54857466, 30);
+VALUES (54857466, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41710789, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54755045, 30);
+VALUES (54755045, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55961471, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5167,7 +5199,7 @@ VALUES (40639741, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (40687814, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54856605, 30);
+VALUES (54856605, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55961470, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5175,13 +5207,13 @@ VALUES (38244042, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (32799763, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54546969, 30);
+VALUES (54546969, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55961469, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54551695, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54541385, 30);
+VALUES (54541385, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (34254712, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5189,7 +5221,7 @@ VALUES (55961468, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54541632, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54534471, 30);
+VALUES (54534471, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54968883, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5199,11 +5231,11 @@ VALUES (58851691, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54506470, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54534434, 30);
+VALUES (54534434, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55961466, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54534362, 30);
+VALUES (54534362, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54547251, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5211,7 +5243,7 @@ VALUES (54495582, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55961465, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54530419, 30);
+VALUES (54530419, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55687775, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5219,13 +5251,13 @@ VALUES (54489406, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53597183, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54529159, 30);
+VALUES (54529159, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55687772, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53506783, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54528789, 30);
+VALUES (54528789, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42380117, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5237,7 +5269,7 @@ VALUES (55543780, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55960822, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54514087, 30);
+VALUES (54514087, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52752051, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5247,7 +5279,7 @@ VALUES (55066613, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52750084, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53983530, 30);
+VALUES (53983530, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543774, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5259,7 +5291,7 @@ VALUES (55543773, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (40714678, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53979708, 30);
+VALUES (53979708, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52429693, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5271,7 +5303,7 @@ VALUES (40648779, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55056658, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53862864, 30);
+VALUES (53862864, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52428571, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5279,7 +5311,7 @@ VALUES (55543771, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46910521, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53862863, 30);
+VALUES (53862863, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543770, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5289,7 +5321,7 @@ VALUES (52350439, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54496409, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53862862, 30);
+VALUES (53862862, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543768, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5299,13 +5331,13 @@ VALUES (42173655, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47266980, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53767843, 30);
+VALUES (53767843, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543767, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (34170593, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52952077, 30);
+VALUES (52952077, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41515858, 27);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5319,11 +5351,11 @@ VALUES (41524481, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (57465014, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52853650, 30);
+VALUES (52853650, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543765, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52345638, 30);
+VALUES (52345638, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46914936, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5331,7 +5363,7 @@ VALUES (55543764, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54854040, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52227286, 30);
+VALUES (52227286, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53332244, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5339,13 +5371,13 @@ VALUES (55543762, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47232744, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (49653276, 30);
+VALUES (49653276, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (29898107, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543761, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (49162163, 30);
+VALUES (49162163, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46622799, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5353,7 +5385,7 @@ VALUES (53430531, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543760, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (48673720, 30);
+VALUES (48673720, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (44833233, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5363,7 +5395,7 @@ VALUES (55543759, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (43495354, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (47761149, 30);
+VALUES (47761149, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543757, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5371,7 +5403,7 @@ VALUES (53430506, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42975965, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (47074637, 30);
+VALUES (47074637, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (32848059, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5381,13 +5413,13 @@ VALUES (42521206, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (34731493, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (46991170, 30);
+VALUES (46991170, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (44011829, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543754, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (46922468, 30);
+VALUES (46922468, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54497403, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5395,7 +5427,7 @@ VALUES (27002473, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543752, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (44834323, 30);
+VALUES (44834323, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (44011839, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5403,7 +5435,7 @@ VALUES (54856194, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543751, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (42986726, 30);
+VALUES (42986726, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54496421, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5411,7 +5443,7 @@ VALUES (54855416, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55397640, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (42986725, 30);
+VALUES (42986725, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55397639, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5419,7 +5451,7 @@ VALUES (53430557, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54855398, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (42184467, 30);
+VALUES (42184467, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55397638, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5427,11 +5459,11 @@ VALUES (41695294, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (57465010, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41683622, 30);
+VALUES (41683622, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55397636, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (40725649, 30);
+VALUES (40725649, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (30686581, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5439,7 +5471,7 @@ VALUES (54968887, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55397634, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32718025, 30);
+VALUES (32718025, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46835904, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5451,13 +5483,13 @@ VALUES (44011766, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56261911, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (29944845, 30);
+VALUES (29944845, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55397632, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53707359, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (29751159, 30);
+VALUES (29751159, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55397625, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5467,7 +5499,7 @@ VALUES (55397624, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52356300, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (27831743, 30);
+VALUES (27831743, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56051593, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5475,7 +5507,7 @@ VALUES (53705766, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48452913, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (6421, 30);
+VALUES (6421, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56139422, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5483,7 +5515,7 @@ VALUES (52926483, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (58851696, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (6377, 30);
+VALUES (6377, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (54638013, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5491,7 +5523,7 @@ VALUES (52345680, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (56059060, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54513139, 30);
+VALUES (54513139, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47127120, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5499,7 +5531,7 @@ VALUES (54643425, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345664, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54513138, 30);
+VALUES (54513138, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (44011830, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5507,13 +5539,13 @@ VALUES (53984168, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52032353, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54512615, 30);
+VALUES (54512615, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52345643, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (53982481, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (54489157, 30);
+VALUES (54489157, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52356320, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5521,7 +5553,7 @@ VALUES (52345637, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48592720, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53863257, 30);
+VALUES (53863257, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46762739, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5529,13 +5561,13 @@ VALUES (52093012, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49127915, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53824120, 30);
+VALUES (53824120, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46642036, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42318454, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (53120424, 30);
+VALUES (53120424, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49653548, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5543,7 +5575,7 @@ VALUES (52032360, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48643322, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52752043, 30);
+VALUES (52752043, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (43780389, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5553,9 +5585,9 @@ VALUES (44313520, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (45238442, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52345635, 30);
+VALUES (52345635, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (52345595, 30);
+VALUES (52345595, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (52356319, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5563,7 +5595,7 @@ VALUES (44670506, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42138198, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (51978033, 30);
+VALUES (51978033, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (47127119, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5571,7 +5603,7 @@ VALUES (41785149, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (44670505, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (45277011, 30);
+VALUES (45277011, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41710575, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5579,7 +5611,7 @@ VALUES (46642850, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42267898, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (45133466, 30);
+VALUES (45133466, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (41696075, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5587,17 +5619,17 @@ VALUES (41392609, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (38530315, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (43668529, 30);
+VALUES (43668529, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55543775, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (42041502, 30);
+VALUES (42041502, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (34192492, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (38706686, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41546026, 30);
+VALUES (41546026, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55242252, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5605,13 +5637,13 @@ VALUES (55543755, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (49127927, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (41437905, 30);
+VALUES (41437905, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55242105, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55397626, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (34167799, 30);
+VALUES (34167799, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (42157289, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
@@ -5619,21 +5651,21 @@ VALUES (55242058, 26);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55069494, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32846182, 30);
+VALUES (32846182, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (38154726, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55242021, 26);
-INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
-VALUES (32846181, 30);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55049122, 2);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (48452932, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (55960821, 26);
+# this plID needed for tests
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (32846180, 30);
+#
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)
 VALUES (46882319, 22);
 INSERT INTO trak.product_promotion_link (product_pl_id, promotion_id)

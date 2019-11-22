@@ -9,6 +9,7 @@ import (
 )
 
 const DailyDealPriceUpdateScheduledTaskName = "DailyDealPriceUpdateScheduledTask"
+const PriceCleanUpScheduledTaskName = "PriceCleanUpScheduledTask"
 const PriceUpdateScheduledTaskName = "PriceUpdateScheduledTask"
 const BrandUpdateScheduledTaskName = "BrandUpdateScheduledTask"
 const PromotionsScheduledTaskName = "PromotionsScheduledTask"

@@ -17,6 +17,12 @@ repos:
         entry: staticcheck.sh
   - repo: local
     hooks:
+      - id: go-mod-tidy
+        language: 'script'
+        name: 'go-mod-tidy'
+        entry: go-mod-tidy.sh
+  - repo: local
+    hooks:
       - id: go-test
         language: 'script'
         name: 'go-test'

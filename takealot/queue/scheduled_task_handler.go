@@ -1,6 +1,7 @@
 package queue
 
 import (
+	"github.com/gammazero/workerpool"
 	"github.com/jinzhu/gorm"
 	"github.com/nsqio/go-nsq"
 	log "github.com/sirupsen/logrus"
@@ -44,6 +45,8 @@ func (task *NSQScheduledTaskHandler) HandleMessage(message *nsq.Message) error {
 		go task.handleBrandUpdateScheduledTask(messageID)
 	case DailyDealPriceUpdateScheduledTask.ID:
 		go task.handleDailyDealPriceUpdateScheduledTask(messageID)
+	case PriceCleanUpScheduledTask.ID:
+		go task.handlePriceCleanUpScheduledTask(messageID)
 	default:
 		log.Warnf("unknown taskID: %d", taskID)
 	}
@@ -52,6 +55,9 @@ func (task *NSQScheduledTaskHandler) HandleMessage(message *nsq.Message) error {
 }
 
 func (task *NSQScheduledTaskHandler) handlePriceUpdateScheduledTask(messageID string) {
+	log.Infof("%s: starting handlePriceUpdateScheduledTask", messageID)
+	defer log.Infof("%s: finished handlePriceUpdateScheduledTask", messageID)
+
 	greaterThanID := uint(0)
 	size := 1000
 
@@ -77,6 +83,7 @@ func (task *NSQScheduledTaskHandler) handlePriceUpdateScheduledTask(messageID st
 }
 
 func (task *NSQScheduledTaskHandler) handlePromotionsScheduledTask(messageID string) {
+	log.Infof("%s: starting handlePromotionsScheduledTask", messageID)
 	promotionsResponse, err := api.FetchPromotions()
 
 	if err != nil {
@@ -106,10 +113,13 @@ func (task *NSQScheduledTaskHandler) handlePromotionsScheduledTask(messageID str
 		promotionModel := promotionModel
 		go task.createPromotionProducts(promotionModel)
 	}
+
+	log.Infof("%s: finished handlePromotionsScheduledTask", messageID)
 }
 
 func (task *NSQScheduledTaskHandler) createPromotionProducts(promotionModel *model.PromotionModel) {
-	log.Infof("createPromotionProducts promotionID: %d", promotionModel.PromotionID)
+	log.Infof("starting createPromotionProducts promotionID: %d", promotionModel.PromotionID)
+	defer log.Info("finished handleBrandUpdateScheduledTask")
 
 	pliDsOnPromotion, err := api.FetchPLIDsOnPromotion(promotionModel.PromotionID)
 	if err != nil {
@@ -131,6 +141,9 @@ func (task *NSQScheduledTaskHandler) createPromotionProducts(promotionModel *mod
 }
 
 func (task *NSQScheduledTaskHandler) handleBrandUpdateScheduledTask(messageID string) {
+	log.Infof("%s: starting handleBrandUpdateScheduledTask", messageID)
+	defer log.Infof("%s: finished handleBrandUpdateScheduledTask", messageID)
+
 	greaterThanID := uint(0)
 	size := 1000
 
@@ -157,7 +170,7 @@ func (task *NSQScheduledTaskHandler) handleBrandUpdateScheduledTask(messageID st
 			}
 
 			for _, plID := range pliDs {
-				log.Infof("%s: Brand: %s updating plID: %d to queue", messageID, bm.Name, plID)
+				log.Infof("%s: Brand: %s pushing plID: %d to queue", messageID, bm.Name, plID)
 				err := task.Producer.Publish(NewProductQueue, SendUintMessage(plID))
 				if err != nil {
 					log.Warnf("%s: failed to publish to nsq: %v", messageID, err)
@@ -170,6 +183,7 @@ func (task *NSQScheduledTaskHandler) handleBrandUpdateScheduledTask(messageID st
 }
 
 func (task *NSQScheduledTaskHandler) handleDailyDealPriceUpdateScheduledTask(messageID string) {
+	log.Infof("%s: starting handleDailyDealPriceUpdateScheduledTask", messageID)
 	dailyDealPromotion, ok := model.FindLatestDailyDealPromotion(task.DB)
 
 	if !ok {
@@ -179,11 +193,10 @@ func (task *NSQScheduledTaskHandler) handleDailyDealPriceUpdateScheduledTask(mes
 
 	page := 0
 	size := 100
-	models, queryPage := model.FindProductsByPromotion(dailyDealPromotion.ID, page, size, task.DB)
+	productModels, queryPage := model.FindProductsByPromotion(dailyDealPromotion.ID, page, size, task.DB)
 
 	for !queryPage.IsLastPage {
-		// todo run in goroutines
-		for _, m := range models {
+		for _, m := range productModels {
 			err := task.Producer.Publish(NewProductQueue, SendUintMessage(m.PLID))
 			if err != nil {
 				log.Errorf("%s: failed to publish plID: %d to nsq: %v", messageID, m.PLID, err)
@@ -192,15 +205,54 @@ func (task *NSQScheduledTaskHandler) handleDailyDealPriceUpdateScheduledTask(mes
 		}
 
 		page++
-		models, queryPage = model.FindProductsByPromotion(dailyDealPromotion.ID, page, size, task.DB)
+		productModels, queryPage = model.FindProductsByPromotion(dailyDealPromotion.ID, page, size, task.DB)
 	}
 
 	// run last page
-	for _, m := range models {
+	for _, m := range productModels {
 		err := task.Producer.Publish(NewProductQueue, SendUintMessage(m.PLID))
 		if err != nil {
 			log.Errorf("%s: failed to publish plID: %d to nsq: %v", messageID, m.PLID, err)
 			return
 		}
 	}
+
+	log.Infof("%s: finished handleDailyDealPriceUpdateScheduledTask", messageID)
+}
+
+func (task *NSQScheduledTaskHandler) handlePriceCleanUpScheduledTask(messageID string) {
+	log.Infof("%s: starting handlePriceCleanUpScheduledTask", messageID)
+	errChan := make(chan error)
+	defer close(errChan)
+
+	greaterThanID := uint(0)
+	size := 1000
+	products := model.FindProducts(greaterThanID, size, task.DB)
+
+	for len(products) > 0 {
+		pool := workerpool.New(5)
+
+		for _, pm := range products {
+			productID := pm.ID
+			pool.Submit(func() {
+				log.Infof("%s: cleaning prices for productID: %d", messageID, productID)
+				err := model.RemoveProductDuplicatePrices(productID, task.DB)
+				errChan <- err
+			})
+		}
+
+		for range products {
+			err := <-errChan
+			if err != nil {
+				log.Errorf("failed to remove product price: %v", err)
+			}
+		}
+
+		pool.Stop()
+
+		greaterThanID = products[len(products)-1].ID
+		products = model.FindProducts(greaterThanID, size, task.DB)
+	}
+
+	log.Infof("%s: finished handlePriceCleanUpScheduledTask", messageID)
 }
