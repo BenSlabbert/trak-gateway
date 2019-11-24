@@ -6,8 +6,8 @@ github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 h1:w+iIsaOQNcT7O
 github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78/go.mod h1:LmzpDX56iTiv29bbRTIsUNlaFfuhWRQBWjQdVyAevI8=
 github.com/BenSlabbert/go-sonic v0.0.0-20191106070808-c1097a6b606b h1:yrgAx1jVlam42CT2AP+tcaNkZnaGQMJ8iBiMhLULXCA=
 github.com/BenSlabbert/go-sonic v0.0.0-20191106070808-c1097a6b606b/go.mod h1:PFtQrItBX4BGfp/OQu8JQ17PPvRNWF52xbubAcbNipI=
-github.com/BenSlabbert/trak-gRPC v0.0.0-20191122190436-b42e68c30092 h1:4lbHHgDaUtUaZ8VasoahSAB91rSHpotUkDzY8efUbGk=
-github.com/BenSlabbert/trak-gRPC v0.0.0-20191122190436-b42e68c30092/go.mod h1:JM2LU0UcguwW+iOPAkymKU/okq70l4kJj2kx/tLocrE=
+github.com/BenSlabbert/trak-gRPC v0.0.0-20191124152506-ec04c2353686 h1:aahD9RSaMpsmgnrukLj3m++6THhxufYOdjgEj3QDeXI=
+github.com/BenSlabbert/trak-gRPC v0.0.0-20191124152506-ec04c2353686/go.mod h1:JM2LU0UcguwW+iOPAkymKU/okq70l4kJj2kx/tLocrE=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Microsoft/go-winio v0.4.11 h1:zoIOcVf0xPN1tnMVbTtEdI+P8OofVk3NObnwOQ6nK2Q=

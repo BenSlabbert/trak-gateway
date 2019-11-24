@@ -243,6 +243,13 @@ func (h *Handler) GetPromotion(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	promotionModel, ok := model.FindPromotion(promotionIdReq, h.DB)
+	if !ok {
+		log.Warnf("failed to find promotion with ID: %d", promotionIdReq)
+		sendError(w, &response.Error{Message: "Failed to find promotion", Type: response.BadRequest})
+		return
+	}
+
 	productModels, queryPage := model.FindProductsByPromotion(promotionIdReq, pageReq, 12, h.DB)
 	productMessages := h.getProductMessages(productModels)
 
@@ -256,6 +263,13 @@ func (h *Handler) GetPromotion(w http.ResponseWriter, req *http.Request) {
 			PageSize:          uint32(queryPage.PageSize),
 			IsFirstPage:       queryPage.IsFirstPage,
 			IsLastPage:        queryPage.IsLastPage,
+		},
+		Promotion: &gatewayPB.PromotionMessage{
+			Id:          uint32(promotionModel.ID),
+			Name:        promotionModel.DisplayName,
+			PromotionId: uint32(promotionModel.PromotionID),
+			Start:       uint32(promotionModel.StartDate.Unix()),
+			End:         uint32(promotionModel.EndDate.Unix()),
 		},
 	}
 
@@ -311,6 +325,13 @@ func (h *Handler) DailyDeals(w http.ResponseWriter, req *http.Request) {
 			PageSize:          uint32(queryPage.PageSize),
 			IsFirstPage:       queryPage.IsFirstPage,
 			IsLastPage:        queryPage.IsLastPage,
+		},
+		Promotion: &gatewayPB.PromotionMessage{
+			Id:          uint32(promotionModel.ID),
+			Name:        promotionModel.DisplayName,
+			PromotionId: uint32(promotionModel.PromotionID),
+			Start:       uint32(promotionModel.StartDate.Unix()),
+			End:         uint32(promotionModel.EndDate.Unix()),
 		},
 	}
 

@@ -33,12 +33,25 @@ func (*PromotionModel) TableName() string {
 }
 
 func migratePromotionModel(db *gorm.DB) {
-	model := &PromotionModel{}
+	model := new(PromotionModel)
 	db.AutoMigrate(model)
 }
 
+func FindPromotion(promotionID uint, db *gorm.DB) (*PromotionModel, bool) {
+	model := new(PromotionModel)
+	db.Model(model).
+		Where("id = ?", promotionID).
+		FirstOrInit(model)
+
+	if model.ID == 0 {
+		return nil, false
+	}
+
+	return model, true
+}
+
 func FindLatestDailyDealPromotion(db *gorm.DB) (*PromotionModel, bool) {
-	model := &PromotionModel{}
+	model := new(PromotionModel)
 	db.Model(model).
 		Order("id desc").
 		Where("display_name = ?", "Daily Deals").
