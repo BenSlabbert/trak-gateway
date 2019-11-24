@@ -22,14 +22,14 @@ import (
 )
 
 func run() error {
-	takealotEnv := env.LoadEnv()
-	if takealotEnv.PPROFEnv.PPROFEnabled {
-		log.Infof("exposing pprof on port: %d", takealotEnv.PPROFEnv.PPROFPort)
+	trakEnv := env.LoadEnv()
+	if trakEnv.PPROFEnv.PPROFEnabled {
+		log.Infof("exposing pprof on port: %d", trakEnv.PPROFEnv.PPROFPort)
 		router := mux.NewRouter()
 		metrics.ExposePPROF(router)
 		go func() {
-			err := http.ListenAndServe(fmt.Sprintf(":%d", takealotEnv.PPROFEnv.PPROFPort), router)
-			log.Warnf("failed to serve on port %d: %v", takealotEnv.PPROFEnv.PPROFPort, err)
+			err := http.ListenAndServe(fmt.Sprintf(":%d", trakEnv.PPROFEnv.PPROFPort), router)
+			log.Warnf("failed to serve on port %d: %v", trakEnv.PPROFEnv.PPROFPort, err)
 		}()
 	}
 

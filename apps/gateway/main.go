@@ -61,14 +61,14 @@ func getProfile() string {
 func main() {
 	log.Infof("Starting gateway")
 
-	takealotEnv := env.LoadEnv()
+	trakEnv := env.LoadEnv()
 
 	db, e := connection.GetMariaDB(connection.MariaDBConnectOpts{
-		Host:            takealotEnv.DB.Host,
-		Port:            takealotEnv.DB.Port,
-		Database:        takealotEnv.DB.Database,
-		User:            takealotEnv.DB.Username,
-		Password:        takealotEnv.DB.Password,
+		Host:            trakEnv.DB.Host,
+		Port:            trakEnv.DB.Port,
+		Database:        trakEnv.DB.Database,
+		User:            trakEnv.DB.Username,
+		Password:        trakEnv.DB.Password,
 		ConnMaxLifetime: time.Hour,
 		MaxIdleConns:    10,
 		MaxOpenConns:    100,
@@ -82,22 +82,23 @@ func main() {
 	handler := &rest.Handler{
 		DB:          db,
 		RedisClient: connection.CreateRedisClient(),
+		TrakEnv:     trakEnv,
 	}
 
 	defer handler.Quit()
 
-	if takealotEnv.PPROFEnv.PPROFEnabled {
-		log.Infof("exposing pprof and db stats on port: %d", takealotEnv.PPROFEnv.PPROFPort)
+	if trakEnv.PPROFEnv.PPROFEnabled {
+		log.Infof("exposing pprof and db stats on port: %d", trakEnv.PPROFEnv.PPROFPort)
 		router := mux.NewRouter()
 		metrics.ExposePPROF(router)
 		metrics.ExposeDBStats(router, db)
 		go func() {
-			err := http.ListenAndServe(fmt.Sprintf(":%d", takealotEnv.PPROFEnv.PPROFPort), router)
-			log.Warnf("failed to serve on port %d: %v", takealotEnv.PPROFEnv.PPROFPort, err)
+			err := http.ListenAndServe(fmt.Sprintf(":%d", trakEnv.PPROFEnv.PPROFPort), router)
+			log.Warnf("failed to serve on port %d: %v", trakEnv.PPROFEnv.PPROFPort, err)
 		}()
 	}
 
-	router := setUpRoutes(takealotEnv, handler)
+	router := setUpRoutes(trakEnv, handler)
 	http.Handle("/", router)
 
 	go func() {

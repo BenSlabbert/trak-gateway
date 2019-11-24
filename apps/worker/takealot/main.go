@@ -29,39 +29,39 @@ func main() {
 		log.SetLevel(log.DebugLevel)
 	}
 
-	takealotEnv := env.LoadEnv()
-	if takealotEnv.PPROFEnv.PPROFEnabled {
-		log.Infof("exposing pprof on port: %d", takealotEnv.PPROFEnv.PPROFPort)
+	trakEnv := env.LoadEnv()
+	if trakEnv.PPROFEnv.PPROFEnabled {
+		log.Infof("exposing pprof on port: %d", trakEnv.PPROFEnv.PPROFPort)
 		router := mux.NewRouter()
 		metrics.ExposePPROF(router)
 		go func() {
-			err := http.ListenAndServe(fmt.Sprintf(":%d", takealotEnv.PPROFEnv.PPROFPort), router)
-			log.Warnf("failed to serve on port %d: %v", takealotEnv.PPROFEnv.PPROFPort, err)
+			err := http.ListenAndServe(fmt.Sprintf(":%d", trakEnv.PPROFEnv.PPROFPort), router)
+			log.Warnf("failed to serve on port %d: %v", trakEnv.PPROFEnv.PPROFPort, err)
 		}()
 	}
 
 	opts := connection.MariaDBConnectOpts{
-		Host:            takealotEnv.DB.Host,
-		Port:            takealotEnv.DB.Port,
-		Database:        takealotEnv.DB.Database,
-		User:            takealotEnv.DB.Username,
-		Password:        takealotEnv.DB.Password,
+		Host:            trakEnv.DB.Host,
+		Port:            trakEnv.DB.Port,
+		Database:        trakEnv.DB.Database,
+		User:            trakEnv.DB.Username,
+		Password:        trakEnv.DB.Password,
 		ConnMaxLifetime: time.Hour,
 		MaxIdleConns:    10,
 		MaxOpenConns:    100,
 	}
 
-	if err := MigrateDB(takealotEnv, opts); err != nil {
+	if err := MigrateDB(trakEnv, opts); err != nil {
 		log.Fatalf("Failed to migrate db: %v", err)
 	}
 
-	if takealotEnv.MasterNode {
-		go WorkerTaskFactory(opts, takealotEnv)
+	if trakEnv.MasterNode {
+		go WorkerTaskFactory(opts, trakEnv)
 	}
 
 	consumers := make([]*nsq.Consumer, 0)
 	newProductTasks := make([]*queue.NSQNewProductTask, 0)
-	for i := 0; i < takealotEnv.Nsq.NumberOfNewProductConsumers; i++ {
+	for i := 0; i < trakEnv.Nsq.NumberOfNewProductConsumers; i++ {
 		db, e := connection.GetMariaDB(opts)
 		if e != nil {
 			log.Fatalf("failed to get db connection: %v", e)
@@ -81,7 +81,7 @@ func main() {
 	}
 
 	scheduledTaskHandlers := make([]*queue.NSQScheduledTaskHandler, 0)
-	for i := 0; i < takealotEnv.Nsq.NumberOfScheduledTaskConsumers; i++ {
+	for i := 0; i < trakEnv.Nsq.NumberOfScheduledTaskConsumers; i++ {
 		db, e := connection.GetMariaDB(opts)
 		if e != nil {
 			log.Fatalf("failed to get db connection: %v", e)

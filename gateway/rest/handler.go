@@ -20,6 +20,7 @@ import (
 	"trak-gateway/gateway/builder"
 	"trak-gateway/gateway/grpc"
 	"trak-gateway/gateway/response"
+	"trak-gateway/takealot/env"
 	"trak-gateway/takealot/model"
 	"trak-gateway/takealot/queue"
 
@@ -29,6 +30,7 @@ import (
 type Handler struct {
 	DB          *gorm.DB
 	RedisClient *redis.Client
+	TrakEnv     env.TrakEnv
 }
 
 func (h *Handler) Quit() {
@@ -37,6 +39,10 @@ func (h *Handler) Quit() {
 }
 
 func (h *Handler) redisGet(key string, msg proto.Message) error {
+	if h.TrakEnv.Redis.DisableCaching {
+		return errors.New("caching disabled")
+	}
+
 	data, err := h.RedisClient.Get(key).Bytes()
 	if err != nil {
 		return err
@@ -52,6 +58,10 @@ func (h *Handler) redisGet(key string, msg proto.Message) error {
 }
 
 func (h *Handler) redisSet(key string, msg proto.Message) {
+	if h.TrakEnv.Redis.DisableCaching {
+		return
+	}
+
 	d, err := proto.Marshal(msg)
 
 	if err != nil {

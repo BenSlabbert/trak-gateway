@@ -15,8 +15,9 @@ type DBEnv struct {
 }
 
 type RedisEnv struct {
-	URL      string
-	Password string
+	URL            string
+	Password       string
+	DisableCaching bool
 }
 
 type NSQEnv struct {
@@ -62,8 +63,9 @@ func LoadEnv() TrakEnv {
 		},
 		MasterNode: getMasterNodeConfig(),
 		Redis: RedisEnv{
-			URL:      getRedisURL(),
-			Password: getRedisPassword(),
+			URL:            getRedisURL(),
+			Password:       getRedisPassword(),
+			DisableCaching: getRedisDisableCaching(),
 		},
 		Nsq: NSQEnv{
 			NsqdURL:                        getNsqdURL(),
@@ -84,6 +86,11 @@ func LoadEnv() TrakEnv {
 			ReleaseAssetURL: getReleaseAssetURL(),
 		},
 	}
+}
+
+func getRedisDisableCaching() bool {
+	e := os.Getenv("REDIS_DISABLE_CACHING")
+	return e == "true"
 }
 
 func getCrawlerEnabled() bool {
