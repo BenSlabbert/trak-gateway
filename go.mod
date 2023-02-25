@@ -17,6 +17,6 @@ require (
 	github.com/nsqio/go-nsq v1.0.7
 	github.com/sirupsen/logrus v1.4.2
 	github.com/testcontainers/testcontainers-go v0.0.8
-	golang.org/x/crypto v0.0.0-20190510104115-cbcb75029529 // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 	google.golang.org/grpc v1.22.1
 )
