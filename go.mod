@@ -10,13 +10,13 @@ require (
 	github.com/gammazero/workerpool v0.0.0-20191005194639-971bc780f6d7
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-resty/resty/v2 v2.1.0
-	github.com/golang/protobuf v1.3.1
-	github.com/google/uuid v1.1.1
+	github.com/golang/protobuf v1.5.3
+	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.7.3
 	github.com/jinzhu/gorm v1.9.11
 	github.com/nsqio/go-nsq v1.0.7
 	github.com/sirupsen/logrus v1.4.2
 	github.com/testcontainers/testcontainers-go v0.0.8
-	golang.org/x/crypto v0.0.0-20190510104115-cbcb75029529 // indirect
-	google.golang.org/grpc v1.22.1
+	golang.org/x/crypto v0.31.0 // indirect
+	google.golang.org/grpc v1.56.3
 )
